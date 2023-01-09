@@ -1,7 +1,7 @@
 <div align="center">
 # Adapters
 
-![](./assets/adapters-white-logo.png)
+![](./assets/adapters-dark-logo.png)
 
 </div>
 
