@@ -37,4 +37,36 @@ Abaixo estão os _adapters_ já implementados até agora:
 
 `**` Esse adaptador de GPU na verdade utiliza uma API nativa chamada WebGPU, que ainda está em Draft funcionando apenas em versões de desenvolvedores dos _browsers_. Também não possui arquivos de testes devido ao mencionado.
 
+<br>
+
+## Como Usar
+
+Abaixo vemos os exemplos de utilização das classes citadas.
+
+<br>
+
+### Fetch
+
+```typescript
+import { Fetch } from "@codeplaydata/adapters";
+
+const httpClient = new Fetch();
+const request = new Request('https://httpstat.us/200');
+const response = await httpClient.fetch(request);
+
+```
+
+<br>
+
+### GenericQueue
+
+```typescript
+import { GenericQueue } from "@codeplaydata/adapters";
+
+const localstorage = new LocalStorage();
+const queue = new GenericQueue(localstorage, 2);
+
+queue.query(/.../);
+
+```
 
