@@ -33,8 +33,8 @@ Abaixo estão os _adapters_ já implementados até agora:
 | [Express](./src/http/server/ExpressApp.ts) | O servidor http mais utilizado em aplicações NodeJs.|
 
 ---
-`*`O IndexedDB não pode ser testado abstraído do frontend, por isso não existem arquivos de teste.
+`*` O IndexedDB não pode ser testado abstraído do frontend, por isso não existem arquivos de teste.
 
-`**`Esse adaptador de GPU na verdade utiliza uma API nativa chamada WebGPU, que ainda está em Draft funcionando apenas em versões de desenvolvedores dos _browsers_. Também não possui arquivos de testes devido ao mencionado.
+`**` Esse adaptador de GPU na verdade utiliza uma API nativa chamada WebGPU, que ainda está em Draft funcionando apenas em versões de desenvolvedores dos _browsers_. Também não possui arquivos de testes devido ao mencionado.
 
 
