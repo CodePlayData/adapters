@@ -22,4 +22,4 @@
 <br>
 
 # Pendentes
-- [ ] Testar os erros dos adapatadores.
+- [ ] Testar os erros dos adaptadores.
