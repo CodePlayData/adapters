@@ -4,19 +4,19 @@ import assert from "node:assert";
 import { MongoDB } from "./MongoDB.js"
 import { MongoQuery, IndexOperations } from "../enums.js";
 
-test('Unit Test - Testing if the class exists.', async (context) => {
+test('Testando se a classe MongoDB pode ser instanciada.', async (context) => {
     const mongo = new MongoDB('mongodb://127.0.0.1:27017')
     assert.strictEqual(mongo._db, 'local');
     assert.strictEqual(mongo._store, 'startup_log');
     
-    await context.test('Behavioural Test - Testing getters and setters.', () => {
+    await context.test('Testando todos os *getters* e *setters*, _i.e._ nome de coleções e base de dados.', () => {
         mongo.database = 'teste';
         assert.strictEqual(mongo.database, 'teste');
         mongo.store = 'collection1';
         assert.strictEqual(mongo.store, 'collection1');
     });
 
-    await context.test('Behavioural Test - Testing all CRUD queries.', async (subcontext) => {
+    await context.test('Testando todas as operações de CRUD.', async (subcontext) => {
         mongo.database = 'admin';
         mongo.store = 'collection1';
 
@@ -33,30 +33,30 @@ test('Unit Test - Testing if the class exists.', async (context) => {
         const data = await mongo.query(MongoQuery.findOne, { msg: 'testing 1, 2, 3...'}) as { [key: string]: any };
         assert.strictEqual(data.msg, 'testing 1, 2, 3...');
 
-        await subcontext.test('Behavioural Test - Create a text index.', async(deepsubcontext) => {
+        await subcontext.test('Criando índice de otimização de banco de dados.', async(deepsubcontext) => {
             await mongo.index(IndexOperations.create, [ { key: { msg: 'text' }, default_language: 'english', name: 'msg_index'} ]);
             const indexes = await mongo.index(IndexOperations.get);
             assert.strictEqual(indexes[1].name, 'msg_index');
             
-            await deepsubcontext.test('Behavioural Test - Search using the index.', async () => {
+            await deepsubcontext.test('Utilizando o índice.', async () => {
                 const data = await mongo.query(MongoQuery.findOne, { $text: { $search: "testing" } }) as { [key: string]: any };
                 assert.strictEqual(data.msg, 'testing 1, 2, 3...')
             });
 
-            await deepsubcontext.test('Behavioural Test - Deleting a index.', async () => {
+            await deepsubcontext.test('Deletando o índice.', async () => {
                 await mongo.index(IndexOperations.drop);
                 const indexes = await mongo.index(IndexOperations.get) as any[];
                 assert.strictEqual(indexes.length, 1);
             });
         });
 
-        await subcontext.test('Behavioural Test - Updating a document in the collection.', async () => {
+        await subcontext.test('Atualizando um documento da coleção.', async () => {
             await mongo.query(MongoQuery.updateOne, { $set: { msg: 'new message.'} }, { msg: 'testing 1, 2, 3...'});
             const data = await mongo.query(MongoQuery.findOne, { msg: 'new message.'}) as { [key: string]: any };
             assert.strictEqual(data.msg, 'new message.');
         });
 
-        await subcontext.test('Behavioural Test - Testing deleting.', async() => {
+        await subcontext.test('Deletando.', async() => {
             let count = await mongo.query(MongoQuery.countDocuments, { msg: 'new message.'});
             assert.strictEqual(count, 1);
             await mongo.query(MongoQuery.deleteOne, { msg: 'new message.'});
@@ -65,7 +65,7 @@ test('Unit Test - Testing if the class exists.', async (context) => {
         });
     });
 
-    await context.test('Behavioural Test - Testing aggregated queries.', async() => {
+    await context.test('Testando queries agregadas.', async() => {
         await mongo.query(MongoQuery.insertOne, { scale: 2, receivers: ["admin", "public"], msg: "A warning for all." });
         await mongo.query(MongoQuery.insertOne, { scale: 4, receivers: ["admin"], msg: "Bug Report."});
         await mongo.query(MongoQuery.insertOne, { scale: 4, receivers: ["admin"], msg: "Upgrade needed."});
@@ -89,12 +89,12 @@ test('Unit Test - Testing if the class exists.', async (context) => {
         assert.deepEqual(Object.keys(data[0]), ['_id', 'count']);
     });
 
-    await context.test('Error Test - Testing the null return in case the method dont exists.', async() => {
+    await context.test('Testando o retorno de null no caso de envio de uma operação que não existe.', async() => {
         const nullReturn = await mongo.query('error' as MongoQuery);
         assert.strictEqual(nullReturn, null);
-    })
+    });
 
-    await context.test('Error Test - Testing the unhandled error.', async() => {
+    await context.test('Testando erro genérico.', async() => {
         await assert.rejects(
             async() => {
                 await mongo.query('' as MongoQuery, {}, {})
@@ -105,6 +105,5 @@ test('Unit Test - Testing if the class exists.', async (context) => {
                 return true;
             }
         )
-    })
-
+    });
 })

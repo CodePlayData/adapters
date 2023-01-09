@@ -9,11 +9,17 @@
 
 > ## Última alteração
 > <br>
->- Retirada as dependências centralizadas no `types.d.ts` e implementadas as interfaces como 
->  classes independentes. Também foram removidos parâmetros que estavam como obrigatórios mas
->  não estavam mais sendo usados.
+>- Migração da base de códigos de outro repositório para esse.
 >
 > <br>
+
+<br>
+
+## 09-01--2023
+## Alteração
+|_File_ | Dev  |
+|:------|:-----|
+| ./            | [_Pedro_](https://github.com/dr2pedro) |
 
 <br>
 
@@ -48,6 +54,9 @@
 | http/server/ExpressApp.ts    | [_Pedro_](https://github.com/dr2pedro) |
 | http/server/ExpressRouter.ts | [_Pedro_](https://github.com/dr2pedro) |
 
+
+<br>
+
 ## 10-12-2022
 ### Adicionado
 |_File_ | Dev  |
@@ -66,6 +75,8 @@
 | databases/LocalStorage.ts | [_Pedro_](https://gitlab.com/dr2pedro) |
 | databases/LocalStorage.test.ts | [_Pedro_](https://gitlab.com/dr2pedro) |
 
+
+<br>
 
 ## 03-12-2022
 ### Adicionado
@@ -87,6 +98,8 @@
 | ToDo.md      | [_Pedro_](https://github.com/dr2pedro) |
 | index.ts     | [_Pedro_](https://github.com/dr2pedro) |
 
+<br>
+
 ## 20-11-2022
 ### Adicionado
 |_File_ | Dev  |
@@ -100,6 +113,8 @@
 | http/server/ExpressApp.ts | [_Pedro_](https://github.com/dr2pedro) |
 | http/server/ExpressRouter.test.ts | [_Pedro_](https://github.com/dr2pedro) |
 | http/server/ExpressRouter.ts | [_Pedro_](https://github.com/dr2pedro) |
+
+<br>
 
 ## 20-11-2022
 ## Alterado

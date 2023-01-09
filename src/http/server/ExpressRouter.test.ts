@@ -3,12 +3,12 @@ import test from "node:test";
 import assert from "node:assert";
 import { ExpressRouter } from "./ExpressRouter.js";
 
-test('Unit Test - Testing if the router indeed resgister routes in the ExpressApp', async (context) => {
+test('Testando se a classe ExpressRouter pode ser instanciada.', async (context) => {
     const router = new ExpressRouter();
     
     assert.deepEqual(router.routes, []);
     
-    await context.test('Behavioural Test - Testing if the method register works in the ExpressApp class.', async () => {
+    await context.test('Testando se o roteador pode de fato registrar rotas.', async () => {
         const route = { method: 'get', endpoint: '/data' };
     
         await router.register(route.method, route.endpoint, async function() {
