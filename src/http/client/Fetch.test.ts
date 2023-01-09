@@ -4,7 +4,7 @@ import assert from "node:assert";
 import { Fetch } from "./Fetch.js";
 
 test('Testando o retorno de uma requisição GET.', async() => {
-    const httpclient = new Fetch()
+    const httpclient = new Fetch();
     const request =  new Request('https://httpstat.us/200');
     assert.strictEqual((await httpclient.fetch(request)).status, 200);
 })
