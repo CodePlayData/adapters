@@ -4,11 +4,10 @@ import assert from "node:assert";
 import { ExpressApp } from "./ExpressApp.js";
 import { ExpressRouter } from "./ExpressRouter.js";
 
-test('Testando se a aplicação _express_ registra o roteador como um módulo.', async () => {
+test('Testando se a aplicacao _express_ registra o roteador como um modulo.', async () => {
     const router = new ExpressRouter();
-    const testRoute = { method: 'get', endpoint: '/data' };
 
-    await router.register(testRoute.method, testRoute.endpoint, async function() {
+    await router.register('get', '/data', async function() {
         return;
     })
 

@@ -9,14 +9,14 @@ test('Testando se a classe MongoDB pode ser instanciada.', async (context) => {
     assert.strictEqual(mongo._db, 'local');
     assert.strictEqual(mongo._store, 'startup_log');
     
-    await context.test('Testando todos os *getters* e *setters*, _i.e._ nome de coleções e base de dados.', () => {
+    await context.test('Testando todos os *getters* e *setters*, _i.e._ nome de colecoes e base de dados.', () => {
         mongo.database = 'teste';
         assert.strictEqual(mongo.database, 'teste');
         mongo.store = 'collection1';
         assert.strictEqual(mongo.store, 'collection1');
     });
 
-    await context.test('Testando todas as operações de CRUD.', async (subcontext) => {
+    await context.test('Testando todas as operacoes de CRUD.', async (subcontext) => {
         mongo.database = 'admin';
         mongo.store = 'collection1';
 
@@ -33,24 +33,24 @@ test('Testando se a classe MongoDB pode ser instanciada.', async (context) => {
         const data = await mongo.query(MongoQuery.findOne, { msg: 'testing 1, 2, 3...'}) as { [key: string]: any };
         assert.strictEqual(data.msg, 'testing 1, 2, 3...');
 
-        await subcontext.test('Criando índice de otimização de banco de dados.', async(deepsubcontext) => {
+        await subcontext.test('Criando indice de otimizacao de banco de dados.', async(deepsubcontext) => {
             await mongo.index(IndexOperations.create, [ { key: { msg: 'text' }, default_language: 'english', name: 'msg_index'} ]);
             const indexes = await mongo.index(IndexOperations.get);
             assert.strictEqual(indexes[1].name, 'msg_index');
             
-            await deepsubcontext.test('Utilizando o índice.', async () => {
+            await deepsubcontext.test('Utilizando o indice.', async () => {
                 const data = await mongo.query(MongoQuery.findOne, { $text: { $search: "testing" } }) as { [key: string]: any };
                 assert.strictEqual(data.msg, 'testing 1, 2, 3...')
             });
 
-            await deepsubcontext.test('Deletando o índice.', async () => {
+            await deepsubcontext.test('Deletando o indice.', async () => {
                 await mongo.index(IndexOperations.drop);
                 const indexes = await mongo.index(IndexOperations.get) as any[];
                 assert.strictEqual(indexes.length, 1);
             });
         });
 
-        await subcontext.test('Atualizando um documento da coleção.', async () => {
+        await subcontext.test('Atualizando um documento da colecao.', async () => {
             await mongo.query(MongoQuery.updateOne, { $set: { msg: 'new message.'} }, { msg: 'testing 1, 2, 3...'});
             const data = await mongo.query(MongoQuery.findOne, { msg: 'new message.'}) as { [key: string]: any };
             assert.strictEqual(data.msg, 'new message.');
@@ -89,12 +89,12 @@ test('Testando se a classe MongoDB pode ser instanciada.', async (context) => {
         assert.deepEqual(Object.keys(data[0]), ['_id', 'count']);
     });
 
-    await context.test('Testando o retorno de null no caso de envio de uma operação que não existe.', async() => {
+    await context.test('Testando o retorno de null no caso de envio de uma operacao que nao existe.', async() => {
         const nullReturn = await mongo.query('error' as MongoQuery);
         assert.strictEqual(nullReturn, null);
     });
 
-    await context.test('Testando erro genérico.', async() => {
+    await context.test('Testando erro generico.', async() => {
         await assert.rejects(
             async() => {
                 await mongo.query('' as MongoQuery, {}, {})

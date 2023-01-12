@@ -70,3 +70,85 @@ queue.query(/.../);
 
 ```
 
+<br>
+
+### Express
+
+```typescript
+import { ExpressApp, ExpressRouter } from "@codeplaydata/adapters";
+
+const router = new ExpressRouter();
+    await router.register('get', '/data', async function() {
+        return;
+    })
+const api = new ExpressApp([{ path: '/teste', router: router.router }]);
+/.../
+```
+
+<br>
+
+### GPU
+
+```typescript
+import { GPUDeviceAdapter, GPUCommandRepository } from "@codeplaydata/adapters";
+
+const gpu = new GPUDeviceAdapter(new GPUCommandRepository());
+/.../
+```
+
+<br>
+
+### MongoDB
+
+```typescript
+import { MongoDB } from "@codeplaydata/adapters";
+
+const mongo = new MongoDB('mongodb://127.0.0.1:27017');
+
+mongo.database = 'teste';
+mongo.store = 'collection1';
+
+await mongo.query(/.../)
+```
+
+<br>
+
+### LocalStorage
+
+```typescript
+import { LocalStorage } from "@codeplaydata/adapters";
+
+const localstorage = new LocalStorage();
+localstorage.query(/.../)
+```
+
+<br>
+
+### IndexedDB
+
+```typescript
+import { IndexedDB } from "@codeplaydata/adapters";
+
+const idbconfig = {
+    name: 'LocalTestStorage',
+    version: 1,
+    repositories: [
+        {
+            name: 'features',
+            id: 'name',
+            indexes: [
+                {
+                    indexName: 'name',
+                    keypath: 'name'
+                }
+            ]
+        }
+    ]
+}
+
+const indexeddb = new IndexedDB(idbconfig);
+indexeddb.query(/.../);
+/.../
+```
+
+---
