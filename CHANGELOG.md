@@ -1,11 +1,15 @@
 # Changelog
 
+<br>
+
+>
 > ## Em desenvolvimento
-> <br>
->- Testando erros das classes.
 >
-> <br>
 >
+>Testando erros das classes.
+
+
+<br>
 
 > ## Última alteração
 > <br>
@@ -15,11 +19,11 @@
 
 <br>
 
-## 09-01--2023
+## 09-01-2023
 ## Alteração
 |_File_ | Dev  |
 |:------|:-----|
-| ./            | [_Pedro_](https://github.com/dr2pedro) |
+| src          | [_Pedro_](https://github.com/dr2pedro) |
 
 <br>
 
