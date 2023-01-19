@@ -16,6 +16,7 @@ import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";
 import { GPUCommandRepository } from "./gpu/GPUCommandRepository.js";
 import { Connection } from "./Connection.js";
 import { LocalStorageQuery, MongoQuery, IndexedDBQuery, IndexOperations, DatabasePermission } from "./enums.js";
+import { WasmModuleSource } from "./webassembly/WasmModuleSource.js"
 
 export {
     IndexedDB,
@@ -42,5 +43,6 @@ export {
     MongoQuery, 
     IndexedDBQuery, 
     IndexOperations, 
-    DatabasePermission
+    DatabasePermission,
+    WasmModuleSource
 }
