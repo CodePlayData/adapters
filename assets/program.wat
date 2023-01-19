@@ -1,0 +1,13 @@
+(module
+ (table 0 anyfunc)
+ (memory $0 1)
+ (export "memory" (memory $0))
+ (export "main" (func $main))
+ (export "main2" (func $main2))
+ (func $main (; 0 ;) (result i32)
+  (i32.const 42)
+ )
+ (func $main2 (; 1 ;) (result i32)
+  (i32.const 44)
+ )
+)
