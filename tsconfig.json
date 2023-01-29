@@ -5,12 +5,10 @@
       "esModuleInterop": true,                             
       "forceConsistentCasingInFileNames": true,
       "outDir": "./dist",
-      "rootDir": "src",    
+      "rootDir": "src/www/",    
       "strict": true,
       "declaration": true,                                  
       "skipLibCheck": true,
       "moduleResolution": "node"
-    },
-    "include": ["src"],
-    "exclude": ["node_modules"]
+    }
 }
