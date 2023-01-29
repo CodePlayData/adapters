@@ -2,20 +2,13 @@
 
 <br>
 
->
-> ## Em desenvolvimento
->
->
->Testando erros das classes.
-
+## Em desenvolvimento
+Testando erros das classes.
 
 <br>
 
-> ## Última alteração
-> <br>
->- Migração da base de códigos de outro repositório para esse.
->
-> <br>
+## Última alteração
+Migração da base de códigos de outro repositório para esse.
 
 <br>
 

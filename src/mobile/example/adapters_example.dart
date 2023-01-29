@@ -1,6 +1,6 @@
 import 'package:adapters/adapters.dart';
 
 void main() {
-  var awesome = Awesome();
-  print('awesome: ${awesome.isAwesome}');
+  final queue = GenericQueue(1);
+  queue.enqueue({'input': 'primeira entrada'});
 }

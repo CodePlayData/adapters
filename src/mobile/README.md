@@ -1,39 +1,30 @@
-<!-- 
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+<div align="center">
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages). 
+# Adapters
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages). 
--->
+![](https://raw.githubusercontent.com/CodePlayData/adapters/main/assets/adapters-white-logo.png)
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+</div>
 
-## Features
+Seguindo os princípios do [Ports and Adapters - _Alistair Cockburn_](https://alistair.cockburn.us/hexagonal-architecture/) essa _lib_ é um agregado de todos os adaptadores utilizados por outros pacotes do projeto **CodePlayData**.
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+<br>
 
-## Getting started
+> Os comentários no código estarão em inglês e a documentação/testes em português.
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+<br>
 
-## Usage
+---
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder. 
+<br>
 
-```dart
-const like = 'sample';
-```
+## Implementação
 
-## Additional information
+Abaixo estão os _adapters_ já implementados até agora:
 
-TODO: Tell users more about the package: where to find more information, how to 
-contribute to the package, how to file issues, what response they can expect 
-from the package authors, and more.
+| _File_   | Descrição  |
+|:---------|:-----------|
+|**GenericQueue** |  Essa classe normalmente é colocada antes de um banco de dados para controlar a _inflow_ e evitar o consumo de memória do servidor. Possui o comportamento de uma fila.|
+
+---
+<br>
