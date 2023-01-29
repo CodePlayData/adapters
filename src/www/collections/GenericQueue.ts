@@ -48,7 +48,7 @@ class GenericQueue implements Queue, Connection {
      * @param key 
      */
     enqueue(query: DatabaseQuery, store: string, object?: unknown, key?: any): void {
-        if(this.storage.length === this.maxsize) {
+        if(this.isFull) {
             throw new Error('You cannot insert any queries, the queue is full')
         }
         this.storage.push({ query, object, key, store });
@@ -59,6 +59,9 @@ class GenericQueue implements Queue, Connection {
      *  @returns @type { IDBRequest }
      */
     dequeue() {
+        if(this.isEmpty) {
+            throw new Error('This queue is already empty.')
+        }
         const element = this.storage.shift() as { query: DatabaseQuery, object?: unknown, key?: any, store: string };
         this.indexeddbadapter.store = element.store;
         const query = this.indexeddbadapter.query(element.query, element.object, element.key);
@@ -75,11 +78,19 @@ class GenericQueue implements Queue, Connection {
     
     /**
      *  Returns if the queue is already full.
-     * @returns @type { boolean }
+     *  @returns @type { boolean }
      */
     get isFull(): boolean {
         return this.storage.length === this.maxsize
-    }    
+    }
+
+    /**
+     *  Returns true if the queue is empty.
+     *  @returns @type { boolean }
+     */
+    get isEmpty(): boolean {
+        return this.storage.length === 0
+    }
 }
 
 export {
