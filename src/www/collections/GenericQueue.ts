@@ -1,5 +1,20 @@
 // @filename: GenericQueue.ts
 
+/* Copyright 2023 Pedro Paulo Teixeira dos Santos
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 /**
  *  A Generic queue to implement some like inbox&outbox pattern (https://event-driven.io/static/614379d9263d1b1395bf8ad305047ed3/5a190/2020-12-30-outbox.png).
  *  the only configuration needed is the database connection to send the queries in the dequeue method.
@@ -8,6 +23,8 @@
 import { Queue } from "./Queue.js";
 import type { Connection } from "../Connection.js";
 import { MongoQuery, IndexedDBQuery, LocalStorageQuery } from "../enums.js";
+import { QueueIsFull } from "../utils/errors/QueueIsFull.js";
+import { QueueIsEmpty } from "../utils/errors/QueueIsEmpty.js";
 
 type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery;
 
@@ -35,7 +52,7 @@ class GenericQueue implements Queue, Connection {
      */
     query(query: DatabaseQuery, object?: unknown, key?: any) {
         if(this.storage.length === this.maxsize) {
-            throw new Error('You cannot insert any queries, the queue is full')
+            throw new QueueIsFull();
         }
         this.enqueue(query, this.store, object, key);
     }
@@ -49,7 +66,7 @@ class GenericQueue implements Queue, Connection {
      */
     enqueue(query: DatabaseQuery, store: string, object?: unknown, key?: any): void {
         if(this.isFull) {
-            throw new Error('You cannot insert any queries, the queue is full')
+            throw new QueueIsFull();
         }
         this.storage.push({ query, object, key, store });
     }
@@ -60,7 +77,7 @@ class GenericQueue implements Queue, Connection {
      */
     dequeue() {
         if(this.isEmpty) {
-            throw new Error('This queue is already empty.')
+            throw new QueueIsEmpty();
         }
         const element = this.storage.shift() as { query: DatabaseQuery, object?: unknown, key?: any, store: string };
         this.indexeddbadapter.store = element.store;

@@ -1,6 +1,6 @@
 name: adapters
-description: Seguindo os princípios do Ports and Adapters - Alistair Cockburn essa lib é um agregado de todos os adaptadores utilizados por outros pacotes do projeto CodePlayData. Utilize apenas nos casos de aplicação descritos, pois estes estarão devidamente testados.
-version: 0.5.3
+description: Seguindo os princípios do Ports and Adapters - Alistair Cockburn essa lib é um agregado de todos os adaptadores utilizados por outros pacotes do projeto CodePlayData.
+version: 0.5.4
 homepage: https://github.com/codeplaydata
 
 environment:

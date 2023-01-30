@@ -1,4 +1,4 @@
-// @filename: Fetch.test.ts
+// @filename: IndexedDBDeleteDatabaseFailure.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,12 +15,12 @@
    limitations under the License.
  */
 
-import test from "node:test";
-import assert from "node:assert";
-import { Fetch } from "./Fetch.js";
+class IndexedDBDeleteDatabaseFailure extends Error {
+    constructor() {
+        super('The database could not be deleted.')
+    }
+}
 
-test('Testando o retorno de uma requisicao GET.', async() => {
-    const httpclient = new Fetch();
-    const request =  new Request('https://httpstat.us/200');
-    assert.strictEqual((await httpclient.fetch(request)).status, 200);
-})
+export {
+    IndexedDBDeleteDatabaseFailure
+}

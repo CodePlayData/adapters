@@ -1,5 +1,20 @@
 // @filename: IndexedDatabaseAdapter.ts
 
+/* Copyright 2023 Pedro Paulo Teixeira dos Santos
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 /**
  *  The IndexedDatabase is a browser V8's feature that acts as a Document Database Store, like MongoDB. 
  *  It acts by events and not Promisses, by transactions and has the following persistence operations:
@@ -15,6 +30,8 @@
 
 import { DatabasePermission, IndexedDBQuery } from "../enums.js";
 import type { Connection } from "../Connection.js";
+import { IndexedDBNoSupport } from "../utils/errors/IndexedDBNoSupport.js";
+import { IndexedDBDeleteDatabaseFailure } from "../utils/errors/IndexedDBDeleteDatabaseFailure.js";
 
 type IDBIndex = {
     indexName: string,
@@ -62,7 +79,7 @@ class IndexedDB implements Connection {
         /** Check if the browser supports this feature. */
         this.hasThisFeature = 'indexedDB' in navigator;
         if(!this.hasThisFeature)
-            throw new Error('This brownser has no support for IndexedDB.');     
+            throw new IndexedDBNoSupport();   
         const database = this.#thisDatabaseAlreadyExists(idbConfig);
         database.then((result: string) => {
             if(result === 'empty' || result === 'exists') {
@@ -77,7 +94,7 @@ class IndexedDB implements Connection {
                     this.#connection.onsuccess = this.#setDatabase();
                 }
                 request.onerror = () => {
-                    console.log('The database could not be deleted.')
+                    throw new IndexedDBDeleteDatabaseFailure();
                 }
             }
         })

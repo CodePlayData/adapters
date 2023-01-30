@@ -1,5 +1,20 @@
 // @filename: MongoDB.ts
 
+/* Copyright 2023 Pedro Paulo Teixeira dos Santos
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+ */
+
 /**
  *  The MongoDB is NoSQL Document database that acts with Promisses and can perform simple queries and
  *  aggregate pipelines. To be less computational expensive is recommended to work with indexes, reference
@@ -14,6 +29,8 @@
 import { Document, IndexDescription, MongoClient } from "mongodb";
 import { MongoQuery, IndexOperations } from "../enums.js";
 import { Connection } from "../Connection.js";
+import { MongoAggregateCouldNotCompleted } from "../utils/errors/MongoAggregateCouldNotCompleted.js";
+import { MongoOperationCouldNotCompleted } from "../utils/errors/MongoOperationCouldNotCompleted.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */
@@ -80,7 +97,7 @@ class MongoDB implements Connection {
             })
             return result
         } catch (error) {
-            throw new Error(`The aggregation could not be completed due: ${error}`)
+            throw new MongoAggregateCouldNotCompleted(error);
         } finally {
             await this._client.close();
         }
@@ -102,7 +119,7 @@ class MongoDB implements Connection {
                                 op === IndexOperations.drop ? await collection.dropIndexes() : await collection.indexes();
             return indexreturn
         } catch (error) {
-            throw new Error(`The operation could not be completed due: ${error}`)
+            throw new MongoOperationCouldNotCompleted(error)
         } finally {
             await this._client.close();
         }
@@ -125,7 +142,7 @@ class MongoDB implements Connection {
 
             return request
         } catch (error) {
-            throw new Error('The operation could not be completed.')
+            throw new MongoOperationCouldNotCompleted();
         } finally {
             await this._client.close();
         }
