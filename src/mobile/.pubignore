@@ -1,2 +1,3 @@
 lib/src/collections/generic_queue_test.dart
 lib/src/http/header_test.dart
+lib/src/http/request_test.dart

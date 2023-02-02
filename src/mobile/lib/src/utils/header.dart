@@ -24,12 +24,12 @@ class Header {
       var map = <String, String>{};
       input.split(";").forEach((header) {
         var parts = header.split(":");
-          if (parts.length == 2) {
-            map[parts[0].trim()] = parts[1].trim();
-          } else {
-            throw HeaderStringSeparatorNotSupported();
-          }
-        });
+        if (parts.length == 2) {
+          map[parts[0].trim()] = parts[1].trim();
+        } else {
+          throw HeaderStringSeparatorNotSupported();
+        }
+      });
       return map;
     } catch (e) {
       throw HeaderStringSeparatorNotSupported();
@@ -59,4 +59,46 @@ class Header {
   }
 
   Map<String, String> get headers => _headers;
+
+  append(String name, String value) {
+    _headers[name] = value;
+  }
+
+  delete(String name) {
+    _headers.remove(name);
+  }
+
+  entries() {
+    return _headers.values;
+  }
+
+  forEach(Function callback) {
+    _headers.forEach((key, value) {
+      callback(key, value);
+    });
+  }
+
+  get(String name) {
+    return _headers[name];
+  }
+
+  has(String name) {
+    return _headers.keys.contains(name);
+  }
+
+  keys() {
+    return _headers.keys;
+  }
+
+  set(String name, String value) {
+    if (has(name)) {
+      _headers.update(name, (newvalue) => value);
+    } else {
+      _headers[name] = value;
+    }
+  }
+
+  values() {
+    return _headers.values;
+  }
 }

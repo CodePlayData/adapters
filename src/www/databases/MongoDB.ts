@@ -114,12 +114,11 @@ class MongoDB implements Connection {
         try {
             await this._client.connect();
             const collection = this._client.db(this._db).collection(this._store);
-            // Alterar também para enums.
             const indexreturn = op === IndexOperations.create && indexdescript ? await collection.createIndexes(indexdescript) :
                                 op === IndexOperations.drop ? await collection.dropIndexes() : await collection.indexes();
             return indexreturn
         } catch (error) {
-            throw new MongoOperationCouldNotCompleted(error)
+            throw new MongoOperationCouldNotCompleted('trouble in the index operation.')
         } finally {
             await this._client.close();
         }

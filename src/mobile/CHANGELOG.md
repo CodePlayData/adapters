@@ -8,9 +8,18 @@ Classes compatíveis com o padrão Web de requesições http.
 <br>
 
 ## Última alteração
-Implementação de uma fila genérica.
+Implementação do construtor do Header.
 
 <br>
+
+## 30-01-2023 (0.5.4v)
+### Adicionado
+|_File_ | Dev  |
+|:------|:-----|
+| http/header_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/header.dart      | [_Pedro_](https://github.com/dr2pedro) |
+
+
 
 ## 29-01-2023 (0.5.3v)
 ### Removido
