@@ -12,8 +12,8 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-class InvalidRequestInput implements Exception {
-  String msg = 'This type of input cannot be used in the Request constructor.';
+class InvalidRequestBody implements Exception {
+  String msg = 'This type of body is not supported.';
   @override
   String toString() => msg;
 }

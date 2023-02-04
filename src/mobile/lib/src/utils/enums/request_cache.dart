@@ -12,8 +12,14 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-class InvalidRequestInput implements Exception {
-  String msg = 'This type of input cannot be used in the Request constructor.';
-  @override
-  String toString() => msg;
+enum RequestCache {
+  defaultish('default'),
+  noStore('no-store'),
+  reload('reload'),
+  noCache('no-cache'),
+  forceCache('force-cache'),
+  onlyIfCached('only-if-cached');
+
+  const RequestCache(this.cache);
+  final String cache;
 }

@@ -1,15 +1,24 @@
+import 'dart:html';
+
+import 'package:adapters/src/utils/enums/request_cache.dart';
+import 'package:adapters/src/utils/enums/request_credentials.dart';
+import 'package:adapters/src/utils/enums/request_method.dart';
+import 'package:adapters/src/utils/enums/request_mode.dart';
+import 'package:adapters/src/utils/enums/request_redirect.dart';
+import 'package:adapters/src/utils/enums/request_referrer.dart';
+import 'package:adapters/src/utils/enums/request_referrer_policy.dart';
 import 'package:adapters/src/utils/header.dart';
 
-abstract class RequestOptions {
-  String? method;
+class RequestOptions {
+  RequestMethod? method;
   Header? headers;
   dynamic body;
-  String? mode;
-  String? credentials;
-  String? cache;
-  String? redirect;
-  String? referrer;
-  String? referrerPolicy;
+  RequestMode? mode;
+  RequestCredentials? credentials;
+  RequestCache? cache;
+  RequestRedirect? redirect;
+  RequestReferrer? referrer;
+  RequestReferrerPolicy? referrerPolicy;
   String? integrity;
 
   RequestOptions(

@@ -12,8 +12,8 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-class InvalidRequestInput implements Exception {
-  String msg = 'This type of input cannot be used in the Request constructor.';
+class CannotTurnIntoArrayBuffer implements Exception {
+  String msg = 'The body data cannot be arrayBuffer.';
   @override
   String toString() => msg;
 }

@@ -12,8 +12,8 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-class InvalidRequestInput implements Exception {
-  String msg = 'This type of input cannot be used in the Request constructor.';
+class CannotTurnIntoFormData implements Exception {
+  String msg = 'The body data cannot be formdata.';
   @override
   String toString() => msg;
 }

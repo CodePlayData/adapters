@@ -12,8 +12,13 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-class InvalidRequestInput implements Exception {
-  String msg = 'This type of input cannot be used in the Request constructor.';
-  @override
-  String toString() => msg;
+enum RequestMode {
+  sameOrigin('same-origin'),
+  noCors('no-cors'),
+  cors('cors'),
+  navigate('navigate'),
+  websocket('websocket');
+
+  const RequestMode(this.mode);
+  final String mode;
 }
