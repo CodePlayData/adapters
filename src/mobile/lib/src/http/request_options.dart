@@ -7,7 +7,7 @@ import 'package:adapters/src/utils/enums/request_mode.dart';
 import 'package:adapters/src/utils/enums/request_redirect.dart';
 import 'package:adapters/src/utils/enums/request_referrer.dart';
 import 'package:adapters/src/utils/enums/request_referrer_policy.dart';
-import 'package:adapters/src/utils/header.dart';
+import 'package:adapters/src/http/header.dart';
 
 class RequestOptions {
   RequestMethod? method;

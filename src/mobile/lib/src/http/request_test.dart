@@ -13,9 +13,8 @@
 //    limitations under the License.
 
 import 'package:adapters/src/utils/enums/request_method.dart';
-import 'package:adapters/src/utils/header.dart';
-import 'package:adapters/src/utils/request.dart';
-import 'package:adapters/src/utils/request_options.dart';
+import 'package:adapters/src/http/request.dart';
+import 'package:adapters/src/http/request_options.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -66,7 +65,7 @@ void main() {
     test('Testando inserir um body.', () {
       var options = RequestOptions(body: {'name': 'test'});
       Request request2 = Request(Uri.http('localhost'), options: options);
-      expect(request2.body, {'name': 'test'});
+      expect(request2.body.body, {'name': 'test'});
     });
 
     test('Metodo formData.', () {

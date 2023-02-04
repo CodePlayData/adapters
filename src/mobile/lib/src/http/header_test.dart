@@ -12,7 +12,7 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/utils/header.dart';
+import 'package:adapters/src/http/header.dart';
 import 'package:test/test.dart';
 
 void main() {

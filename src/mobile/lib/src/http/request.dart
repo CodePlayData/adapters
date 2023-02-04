@@ -12,9 +12,9 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:convert';
 import 'dart:html';
 import 'dart:typed_data';
+import 'package:adapters/src/http/body.dart';
 import 'package:adapters/src/utils/enums/request_cache.dart';
 import 'package:adapters/src/utils/enums/request_credentials.dart';
 import 'package:adapters/src/utils/enums/request_method.dart';
@@ -22,12 +22,8 @@ import 'package:adapters/src/utils/enums/request_mode.dart';
 import 'package:adapters/src/utils/enums/request_redirect.dart';
 import 'package:adapters/src/utils/enums/request_referrer.dart';
 import 'package:adapters/src/utils/enums/request_referrer_policy.dart';
-import 'package:adapters/src/utils/exceptions/cannot_parse_into_json.dart';
-import 'package:adapters/src/utils/exceptions/cannot_turn_into_array_buffer.dart';
-import 'package:adapters/src/utils/exceptions/cannot_turn_into_blob.dart';
-import 'package:adapters/src/utils/exceptions/cannot_turn_into_form_data.dart';
-import 'package:adapters/src/utils/header.dart';
-import 'package:adapters/src/utils/request_options.dart';
+import 'package:adapters/src/http/header.dart';
+import 'package:adapters/src/http/request_options.dart';
 import 'package:adapters/src/utils/exceptions/invalid_request_input.dart';
 
 class Request {
@@ -41,7 +37,7 @@ class Request {
   late String redirect;
   late String cache;
   late String credentials;
-  dynamic body;
+  late Body body;
 
   Request(dynamic input, {RequestOptions? options}) {
     if (input is Uri) {
@@ -69,14 +65,15 @@ class Request {
       credentials = (options?.credentials != null
           ? options?.credentials?.credentials
           : RequestCredentials.sameOrigin.credentials)!;
-      body = options?.body;
+      body = Body(options?.body);
     } else if (input is Request) {
       headers = input.headers;
       method = input.method;
-      mode = input.mode;
+      mode =
+          input.mode == 'navigate' ? RequestMode.sameOrigin.mode : input.mode;
       url = input.url;
       referrerPolicy = input.referrerPolicy;
-      referrer = input.referrer;
+      referrer = '';
       integrity = input.integrity;
       redirect = input.redirect;
       cache = input.cache;
@@ -88,42 +85,19 @@ class Request {
   }
 
   Uint8List arrayBuffer() {
-    try {
-      var array8bit = Uint8List.fromList(body);
-      return array8bit;
-    } catch (e) {
-      throw CannotTurnIntoArrayBuffer();
-    }
+    return body.arrayBuffer();
   }
 
   Blob blob() {
-    try {
-      var blob = Blob(body);
-      return blob;
-    } catch (e) {
-      throw CannotTurnIntoBlob();
-    }
+    return body.blob();
   }
 
   FormData formData() {
-    try {
-      var formdata = FormData();
-      Map mapbody = body as Map;
-      mapbody.forEach((key, value) {
-        formdata.append(key, value);
-      });
-      return formdata;
-    } catch (e) {
-      throw CannotTurnIntoFormData();
-    }
+    return body.formData();
   }
 
   String json() {
-    try {
-      return jsonEncode(body);
-    } catch (e) {
-      throw CannotParseIntoJson();
-    }
+    return body.json();
   }
 
   String text() {
