@@ -12,9 +12,6 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:html';
-import 'dart:typed_data';
-
 import 'package:adapters/src/utils/enums/request_method.dart';
 import 'package:adapters/src/utils/header.dart';
 import 'package:adapters/src/utils/request.dart';
@@ -22,6 +19,7 @@ import 'package:adapters/src/utils/request_options.dart';
 import 'package:test/test.dart';
 
 void main() {
+  // Teste com: dart test -p chrome .
   group('Testando a classe Request.', () {
     Request request = Request(Uri.http('localhost'));
 
@@ -66,9 +64,39 @@ void main() {
     });
 
     test('Testando inserir um body.', () {
-      var options = RequestOptions(body: { 'name': 'test' } as Body);
+      var options = RequestOptions(body: {'name': 'test'});
       Request request2 = Request(Uri.http('localhost'), options: options);
-      expect(request2.body, []);
+      expect(request2.body, {'name': 'test'});
+    });
+
+    test('Metodo formData.', () {
+      var options = RequestOptions(body: {'name': 'test'});
+      Request request2 = Request(Uri.http('localhost'), options: options);
+      expect(request2.formData().has('name'), true);
+    });
+
+    test('Metodo arrayBuffer.', () {
+      var options = RequestOptions(body: [1, 2, 3, 4, 5, 6]);
+      Request request3 = Request(Uri.http('localhost'), options: options);
+      expect(request3.arrayBuffer(), [1, 2, 3, 4, 5, 6]);
+    });
+
+    test('Metodo blob.', () {
+      var options = RequestOptions(body: [1, 2, 3, 4, 5, 6]);
+      Request request4 = Request(Uri.http('localhost'), options: options);
+      expect(request4.blob().size, 6);
+    });
+
+    test('Metodo json.', () {
+      var options = RequestOptions(body: {'hello': 'world'});
+      Request request5 = Request(Uri.http('localhost'), options: options);
+      expect(request5.json(), '{"hello":"world"}');
+    });
+
+    test('Metodo text.', () {
+      var options = RequestOptions(body: 'hello world');
+      Request request6 = Request(Uri.http('localhost'), options: options);
+      expect(request6.text(), 'hello world');
     });
   });
 }

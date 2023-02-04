@@ -12,8 +12,8 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-class InvalidRequestBody implements Exception {
-  String msg = 'This type of body is not supported.';
+class CannotTurnIntoBlob implements Exception {
+  String msg = 'The body data cannot be blob.';
   @override
   String toString() => msg;
 }

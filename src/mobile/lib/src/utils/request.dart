@@ -22,9 +22,10 @@ import 'package:adapters/src/utils/enums/request_mode.dart';
 import 'package:adapters/src/utils/enums/request_redirect.dart';
 import 'package:adapters/src/utils/enums/request_referrer.dart';
 import 'package:adapters/src/utils/enums/request_referrer_policy.dart';
+import 'package:adapters/src/utils/exceptions/cannot_parse_into_json.dart';
 import 'package:adapters/src/utils/exceptions/cannot_turn_into_array_buffer.dart';
+import 'package:adapters/src/utils/exceptions/cannot_turn_into_blob.dart';
 import 'package:adapters/src/utils/exceptions/cannot_turn_into_form_data.dart';
-import 'package:adapters/src/utils/exceptions/invalid_request_body.dart';
 import 'package:adapters/src/utils/header.dart';
 import 'package:adapters/src/utils/request_options.dart';
 import 'package:adapters/src/utils/exceptions/invalid_request_input.dart';
@@ -68,11 +69,7 @@ class Request {
       credentials = (options?.credentials != null
           ? options?.credentials?.credentials
           : RequestCredentials.sameOrigin.credentials)!;
-      body = options?.body is String ||
-              options?.body is List<int> ||
-              options?.body is Map<String, String>
-          ? options?.body
-          : throw InvalidRequestBody();
+      body = options?.body;
     } else if (input is Request) {
       headers = input.headers;
       method = input.method;
@@ -90,41 +87,50 @@ class Request {
     }
   }
 
-  arrayBuffer() {
-    if (!body is List) {
+  Uint8List arrayBuffer() {
+    try {
+      var array8bit = Uint8List.fromList(body);
+      return array8bit;
+    } catch (e) {
       throw CannotTurnIntoArrayBuffer();
-    } else {
-      return Uint8List.fromList(body);
     }
   }
 
-  blob() {
-    Blob blob = Blob(body);
-    return blob;
+  Blob blob() {
+    try {
+      var blob = Blob(body);
+      return blob;
+    } catch (e) {
+      throw CannotTurnIntoBlob();
+    }
   }
 
-  formData() {
-    if (!body is Map) {
-      throw CannotTurnIntoFormData();
-    } else {
+  FormData formData() {
+    try {
       var formdata = FormData();
       Map mapbody = body as Map;
       mapbody.forEach((key, value) {
         formdata.append(key, value);
       });
       return formdata;
+    } catch (e) {
+      throw CannotTurnIntoFormData();
     }
   }
 
-  json() {
-    return jsonEncode(body);
+  String json() {
+    try {
+      return jsonEncode(body);
+    } catch (e) {
+      throw CannotParseIntoJson();
+    }
   }
 
-  text() {
+  String text() {
     return body.toString();
   }
 
-  clone() {
+  Request clone() {
     return Request(this);
   }
 }
