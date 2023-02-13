@@ -12,26 +12,14 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/http/body.dart';
-import 'package:adapters/src/http/header.dart';
-import 'package:adapters/src/http/response_options.dart';
+import 'package:adapters/src/http/response.dart';
+import 'package:test/test.dart';
 
-class Response {
-  Header? headers;
-  late Body body;
-  late bool bodyUsed;
-  late bool ok;
-  late String redirect;
-  late String status;
-  late String statusText;
-  late String type;
-  late Uri url;
-
-  Response([dynamic bodyInput, ResponseOptions? options]) {
-    body = Body(bodyInput);
-  }
-
-  Response clone() {
-    return this;
-  }
+void main() {
+  group('Testando a classe Response.', () {
+    test('Inserindo um input valido no body.', () {
+      Response response = Response('input1');
+      expect(response.body.text(), 'input1');
+    });
+  });
 }
