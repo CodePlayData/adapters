@@ -45,7 +45,8 @@ class Body {
 
   Uint8List arrayBuffer() {
     try {
-      var array8bit = Uint8List.fromList(_body);
+      var list = List<int>.from(_body);
+      var array8bit = Uint8List.fromList(list);
       return array8bit;
     } catch (e) {
       throw CannotTurnIntoArrayBuffer();

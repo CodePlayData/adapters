@@ -27,11 +27,6 @@ class Response {
   late Uri url;
 
   Response({dynamic body, ResponseOptions? options});
-  // o body tem que aceitar Blob ok, Uint8List ok, FormData ok, String ok, UrlSearchParams? ok, ReadbleStream?
-  // a maior dificuldade do response parece ser aceitar essas entradas, pois elas
-  // se tornarão a propriedade `body` da response.
-  // Na especificação tem um exemplo com o blob, parece ser o inicio mais simples.
-  // A parte de options parece ser mais simples.
 
   Response clone() {
     return this;

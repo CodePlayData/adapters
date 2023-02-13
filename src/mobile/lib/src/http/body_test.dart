@@ -14,7 +14,6 @@
 
 import 'dart:html';
 import 'dart:typed_data';
-
 import 'package:adapters/src/http/body.dart';
 import 'package:test/test.dart';
 
@@ -22,7 +21,7 @@ void main() {
   // Teste com: dart test -p chrome .
   group('Testando a classe Body.', () {
     test('Inserindo uma List/TypedArray como input.', () {
-      List lista = [1, 2, 3, 4];
+      var lista = [1, 2, 3, 4];
       Body body = Body(lista);
       expect(body.body, lista);
     });
@@ -58,12 +57,12 @@ void main() {
       expect(body.body, formData);
     });
 
-    // Teste quebrando!
     test('Inserindo UrlSearchParams como entrada.', () {
-      UrlSearchParams searchParams = UrlSearchParams({'input1': 'teste'});
+      UrlSearchParams searchParams = UrlSearchParams();
+      searchParams.append('input1', 'test');
       Body body = Body(searchParams);
-      expect(body.body, searchParams);
-    }, skip: true);
+      expect(body.body.get('input1'), searchParams.get('input1'));
+    });
 
     test('Inserindo uma Stream como entrada.', () {
       Stream stream = Stream.empty();
@@ -71,6 +70,41 @@ void main() {
       expect(body.body, stream);
     });
 
-    
+    test('ArrayBuffer, deve retornar um Uint8List de uma List.', () {
+      var lista = [1, 2, 3, 4];
+      Body body = Body(lista);
+      var arrayBuffer = body.arrayBuffer();
+      expect(arrayBuffer, [1, 2, 3, 4]);
+    });
+
+    test('Blob, deve retornar um blob de uma.', () {
+      var list = ['input1', 'input2'];
+      Body body = Body(list);
+      var blob = body.blob();
+      expect(blob.size, 12);
+    });
+
+    test('FormData, deve retornar um FormaData de um Map.', () {
+      var map = {'input1': 'teste'};
+      Body body = Body(map);
+      var form = body.formData();
+      var formToCompare = FormData();
+      formToCompare.append('input1', 'teste');
+      expect(form.get('input1'), formToCompare.get('input1'));
+    });
+
+    test('Json, deve retornar um json de um Map.', () {
+      var map = {'input1': 'teste'};
+      Body body = Body(map);
+      var json = body.json();
+      expect(json, '{"input1":"teste"}');
+    });
+
+    test('Text, deve retornar uma string.', () {
+      var msg = 'testando 1, 2, 3,...';
+      Body body = Body(msg);
+      var text = body.text();
+      expect(text, msg);
+    });
   });
 }
