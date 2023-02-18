@@ -12,28 +12,69 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
+import 'dart:html';
+import 'package:adapters/src/http/body.dart';
 import 'package:adapters/src/http/header.dart';
 import 'package:adapters/src/http/response_options.dart';
+import 'package:adapters/src/utils/enums/response_type.dart';
 
 class Response {
   Header? headers;
-  dynamic body;
-  late bool bodyUsed;
-  late bool ok;
-  late String redirect;
-  late String status;
-  late String statusText;
-  late String type;
-  late Uri url;
+  late final Body body;
+  late final bool ok;
+  late final bool redirected;
+  late final int status;
+  late final String statusText;
+  late final ResponseType type;
+  late final Uri url;
 
-  Response({dynamic body, ResponseOptions? options});
-  // o body tem que aceitar Blob ok, Uint8List ok, FormData ok, String ok, UrlSearchParams? ok, ReadbleStream?
-  // a maior dificuldade do response parece ser aceitar essas entradas, pois elas
-  // se tornarão a propriedade `body` da response.
-  // Na especificação tem um exemplo com o blob, parece ser o inicio mais simples.
-  // A parte de options parece ser mais simples.
+  Response(this.url, this.redirected, this.type, dynamic bodyInput,
+      ResponseOptions options) {
+    body = Body(bodyInput);
+    if (options.status > 200 && options.status <= 209) {
+      ok = true;
+    }
+    statusText = options.statusMsg;
+    headers = options.headers;
+  }
 
   Response clone() {
     return this;
+  }
+
+  bool get bodyUsed {
+    return body.bodyUsed;
+  }
+
+  set bodyUser(bool used) {
+    if (bodyUsed == false) {
+      body.bodyUsed = used;
+    }
+  }
+
+  Blob blob() {
+    return body.blob();
+  }
+
+  FormData formData() {
+    return body.formData();
+  }
+
+  String json() {
+    return body.json();
+  }
+
+  String text() {
+    return body.toString();
+  }
+
+  static redirect(Uri newurl, Response response) {
+    return Response(newurl, true, ResponseType.basic, response.body,
+        ResponseOptions(302, response.headers!, 'Permanent Redirect'));
+  }
+
+  static error(int statusCode, Header headers, String errorMsg) {
+    return Response(Uri.directory('/'), false, ResponseType.error, null,
+        ResponseOptions(statusCode, headers, errorMsg));
   }
 }
