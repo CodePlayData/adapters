@@ -12,12 +12,13 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/http/header.dart';
+enum ResponseType {
+  basic('basic'),
+  cors('cors'),
+  error('error'),
+  opaque('opaque'),
+  opaqueredirect('opaqueredirect');
 
-class ResponseOptions {
-  int status;
-  Header headers;
-  String statusMsg;
-
-  ResponseOptions(this.status, this.headers, this.statusMsg);
+  const ResponseType(this.type);
+  final String type;
 }

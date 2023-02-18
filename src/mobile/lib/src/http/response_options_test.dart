@@ -13,11 +13,14 @@
 //    limitations under the License.
 
 import 'package:adapters/src/http/header.dart';
+import 'package:adapters/src/http/response_options.dart';
+import 'package:test/test.dart';
 
-class ResponseOptions {
-  int status;
-  Header headers;
-  String statusMsg;
-
-  ResponseOptions(this.status, this.headers, this.statusMsg);
+main() {
+  group('Testando a classe ResponseOptions.', () {
+    test('Testando as options com apenas um parâmetro.', () {
+      var options = ResponseOptions(202, Header({'type': 'application/json'}), 'ok');
+      expect(options.status, 202);
+    });
+  });
 }
