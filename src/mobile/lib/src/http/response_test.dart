@@ -15,11 +15,11 @@
 import 'package:adapters/src/http/response.dart';
 import 'package:test/test.dart';
 
-main() {
+void main() {
   group('Testando a classe Response.', () {
-    Response response = Response(url, redirected, type, bodyInput, options);
-
-    test('Instanciando a classe.', () {});
-    
+    test('Inserindo um input valido no body.', () {
+      Response response = Response('input1');
+      expect(response.body.text(), 'input1');
+    });
   });
 }

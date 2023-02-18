@@ -12,10 +12,8 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:io';
-
-class Fetch {
-  fetch(HttpClientRequest request) async {
-    return await request.close();
-  }
+class InvalidBody implements Exception {
+  String msg = 'This is a invalid Body input.';
+  @override
+  String toString() => msg;
 }
