@@ -21,60 +21,81 @@ import 'package:adapters/src/utils/enums/response_type.dart';
 class Response {
   Header? headers;
   late final Body body;
+  late bool _bodyUsed;
   late final bool ok;
   late final bool redirected;
   late final int status;
-  late final String statusText;
+  late final String statusMsg;
   late final ResponseType type;
-  late final Uri url;
+  late Uri? url;
 
-  Response(this.url, this.redirected, this.type, dynamic bodyInput,
-      ResponseOptions options) {
+  Response([dynamic bodyInput, ResponseOptions? options]) {
     body = Body(bodyInput);
-    if (options.status > 200 && options.status <= 209) {
-      ok = true;
+    type = ResponseType.cors;
+    _bodyUsed = false;
+    url = Uri.file('/');
+    if (options != null) {
+      status = options.status;
+      statusMsg = options.statusMsg;
+      if (options.status > 200 && options.status <= 209) {
+        ok = true;
+      }
+      if (options.headers?.has('Location')) {
+        redirected = true;
+        url = Uri.tryParse(options.headers?.get('Location'));
+      } else {
+        redirected = false;
+      }
     }
-    statusText = options.statusMsg;
-    headers = options.headers;
+    headers = options?.headers;
   }
 
   Response clone() {
+    bodyUsed = true;
     return this;
   }
 
   bool get bodyUsed {
-    return body.bodyUsed;
+    return _bodyUsed;
   }
 
-  set bodyUser(bool used) {
-    if (bodyUsed == false) {
-      body.bodyUsed = used;
+  set bodyUsed(bool used) {
+    if (_bodyUsed == false) {
+      _bodyUsed = used;
     }
   }
 
   Blob blob() {
+    bodyUsed = true;
     return body.blob();
   }
 
   FormData formData() {
+    bodyUsed = true;
     return body.formData();
   }
 
   String json() {
+    bodyUsed = true;
     return body.json();
   }
 
   String text() {
+    bodyUsed = true;
     return body.toString();
   }
 
-  static redirect(Uri newurl, Response response) {
-    return Response(newurl, true, ResponseType.basic, response.body,
-        ResponseOptions(302, response.headers!, 'Permanent Redirect'));
+  static redirect(int statusCode, String statusMsg, String to, Response previousResponse) {
+    ResponseOptions options =
+        ResponseOptions(statusCode, previousResponse.headers, statusMsg);
+    options.headers?.set('Location', to);
+    Response newResponse = Response(previousResponse.body, options);
+    return newResponse;
   }
 
   static error(int statusCode, Header headers, String errorMsg) {
-    return Response(Uri.directory('/'), false, ResponseType.error, null,
-        ResponseOptions(statusCode, headers, errorMsg));
+    ResponseOptions options = ResponseOptions(statusCode, headers, errorMsg);
+    Response response = Response(null, options);
+    return response;
   }
 }

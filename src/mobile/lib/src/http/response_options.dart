@@ -16,7 +16,7 @@ import 'package:adapters/src/http/header.dart';
 
 class ResponseOptions {
   int status;
-  Header headers;
+  Header? headers;
   String statusMsg;
 
   ResponseOptions(this.status, this.headers, this.statusMsg);
