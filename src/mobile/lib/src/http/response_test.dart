@@ -15,6 +15,7 @@
 import 'package:adapters/src/http/header.dart';
 import 'package:adapters/src/http/response.dart';
 import 'package:adapters/src/http/response_options.dart';
+import 'package:adapters/src/utils/enums/redirect_status_code.dart';
 import 'package:test/test.dart';
 import '../utils/enums/response_type.dart';
 
@@ -23,21 +24,24 @@ void main() {
   group('Testando a classe Response.', () {
     test('Sem nenhum input.', () {
       Response response = Response();
+
       expect(response.type.toString(), ResponseType.cors.toString());
-      // defaults
       expect(response.url, Uri.file('/'));
       expect(response.type.toString(), ResponseType.cors.toString());
     });
 
     test('Com apenas o Body de input.', () {
       Response response = Response('test');
+
       expect(response.text(), 'test');
     });
 
     test('Com body e options.', () {
       ResponseOptions options =
           ResponseOptions(202, Header({'Location': 'http://localhost'}), 'ok');
+
       Response response = Response('test', options);
+
       expect(response.status, 202);
       expect(response.bodyUsed, false);
     });
@@ -45,12 +49,15 @@ void main() {
     test('Testando bodyUsed.', () {
       Response response = Response('test');
       String input = response.text();
+
       expect(response.bodyUsed, true);
     });
 
     test('Clonando a response.', () {
       Response response = Response('test');
+
       Response cloned = response.clone();
+
       expect(response, cloned);
     });
 
@@ -63,16 +70,29 @@ void main() {
           }),
           'ok');
       Response response = Response('input', options);
-      Response redirected = Response.redirect(
-          307, 'Temporary redirected.', 'http://localhost:3000/', response);
-      expect(redirected.headers?.get('Location'), 'http://localhost:3000/');
-      expect(redirected.redirected, true);
+
+      response = Response.redirect(
+          'http://localhost:3000/', RedirectStatusCode.temporaryRedirect);
+
+      expect(response.headers?.get('Location'), 'http://localhost:3000/');
+      expect(response.redirected, true);
+      expect(response.status, 307);
+      expect(response.statusMsg, 'Temporary Redirect');
     });
 
     test('Error de uma response.', () {
-      Response response = Response.error(
-          500, Header({'Connection': 'close'}), 'Internal server error.');
-      expect(response.status, 500);
+      ResponseOptions options = ResponseOptions(
+          200,
+          Header({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }),
+          'ok');
+      Response response = Response('input', options);
+      response = Response.error();
+
+      expect(response.status, 0);
+      expect(response.type.toString(), ResponseType.error.toString());
     });
   });
 }

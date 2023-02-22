@@ -12,14 +12,16 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/http/header.dart';
-import 'package:adapters/src/utils/enums/response_type.dart';
+enum RedirectStatusCode {
+  multipleChoice(300, 'Multiple Choice'),
+  movedPermanently(301, 'Moved Permanently'),
+  found(302, 'Found'),
+  seeOther(303, 'See Other'),
+  notModified(304, 'Not Modified'),
+  temporaryRedirect(307, 'Temporary Redirect'),
+  permanentRedirect(308, 'Permanent Reirect');
 
-class ResponseOptions {
-  int status;
-  Header? headers;
-  String statusMsg;
-  ResponseType? type;
-
-  ResponseOptions(this.status, this.headers, this.statusMsg, [this.type]);
+  const RedirectStatusCode(this.code, this.codeMsg);
+  final int code;
+  final String codeMsg;
 }

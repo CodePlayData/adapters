@@ -16,6 +16,7 @@ import 'dart:html';
 import 'package:adapters/src/http/body.dart';
 import 'package:adapters/src/http/header.dart';
 import 'package:adapters/src/http/response_options.dart';
+import 'package:adapters/src/utils/enums/redirect_status_code.dart';
 import 'package:adapters/src/utils/enums/response_type.dart';
 
 class Response {
@@ -26,8 +27,9 @@ class Response {
   late final bool redirected;
   late final int status;
   late final String statusMsg;
-  late final ResponseType type;
+  late ResponseType type;
   late Uri? url;
+  static late Response _response;
 
   Response([dynamic bodyInput, ResponseOptions? options]) {
     body = Body(bodyInput);
@@ -39,6 +41,8 @@ class Response {
       statusMsg = options.statusMsg;
       if (options.status > 200 && options.status <= 209) {
         ok = true;
+      } else {
+        ok = false;
       }
       if (options.headers?.has('Location')) {
         redirected = true;
@@ -46,8 +50,13 @@ class Response {
       } else {
         redirected = false;
       }
+
+      if (options.type != null) {
+        type = options.type!;
+      }
     }
     headers = options?.headers;
+    _response = this;
   }
 
   Response clone() {
@@ -85,17 +94,20 @@ class Response {
     return body.toString();
   }
 
-  static redirect(int statusCode, String statusMsg, String to, Response previousResponse) {
-    ResponseOptions options =
-        ResponseOptions(statusCode, previousResponse.headers, statusMsg);
-    options.headers?.set('Location', to);
-    Response newResponse = Response(previousResponse.body, options);
+  static redirect(String url, [RedirectStatusCode? statusCode]) {
+    ResponseOptions options = ResponseOptions(
+        statusCode!.code, _response.headers, statusCode.codeMsg);
+    options.headers?.set('Location', url);
+    Response newResponse = Response(_response.body, options);
+    _response = newResponse;
     return newResponse;
   }
 
-  static error(int statusCode, Header headers, String errorMsg) {
-    ResponseOptions options = ResponseOptions(statusCode, headers, errorMsg);
-    Response response = Response(null, options);
-    return response;
+  static error() {
+    ResponseOptions options = ResponseOptions(
+        0, Header({'Connection': 'close'}), '', ResponseType.error);
+    Response errorResponse = Response(null, options);
+    _response = errorResponse;
+    return errorResponse;
   }
 }

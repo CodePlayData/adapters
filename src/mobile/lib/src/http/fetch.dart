@@ -12,14 +12,6 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/http/header.dart';
-import 'package:adapters/src/utils/enums/response_type.dart';
-
-class ResponseOptions {
-  int status;
-  Header? headers;
-  String statusMsg;
-  ResponseType? type;
-
-  ResponseOptions(this.status, this.headers, this.statusMsg, [this.type]);
+abstract class Fetch {
+  fetch([dynamic resource, dynamic options]);
 }
