@@ -1,0 +1,4 @@
+- [ ] Remover a dependência ao pacote dart:html que é apenas compilado para javascript e não para os plataformas nativas.
+    - [ ] Remover a dependência do Blob e do Form-Data;
+    - [ ] Codar um switch que detecte em tempo de compilação se o código está nativo ou Web;
+Obs¹.: Segundo o [overview](https://dart.dev/overview#native-platform) existe uma lib chamada [http](https://pub.dev/packages/http) que implementa essa funcionalidade multi-plataforma mas não segue os padrões da web para requisições e respostas Http (ainda que utilize os mesmo objetos descritos os métodos e propriedades são todos diferentes), o que é ruim, completamente o oposto da proposta desse repositório.
