@@ -13,8 +13,8 @@
 //    limitations under the License.
 
 import 'package:adapters/src/utils/enums/request_method.dart';
-import 'package:adapters/src/http/request.dart';
-import 'package:adapters/src/http/request_options.dart';
+import 'package:adapters/src/http/Request/request.dart';
+import 'package:adapters/src/http/Request/request_options.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -68,22 +68,10 @@ void main() {
       expect(request2.body.body, {'name': 'test'});
     });
 
-    test('Metodo formData.', () {
-      var options = RequestOptions(body: {'name': 'test'});
-      Request request2 = Request(Uri.http('localhost'), options: options);
-      expect(request2.formData().has('name'), true);
-    });
-
     test('Metodo arrayBuffer.', () {
       var options = RequestOptions(body: [1, 2, 3, 4, 5, 6]);
       Request request3 = Request(Uri.http('localhost'), options: options);
       expect(request3.arrayBuffer(), [1, 2, 3, 4, 5, 6]);
-    });
-
-    test('Metodo blob.', () {
-      var options = RequestOptions(body: [1, 2, 3, 4, 5, 6]);
-      Request request4 = Request(Uri.http('localhost'), options: options);
-      expect(request4.blob().size, 6);
     });
 
     test('Metodo json.', () {

@@ -12,9 +12,14 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:html';
 import 'dart:typed_data';
-import 'package:adapters/src/http/body.dart';
+
+import 'package:adapters/src/http/Body/body_default.dart'
+    if (dart.library.html) 'package:adapters/src/http/Body/body_html.dart' show Body;
+
+import 'package:adapters/src/http/Header/header.dart';
+import 'package:adapters/src/http/Request/request_options.dart';
+
 import 'package:adapters/src/utils/enums/request_cache.dart';
 import 'package:adapters/src/utils/enums/request_credentials.dart';
 import 'package:adapters/src/utils/enums/request_method.dart';
@@ -22,8 +27,7 @@ import 'package:adapters/src/utils/enums/request_mode.dart';
 import 'package:adapters/src/utils/enums/request_redirect.dart';
 import 'package:adapters/src/utils/enums/request_referrer.dart';
 import 'package:adapters/src/utils/enums/request_referrer_policy.dart';
-import 'package:adapters/src/http/header.dart';
-import 'package:adapters/src/http/request_options.dart';
+
 import 'package:adapters/src/utils/exceptions/invalid_request_input.dart';
 
 class Request {
@@ -88,11 +92,11 @@ class Request {
     return body.arrayBuffer();
   }
 
-  Blob blob() {
+  dynamic blob() {
     return body.blob();
   }
 
-  FormData formData() {
+  dynamic formData() {
     return body.formData();
   }
 

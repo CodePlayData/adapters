@@ -12,6 +12,16 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-abstract class RequestI {
-  
+import 'package:test/test.dart';
+
+import 'package:adapters/src/http/Header/header.dart';
+import 'package:adapters/src/http/Response/response_options.dart';
+
+main() {
+  group('Testando a classe ResponseOptions.', () {
+    test('Testando as options com apenas um parâmetro.', () {
+      var options = ResponseOptions(202, Header({'type': 'application/json'}), 'ok');
+      expect(options.status, 202);
+    });
+  });
 }

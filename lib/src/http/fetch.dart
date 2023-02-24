@@ -13,5 +13,5 @@
 //    limitations under the License.
 
 abstract class Fetch {
-  fetch([dynamic resource, dynamic options]);
+  send([dynamic resource, dynamic options]);
 }

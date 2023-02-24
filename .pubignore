@@ -1,3 +1,8 @@
 lib/src/collections/generic_queue_test.dart
-lib/src/http/header_test.dart
-lib/src/http/request_test.dart
+lib/src/http/Body/body_default_test.dart
+lib/src/http/Body/body_html_test.dart
+lib/src/http/Header/header_test.dart
+lib/src/http/Request/request_html_test.dart
+lib/src/http/Request/request_test.dart
+lib/src/http/Response/response_options_test.dart
+lib/src/http/Response/response_test.dart

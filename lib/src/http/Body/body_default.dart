@@ -12,15 +12,19 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:convert';
-import 'dart:html';
-import 'dart:typed_data';
-import '../utils/exceptions/cannot_parse_into_json.dart';
-import '../utils/exceptions/cannot_turn_into_array_buffer.dart';
-import '../utils/exceptions/cannot_turn_into_blob.dart';
-import '../utils/exceptions/cannot_turn_into_form_data.dart';
+// ignore_for_file: annotate_overrides
 
-class Body {
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:adapters/src/http/Body/body.dart';
+
+import 'package:adapters/src/utils/exceptions/cannot_parse_into_json.dart';
+import 'package:adapters/src/utils/exceptions/cannot_turn_into_array_buffer.dart';
+import 'package:adapters/src/utils/exceptions/cannot_turn_into_blob.dart';
+import 'package:adapters/src/utils/exceptions/cannot_turn_into_form_data.dart';
+
+class Body implements BodyI {
   dynamic _body;
 
   Body(dynamic input) {
@@ -30,13 +34,9 @@ class Body {
       _body = input;
     } else if (input is Map) {
       _body = input;
-    } else if (input is Blob) {
+    } else if (input is List<int>) {
       _body = input;
     } else if (input is Uint8List) {
-      _body = input;
-    } else if (input is FormData) {
-      _body = input;
-    } else if (input is UrlSearchParams) {
       _body = input;
     } else if (input is Stream) {
       _body = input;
@@ -53,23 +53,18 @@ class Body {
     }
   }
 
-  Blob blob() {
+  List<int> blob() {
     try {
-      var blob = Blob(_body);
+      var blob = List<int>.from(_body);
       return blob;
     } catch (e) {
       throw CannotTurnIntoBlob();
     }
   }
 
-  FormData formData() {
+  Map formData() {
     try {
-      var formdata = FormData();
-      Map mapbody = _body as Map;
-      mapbody.forEach((key, value) {
-        formdata.append(key, value);
-      });
-      return formdata;
+      return body as Map;
     } catch (e) {
       throw CannotTurnIntoFormData();
     }
@@ -90,7 +85,7 @@ class Body {
   get body {
     return _body;
   }
-
+  
   @override
   String toString() {
     return _body.toString();

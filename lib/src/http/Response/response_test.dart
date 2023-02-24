@@ -12,12 +12,13 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/http/header.dart';
-import 'package:adapters/src/http/response.dart';
-import 'package:adapters/src/http/response_options.dart';
-import 'package:adapters/src/utils/enums/redirect_status_code.dart';
 import 'package:test/test.dart';
-import '../utils/enums/response_type.dart';
+
+import 'package:adapters/src/http/Header/header.dart';
+import 'package:adapters/src/http/Response/response.dart';
+import 'package:adapters/src/http/Response/response_options.dart';
+import 'package:adapters/src/utils/enums/redirect_status_code.dart';
+import '../../utils/enums/response_type.dart';
 
 void main() {
   // Teste com: dart test -p chrome .

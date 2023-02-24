@@ -12,13 +12,36 @@ Implementação do construtor do Header.
 
 <br>
 
+## 23-02-2023 (0.5.5v)
+### Adicionado
+|_File_ | Dev  |
+|:------|:-----|
+| http/Body/body_default_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Body/body_default.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Body/body_html_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Body/body_html.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Body/body.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Request/request_html_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+
+
+### Alterado
+| http/Header/header_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Header/header.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Request/request_options.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Request/request_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Request/request.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Response/response_options_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Response/response_options.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Response/response_test.dart | [_Pedro_](https://github.com/dr2pedro) |
+| http/Response/response.dart | [_Pedro_](https://github.com/dr2pedro) |
+
+
 ## 30-01-2023 (0.5.4v)
 ### Adicionado
 |_File_ | Dev  |
 |:------|:-----|
 | http/header_test.dart | [_Pedro_](https://github.com/dr2pedro) |
 | http/header.dart      | [_Pedro_](https://github.com/dr2pedro) |
-
 
 
 ## 29-01-2023 (0.5.3v)

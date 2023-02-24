@@ -12,8 +12,9 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'package:adapters/src/http/header.dart';
 import 'package:test/test.dart';
+
+import 'package:adapters/src/http/Header/header.dart';
 
 void main() {
   group('Testando a classe Header.', () {

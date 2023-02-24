@@ -12,10 +12,16 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:html';
-import 'dart:typed_data';
-import 'package:adapters/src/http/body.dart';
+// ignore_for_file: depend_on_referenced_packages
+
+
 import 'package:test/test.dart';
+
+import 'dart:typed_data';
+
+import 'package:adapters/src/http/Body/body_default.dart'
+    if (dart.library.html) 'package:adapters/src/http/Body/body_html.dart' show Body;
+
 
 void main() {
   // Teste com: dart test -p chrome .
@@ -38,30 +44,10 @@ void main() {
       expect(body.body, map);
     });
 
-    test('Inserindo um blob como entrada.', () {
-      Blob blob = Blob([1, 2, 3]);
-      Body body = Body(blob);
-      expect(body.body, blob);
-    });
-
     test('Inserindo um Uint8List/ArrayBuffer como entrada.', () {
       Uint8List arrayBuffer = Uint8List.fromList([1, 225, 24]);
       Body body = Body(arrayBuffer);
       expect(body.body, arrayBuffer);
-    });
-
-    test('Inserindo um FormData como entrada.', () {
-      FormData formData = FormData();
-      formData.append('input1', 'test');
-      Body body = Body(formData);
-      expect(body.body, formData);
-    });
-
-    test('Inserindo UrlSearchParams como entrada.', () {
-      UrlSearchParams searchParams = UrlSearchParams();
-      searchParams.append('input1', 'test');
-      Body body = Body(searchParams);
-      expect(body.body.get('input1'), searchParams.get('input1'));
     });
 
     test('Inserindo uma Stream como entrada.', () {
@@ -75,22 +61,6 @@ void main() {
       Body body = Body(lista);
       var arrayBuffer = body.arrayBuffer();
       expect(arrayBuffer, [1, 2, 3, 4]);
-    });
-
-    test('Blob, deve retornar um blob de uma.', () {
-      var list = ['input1', 'input2'];
-      Body body = Body(list);
-      var blob = body.blob();
-      expect(blob.size, 12);
-    });
-
-    test('FormData, deve retornar um FormaData de um Map.', () {
-      var map = {'input1': 'teste'};
-      Body body = Body(map);
-      var form = body.formData();
-      var formToCompare = FormData();
-      formToCompare.append('input1', 'teste');
-      expect(form.get('input1'), formToCompare.get('input1'));
     });
 
     test('Json, deve retornar um json de um Map.', () {

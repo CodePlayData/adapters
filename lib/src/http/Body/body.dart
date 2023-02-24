@@ -12,6 +12,17 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-abstract class HeaderI {
-  
+import 'dart:typed_data';
+
+abstract class BodyI {
+
+  Uint8List arrayBuffer();
+  blob();
+  formData();
+  String json();
+  String text();
+
+  get body;
+  @override
+  String toString();
 }

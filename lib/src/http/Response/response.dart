@@ -12,10 +12,12 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:html';
-import 'package:adapters/src/http/body.dart';
-import 'package:adapters/src/http/header.dart';
-import 'package:adapters/src/http/response_options.dart';
+import 'package:adapters/src/http/Body/body_default.dart'
+    if (dart.library.html) 'package:adapters/src/http/Body/body_html.dart' show Body;
+
+import 'package:adapters/src/http/Header/header.dart';
+import 'package:adapters/src/http/Response/response_options.dart';
+
 import 'package:adapters/src/utils/enums/redirect_status_code.dart';
 import 'package:adapters/src/utils/enums/response_type.dart';
 
@@ -74,12 +76,12 @@ class Response {
     }
   }
 
-  Blob blob() {
+  dynamic blob() {
     bodyUsed = true;
     return body.blob();
   }
 
-  FormData formData() {
+  dynamic formData() {
     bodyUsed = true;
     return body.formData();
   }

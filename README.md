@@ -2,7 +2,7 @@
 
 # Adapters
 
-![](https://raw.githubusercontent.com/CodePlayData/adapters/main/assets/adapters-white-logo.png)
+![](./assets/adapters-white-logo.png)
 
 </div>
 

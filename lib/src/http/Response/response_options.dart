@@ -12,15 +12,14 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import 'dart:io';
-import 'package:adapters/src/http/fetch.dart';
+import 'package:adapters/src/http/Header/header.dart';
+import 'package:adapters/src/utils/enums/response_type.dart';
 
-class IOHttpClient implements Fetch {
-  HttpClient client = HttpClient();
-  @override
-  fetch([resource, options]) {
-    // TODO: implement fetch
-    throw UnimplementedError();
-  }
+class ResponseOptions {
+  int status;
+  Header? headers;
+  String statusMsg;
+  ResponseType? type;
 
+  ResponseOptions(this.status, this.headers, this.statusMsg, [this.type]);
 }
