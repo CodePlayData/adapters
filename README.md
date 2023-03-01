@@ -2,7 +2,7 @@
 
 # Adapters
 
-![](https://raw.githubusercontent.com/CodePlayData/adapters/dart-flutter/assets/adapters-white-logo.png)
+![](https://raw.githubusercontent.com/CodePlayData/adapters/dart-flutter/assets/adapters-dark-logo.png)
 
 </div>
 
