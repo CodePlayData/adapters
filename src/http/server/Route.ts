@@ -1,4 +1,4 @@
-// @filename: Express.ts
+// @filename: Route.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,30 +15,11 @@
    limitations under the License.
  */
 
-import { HttpServer } from "./HttpServer.js";
-import { RouterApp } from "./RouterApp.js";
-
-import express from "express";
-
-class ExpressApp implements HttpServer {
-    _app;
-
-    constructor(readonly routers?: RouterApp[]) {
-        this._app = express();
-        routers?.map((router: RouterApp) => {
-            this._app.use(router.path, router.router);
-        })
-    }
-
-    async listen(port: number) {
-        return this._app.listen(port);
-    }
-
-    get router() {
-        return this._app._router
+class Route {
+    constructor(readonly method: string, readonly endpoint: string, readonly callback: Function) {
     }
 }
 
 export {
-    ExpressApp
+    Route
 }

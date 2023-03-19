@@ -1,4 +1,4 @@
-// @filename: RouterApp.ts
+// @filename: Fetch.test.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,13 +15,12 @@
    limitations under the License.
  */
 
-import { Router } from "express"
+import test from "node:test";
+import assert from "node:assert";
+import { Fetch } from "./Fetch.js";
 
-type RouterApp = {
-    path: string,
-    router: Router
-}
-
-export {
-    RouterApp
-}
+test('Testando o retorno de uma requisicao GET.', async() => {
+    const httpclient = new Fetch();
+    const request =  new Request('https://httpstat.us/200');
+    assert.strictEqual((await httpclient.send(request)).status, 200);
+})

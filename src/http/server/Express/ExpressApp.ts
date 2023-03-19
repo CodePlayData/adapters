@@ -1,4 +1,4 @@
-// @filename: HttpServer.ts
+// @filename: Express.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,23 +15,16 @@
    limitations under the License.
  */
 
-import { Router } from "./Router";
+import { Router } from "../Router.js";
+import { HttpServer } from "../HttpServer.js";
+import express from "express";
 
-abstract class HttpServer {
-
-    constructor(private app: any, router?: Router) {
-        if(router) {
-            this.app.use(router.routerPath, router.router)
-        }
-    }
-
-    listen(port: number | string): void {
-        this.app.listen(port, () => {
-            console.log(`Listening on: ${port}`)
-        })
+class ExpressApp extends HttpServer {
+    constructor(router?: Router) {
+        super(express(), router);
     }
 }
 
 export {
-    HttpServer
+    ExpressApp
 }

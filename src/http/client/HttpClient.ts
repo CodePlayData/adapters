@@ -16,7 +16,7 @@
  */
 
 interface HttpClient {
-    fetch(request: Request): Promise<Response> | Response
+    send(request: Request): Promise<Response> | Response
 }
 
 export {

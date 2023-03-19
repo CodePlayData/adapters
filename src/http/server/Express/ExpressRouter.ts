@@ -1,4 +1,4 @@
-// @filename: HttpRouter.ts
+// @filename: ExpressRouter.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,13 +15,27 @@
    limitations under the License.
  */
 
-interface HttpRouter {
-    _router: any;
-    router: any;
-    routes: any;
-    register(method: string, subpath: string, callback: Function): Promise<void>;
-}
+import { Router as RouterBase } from "express";
+import { Router } from "../Router.js";
+import { Route } from "../Route.js";
+
+class ExpressRouter extends Router  {
+
+    constructor(routes?: Route[], readonly routerPath: string = '/') {
+        super(RouterBase(), routes, routerPath);
+    }
+
+    get routes() {
+        const routes = this.router.stack.map((i:any) => {
+            return {
+                path: i.route.path,
+                methods: i.route.methods,
+            }
+        })
+        return routes
+    }
+};
 
 export {
-    HttpRouter
+    ExpressRouter
 }

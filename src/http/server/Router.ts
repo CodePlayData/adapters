@@ -1,4 +1,4 @@
-// @filename: Fetch.ts
+// @filename: Router.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,19 +15,24 @@
    limitations under the License.
  */
 
-import { HttpClient } from "./HttpClient.js";
- 
- class Fetch implements HttpClient {
-    /**
-     * An implementation of a httpClient from the FetchAPI.
-     * @param request An object derived from Request constructor to be fetched.
-     * @returns @type { Promise<Response> } The eventLoopIdentifier of the request. Be aware, is not the Response directly.
-     */
-    fetch(request: Request): Promise<Response> {
-        return fetch(request)
+import { Route } from "./Route.js";
+
+abstract class Router {
+
+    constructor (readonly router: any, routes?: Route[], readonly routerPath: string = '/') {
+        routes?.map((route: Route) => {
+            this.add(route);
+        })
+    }
+
+    add(route: Route) {
+        this.router[route.method](route.endpoint, async (req: any, res: any) => {
+            const output = await route.callback(req.params, req.body);
+            res.json(output);
+        })
     }
 }
-  
+
 export {
-    Fetch
+    Router
 }
