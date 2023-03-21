@@ -141,7 +141,7 @@ class MongoDB implements Connection {
 
             return request
         } catch (error) {
-            throw new MongoOperationCouldNotCompleted();
+            throw new MongoOperationCouldNotCompleted('a query error ocorred.');
         } finally {
             await this._client.close();
         }
