@@ -15,12 +15,15 @@
    limitations under the License.
  */
 
-import test from "node:test";
-import assert from "node:assert";
+import { describe, it } from "node:test";
+import { strictEqual } from "node:assert";
 import { Fetch } from "./Fetch.js";
 
-test('Testando o retorno de uma requisicao GET.', async() => {
+describe('Testando a classe Fetch com...', () => {
     const httpclient = new Fetch();
-    const request =  new Request('https://httpstat.us/200');
-    assert.strictEqual((await httpclient.send(request)).status, 200);
-})
+
+    it('uma requisição GET.', async () => {
+        const request =  new Request('https://httpstat.us/200');
+        strictEqual((await httpclient.send(request)).status, 200);
+    });
+});

@@ -6,8 +6,7 @@
     "scripts": {
         "build": "tsc && cp LICENSE ./dist/LICENSE && cp CHANGELOG.md ./dist/CHANGELOG.md &&   cp README.md ./dist/README.md && cp package.json ./dist/package.json",
         "publish": "npm publish ./dist --access=public",
-        "pre-test": "node ./dist/http/server/Express/child/Express.js",
-        "test": "npm run build & npm run pre-test & node --test --trace-warnings --experimental-fetch"
+        "test": "npm run build && node --test --trace-warnings --experimental-fetch"
     },
     "repository": {
         "type": "git",

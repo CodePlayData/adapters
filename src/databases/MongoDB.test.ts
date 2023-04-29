@@ -15,77 +15,71 @@
    limitations under the License.
  */
 
-import test from "node:test";
-import assert from "node:assert";
+import { describe, it, after } from "node:test";
+import { strictEqual, deepEqual, rejects } from "node:assert";
 import { MongoDB } from "./MongoDB.js"
 import { MongoQuery, IndexOperations } from "../enums.js";
 
-test('Testando se a classe MongoDB pode ser instanciada.', async (context) => {
-    const mongo = new MongoDB('mongodb://127.0.0.1:27017')
-    assert.strictEqual(mongo._db, 'local');
-    assert.strictEqual(mongo._store, 'startup_log');
-    
-    await context.test('Testando todos os *getters* e *setters*, _i.e._ nome de colecoes e base de dados.', () => {
+describe('Testando a classe MongoDB com...', () => {
+
+    const mongo = new MongoDB('mongodb://127.0.0.1:27017');
+
+    it('a inicialização no local:startup_log.', () => {
+        strictEqual(mongo._db, 'local');
+        strictEqual(mongo._store, 'startup_log');    
+    });
+
+    it('o setter/getter da database.', () => {
         mongo.database = 'teste';
-        assert.strictEqual(mongo.database, 'teste');
-        mongo.store = 'collection1';
-        assert.strictEqual(mongo.store, 'collection1');
+        strictEqual(mongo.database, 'teste');
     });
 
-    await context.test('Testando todas as operacoes de CRUD.', async (subcontext) => {
-        mongo.database = 'admin';
+    it('o setter/getter da store/collection.', () => {
+        mongo.store = 'collection1';
+        strictEqual(mongo.store, 'collection1');
+    });
+
+    it('o insertOne.', async () => {
+        mongo.database = 'test';
         mongo.store = 'collection1';
 
-        // deleting all things in the previous tests if exists
-        await mongo.query(MongoQuery.deleteMany, undefined, { msg: 'testing 1, 2, 3...'});
-        await mongo.query(MongoQuery.deleteMany, undefined, { msg: 'new message.'});
+        await mongo.query(MongoQuery.insertOne, { name: 'subject-1'});
+        const length = await mongo.query(MongoQuery.countDocuments, {});
+        strictEqual(length, 1)
+    });
+
+    it('o create Index.', async () => {
+        await mongo.index(IndexOperations.create, [ { key: { name: 'text' }, default_language: 'english', name: 'index_name'} ]);
+        const indexes = await mongo.index(IndexOperations.get) as Array<any>;
+        strictEqual(indexes[1].name, 'index_name');
+    });
+
+    it('o dropIndex.', async () => {
         await mongo.index(IndexOperations.drop);
-        await mongo.query(MongoQuery.deleteOne, undefined, { scale: 2 });
-        await mongo.query(MongoQuery.deleteMany, undefined, { scale: 4 });
-        await mongo.query(MongoQuery.deleteOne, undefined, { scale: 0 });
-
-        // creating or re-creating
-        await mongo.query(MongoQuery.insertOne, { msg: 'testing 1, 2, 3...'});
-        const data = await mongo.query(MongoQuery.findOne, { msg: 'testing 1, 2, 3...'}) as { [key: string]: any };
-        assert.strictEqual(data.msg, 'testing 1, 2, 3...');
-
-        await subcontext.test('Criando indice de otimizacao de banco de dados.', async(deepsubcontext) => {
-            await mongo.index(IndexOperations.create, [ { key: { msg: 'text' }, default_language: 'english', name: 'msg_index'} ]);
-            const indexes = await mongo.index(IndexOperations.get);
-            assert.strictEqual(indexes[1].name, 'msg_index');
-            
-            await deepsubcontext.test('Utilizando o indice.', async () => {
-                const data = await mongo.query(MongoQuery.findOne, { $text: { $search: "testing" } }) as { [key: string]: any };
-                assert.strictEqual(data.msg, 'testing 1, 2, 3...')
-            });
-
-            await deepsubcontext.test('Deletando o indice.', async () => {
-                await mongo.index(IndexOperations.drop);
-                const indexes = await mongo.index(IndexOperations.get) as any[];
-                assert.strictEqual(indexes.length, 1);
-            });
-        });
-
-        await subcontext.test('Atualizando um documento da colecao.', async () => {
-            await mongo.query(MongoQuery.updateOne, { $set: { msg: 'new message.'} }, { msg: 'testing 1, 2, 3...'});
-            const data = await mongo.query(MongoQuery.findOne, { msg: 'new message.'}) as { [key: string]: any };
-            assert.strictEqual(data.msg, 'new message.');
-        });
-
-        await subcontext.test('Deletando.', async() => {
-            let count = await mongo.query(MongoQuery.countDocuments, { msg: 'new message.'});
-            assert.strictEqual(count, 1);
-            await mongo.query(MongoQuery.deleteOne, { msg: 'new message.'});
-            count = await mongo.query(MongoQuery.countDocuments, { msg: 'new message.'});
-            assert.strictEqual(count, 0);
-        });
+        const indexes = await mongo.index(IndexOperations.get) as any[];
+        strictEqual(indexes.length, 1);
     });
 
-    await context.test('Testando queries agregadas.', async() => {
+    it('o updateOne.', async () => {
+        await mongo.query(MongoQuery.updateOne, { $set: { name: 'subject-2' } }, { name: 'subject-1'});
+        const data = await mongo.query(MongoQuery.findOne, { name: 'subject-2'}) as { [key: string]: any };
+        strictEqual(data.name, 'subject-2');
+    });
+
+    it('o delete.', async ()=> {
+        let count = await mongo.query(MongoQuery.countDocuments, { name: 'subject-2'});
+        strictEqual(count, 1);
+        await mongo.query(MongoQuery.deleteOne, { name: 'subject-2' });
+        count = await mongo.query(MongoQuery.countDocuments, { name: 'subject-2' });
+        strictEqual(count, 0);
+    });
+
+    it('o aggregate.', async () => {
         await mongo.query(MongoQuery.insertOne, { scale: 2, receivers: ["admin", "public"], msg: "A warning for all." });
         await mongo.query(MongoQuery.insertOne, { scale: 4, receivers: ["admin"], msg: "Bug Report."});
         await mongo.query(MongoQuery.insertOne, { scale: 4, receivers: ["admin"], msg: "Upgrade needed."});
         await mongo.query(MongoQuery.insertOne, { scale: 0, receivers: [ "public"], msg: "Be cool, nothing is wrong!"});
+
         const aggregation = [
             { 
                 $match: { 
@@ -101,25 +95,31 @@ test('Testando se a classe MongoDB pode ser instanciada.', async (context) => {
                 } 
             }
         ]
+
         const data = await mongo.pipeline(aggregation) as Document[];
-        assert.deepEqual(Object.keys(data[0]), ['_id', 'count']);
+
+        deepEqual(Object.keys(data[0]), ['_id', 'count']);
     });
 
-    await context.test('Testando o retorno de null no caso de envio de uma operacao que nao existe.', async() => {
+    it('o null como retorno de uma query vazia.', async () => {
         const nullReturn = await mongo.query('error' as MongoQuery);
-        assert.strictEqual(nullReturn, null);
+        strictEqual(nullReturn, null);
     });
 
-    await context.test('Testando erro generico.', async() => {
-        await assert.rejects(
+    it('o um erro de query.', async () => {
+        await rejects(
             async() => {
                 await mongo.query('' as MongoQuery, {}, {})
             },
             (error: Error) => {
-                assert.strictEqual(error.name, 'Error');
-                assert.strictEqual(error.message, 'The operation could not be completed.');
+                strictEqual(error.name, 'Error');
+                strictEqual(error.message, 'The operation could not be completed due: a query error ocorred.');
                 return true;
             }
         )
     });
-})
+
+    after(async () => {
+        await mongo.query(MongoQuery.deleteMany, {});
+    });
+});
