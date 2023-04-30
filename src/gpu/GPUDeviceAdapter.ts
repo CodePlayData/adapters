@@ -15,7 +15,7 @@
    limitations under the License.
  */
 
-import { NoGpuAvaiable } from "../utils/errors/NoGpuAvaiable.js";
+import { NoGpuAvaiable } from "../error/NoGpuAvaiable.js";
 import { GPUCommandRepository } from "./GPUCommandRepository.js";
 
 class GPUDeviceAdapter {

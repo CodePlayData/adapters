@@ -15,21 +15,22 @@
    limitations under the License.
  */
 
-import test from "node:test";
-import assert from "node:assert";
-import { ExpressRouter } from "./ExpressRouter.js";
+import { describe, it } from "node:test";
+import { strictEqual, deepEqual } from "node:assert";
+import { ExpressRouter } from "./Router.js";
 import { Route } from "../Route.js";
 
-test('Testando se a classe ExpressRouter pode ser instanciada.', async (context) => {
+describe('Testando a classe ExpressRouter com...', () => {
     const router = new ExpressRouter();
-    
-    assert.deepEqual(router.routes, []);
-    
-    await context.test('Testando se o roteador pode de fato registrar rotas.', async () => {
+
+    it('nenhuma rota.', () => {
+        deepEqual(router.routes, []);
+    });
+
+    it('uma rota GET no /data', async () => {
         const route = new Route('get', '/data', async () => { return });
-        await router.add(route);
-        console.log(router.routes[0].methods['get']);
-        assert.strictEqual(router.routes[0].path, '/data');
-        assert.strictEqual(router.routes[0].methods['get'], true);
-    })
+        router.add(route);
+        strictEqual(router.routes[0].path, '/data');
+        strictEqual(router.routes[0].methods['get'], true);
+    });
 });

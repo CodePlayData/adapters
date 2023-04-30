@@ -24,9 +24,10 @@ abstract class Router {
             this.add(route);
         })
     }
-
+    
     add(route: Route) {
         this.router[route.method](route.endpoint, async (req: any, res: any) => {
+            console.log('cheguei aqui?')
             const output = await route.callback(req.params, req.body);
             res.json(output);
         })

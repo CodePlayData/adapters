@@ -1,4 +1,4 @@
-// @filename: HttpServer.ts
+// @filename: Server.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,27 +13,17 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-import { Router } from "./Router";
+import { createServer } from "node:http";
+import { HttpServer } from "../HttpServer.js";
+import { Router } from "../Router.js";
 
-abstract class HttpServer {
-
-    constructor(readonly app: any, router?: Router) {
-        if(router) {
-            this.app.use(router.routerPath, router.router)
-        }
+class NodeApp extends HttpServer {
+    use(): void {
+        throw new Error("Method not implemented.");
     }
-    
-    listen(port: number | string): void {
-        this.app.listen(port, () => {
-            console.log(`Listening on: ${port}`)
-        })
+    constructor(router?: Router) {
+        super(createServer());
     }
-
-    abstract use(): void;
-}
-
-export {
-    HttpServer
 }

@@ -14,11 +14,14 @@
 //    See the License for the specific language governing permissions and
 //    limitations under the License.
 
-import test from "node:test";
+import { describe, it } from "node:test";
 import assert from "node:assert";
 import { RequestBuilder } from "./RequestBuilder.js";
 
-test('Unit Test - ', async() => {
-    const request = new RequestBuilder('https://httpstat.us/200').get().build();
-    assert.strictEqual(request.method, 'GET');
+
+describe('Testando a classe RequestBuilder com...', () => {
+    it('o método GET.', () => {
+        const request = new RequestBuilder('https://httpstat.us/200').get().build();
+        assert.strictEqual(request.method, 'GET');
+    });
 });

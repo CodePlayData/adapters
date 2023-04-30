@@ -1,4 +1,4 @@
-// @filename: ExpressApp.test.ts
+// @filename: Express.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,11 +13,23 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-import test from "node:test";
-import assert from "node:assert";
+import { Router } from "../Router.js";
+import { HttpServer } from "../HttpServer.js";
+import express, { Express } from "express";
 
-test('Testando se aplicacao Express pode ser instanciada.', async () => {
-    assert.strictEqual(await (await fetch('http://127.0.0.1:3001/api')), "hello world");
-})
+class ExpressApp extends HttpServer {
+    constructor(readonly router?: Router) {
+        super(express(), router);
+    }
+
+    use(): void {
+        const expressApp = super.app as Express;
+        expressApp.use(this.router!.routerPath, this.router!.router)
+    }
+}
+
+export {
+    ExpressApp
+}
