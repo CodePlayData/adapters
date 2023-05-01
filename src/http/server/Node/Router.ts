@@ -20,3 +20,24 @@ import { Router } from "../Router.js";
 import { createServer } from "node:http";
 
 
+class NodeRouter implements Router {
+    routes: Route[] = [];
+
+    add(route: Route): void {
+        this.routes.push(route);
+    }
+
+    handler() {
+        return async (req: any, res: any) => {
+            this.routes.map((route: Route) => {
+                if(req.method === route.method && req.url === route.endpoint) {
+                    route.callback(req, res);
+                }
+            });
+        }
+    }
+}
+
+export {
+    NodeRouter
+}

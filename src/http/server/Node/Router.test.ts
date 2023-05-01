@@ -1,4 +1,4 @@
-// @filename: HttpServer.ts
+// @filename: Router.test.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,11 +15,22 @@
    limitations under the License.
  */
 
-interface HttpServer {
-    listen(port: number): void;
-    use?(...params: any): void;
-}
+import { describe, it } from "node:test";
+import { strictEqual, deepEqual } from "node:assert";
+import { Route } from "../Route.js";
+import { NodeRouter } from "./Router.js";
 
-export {
-    HttpServer
-}
+describe('Testando a classe NodeRouter com...', () => {
+    const router = new NodeRouter();
+
+    it('nenhuma rota.', () => {
+        deepEqual(router.routes, []);
+    });
+
+    it('uma rota GET no /data', async () => {
+        const route = new Route('GET', '/data', async () => { return });
+        router.add(route);
+        strictEqual(router.routes[0].endpoint, '/data');
+    });
+});
+   

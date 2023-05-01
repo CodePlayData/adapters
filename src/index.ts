@@ -23,7 +23,7 @@ import { HttpClient } from "./http/client/HttpClient.js";
 import { Collection } from "./collections/Collection.js";
 import { Queue } from "./collections/Queue.js";
 import { GenericQueue, DatabaseQuery } from "./collections/GenericQueue.js";
-import { ExpressApp } from "./http/server/Express/Server.js";
+import { ExpressServer } from "./http/server/Express/Server.js";
 import { ExpressRouter } from "./http/server/Express/Router.js";
 import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";
 import { GPUCommandRepository } from "./gpu/GPUCommandRepository.js";
@@ -45,7 +45,7 @@ export {
     GenericQueue,
     GPUCommandRepository,
     Fetch,
-    ExpressApp,
+    ExpressServer,
     ExpressRouter,
     Connection,
     GPUDeviceAdapter,

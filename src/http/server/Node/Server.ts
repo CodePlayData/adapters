@@ -15,15 +15,23 @@
    limitations under the License.
 */
 
-import { createServer } from "node:http";
+import { createServer, Server } from "node:http";
 import { HttpServer } from "../HttpServer.js";
-import { Router } from "../Router.js";
+import { NodeRouter } from "./Router.js";
 
-class NodeApp extends HttpServer {
-    use(): void {
-        throw new Error("Method not implemented.");
+class NodeServer implements HttpServer {
+    app: Server;
+
+    constructor(router?: NodeRouter) {
+        this.app = createServer(router?.handler())
     }
-    constructor(router?: Router) {
-        super(createServer());
+
+    listen(port: number) {
+        this.app.listen(port, () => `listening at ${port}`);
+        return this.app
     }
+}
+
+export {
+    NodeServer
 }

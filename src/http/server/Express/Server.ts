@@ -15,21 +15,32 @@
    limitations under the License.
 */
 
-import { Router } from "../Router.js";
 import { HttpServer } from "../HttpServer.js";
+import { ExpressRouter } from "./Router.js";
 import express, { Express } from "express";
 
-class ExpressApp extends HttpServer {
-    constructor(readonly router?: Router) {
-        super(express(), router);
+class ExpressServer implements HttpServer {
+    readonly app!: Express;
+    
+    constructor(readonly router?: ExpressRouter) {
+        this.app = express();
+        if(router) {
+            this.app.use(router.routerPath, router.router)
+        }
+    }
+
+    listen(port: number): void {
+        this.app.listen(port, () => {
+            console.log(`Listening on: ${port}`)
+        })
     }
 
     use(): void {
-        const expressApp = super.app as Express;
+        const expressApp = this.app as Express;
         expressApp.use(this.router!.routerPath, this.router!.router)
     }
 }
 
 export {
-    ExpressApp
+    ExpressServer
 }

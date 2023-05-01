@@ -15,14 +15,29 @@
    limitations under the License.
 */
 
-import { Router as RouterBase } from "express";
+import { Router as ExpressRouterBase } from "express";
 import { Router } from "../Router.js";
 import { Route } from "../Route.js";
 
-class ExpressRouter extends Router  {
+type RouterBase = ExpressRouterBase & {
+    [key: string]: any
+}
+
+class ExpressRouter implements Router  {
+    router!: RouterBase;
 
     constructor(routes?: Route[], readonly routerPath: string = '/') {
-        super(RouterBase(), routes, routerPath);
+        this.router = ExpressRouterBase();
+        routes?.map((route: Route) => {
+            this.add(route);
+        });
+    }
+
+    add(route: Route): void {
+        this.router[route.method](route.endpoint, async (req: any, res: any) => {
+            const output = await route.callback(req.params, req.body);
+            res.json(output);
+        });
     }
 
     get routes() {

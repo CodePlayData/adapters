@@ -17,21 +17,9 @@
 
 import { Route } from "./Route.js";
 
-abstract class Router {
-
-    constructor (readonly router: any, routes?: Route[], readonly routerPath: string = '/') {
-        routes?.map((route: Route) => {
-            this.add(route);
-        })
-    }
-    
-    add(route: Route) {
-        this.router[route.method](route.endpoint, async (req: any, res: any) => {
-            console.log('cheguei aqui?')
-            const output = await route.callback(req.params, req.body);
-            res.json(output);
-        })
-    }
+interface Router {
+    add(route: Route): void;
+    routes: any;
 }
 
 export {
