@@ -18,7 +18,7 @@
 import { describe, it, after } from "node:test";
 import { strictEqual, deepEqual, rejects } from "node:assert";
 import { MongoDB } from "./MongoDB.js"
-import { MongoQuery, IndexOperations } from "../enums.js";
+import { MongoQuery, IndexOperations } from "../../enums.js";
 
 describe('Testando a classe MongoDB com...', () => {
 

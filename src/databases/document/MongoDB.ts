@@ -27,10 +27,10 @@
  */
 
 import { Document, IndexDescription, MongoClient } from "mongodb";
-import { MongoQuery, IndexOperations } from "../enums.js";
-import { Connection } from "../Connection.js";
-import { MongoAggregateCouldNotCompleted } from "../error/MongoAggregateCouldNotCompleted.js";
-import { MongoOperationCouldNotCompleted } from "../error/MongoOperationCouldNotCompleted.js";
+import { MongoQuery, IndexOperations } from "../../enums.js";
+import { Connection } from "../../Connection.js";
+import { MongoAggregateCouldNotCompleted } from "../../error/MongoAggregateCouldNotCompleted.js";
+import { MongoOperationCouldNotCompleted } from "../../error/MongoOperationCouldNotCompleted.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */

@@ -17,7 +17,7 @@
 
 import { describe, it } from "node:test";
 import { strictEqual } from "node:assert";
-import { LocalStorageQuery } from "../enums.js";
+import { LocalStorageQuery } from "../../enums.js";
 import { LocalStorage } from "./LocalStorage.js";
 import 'mock-local-storage';
 

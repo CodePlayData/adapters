@@ -20,8 +20,8 @@
  *  1-clear; 2-getItem; 3-removeItem; 4-setItem. And the auxiliary methods: 1-key; 2-lenght.
  */
 
-import { LocalStorageQuery } from "../enums.js";
-import { Connection } from "../Connection.js";
+import { LocalStorageQuery } from "../../enums.js";
+import { Connection } from "../../Connection.js";
 
 class LocalStorage implements Connection {
     /** @type { string } - An identifier. */

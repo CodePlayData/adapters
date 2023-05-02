@@ -15,9 +15,9 @@
    limitations under the License.
  */
 
-import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/IndexedDB.js";
-import { LocalStorage } from "./databases/LocalStorage.js";
-import { MongoDB } from "./databases/MongoDB.js";
+import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/browser/IndexedDB.js";
+import { LocalStorage } from "./databases/browser/LocalStorage.js";
+import { MongoDB } from "./databases/document/MongoDB.js";
 import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
 import { Collection } from "./collections/Collection.js";
