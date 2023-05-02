@@ -25,7 +25,9 @@ class ExpressServer implements HttpServer {
     constructor(readonly router?: ExpressRouter) {
         this.app = express();
         if(router) {
-            this.app.use(router.routerPath, router.router)
+            this.app
+                .use(router.routerPath, router.router)
+                .use(express.json())
         }
     }
 

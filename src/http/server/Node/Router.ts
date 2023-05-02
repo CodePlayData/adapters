@@ -17,7 +17,7 @@
 
 import { Route } from "../Route.js";
 import { Router } from "../Router.js";
-import { createServer } from "node:http";
+import { IncomingMessage, ServerResponse } from "node:http";
 
 
 class NodeRouter implements Router {
@@ -28,10 +28,10 @@ class NodeRouter implements Router {
     }
 
     handler() {
-        return async (req: any, res: any) => {
+        return async (req: IncomingMessage, res: ServerResponse) => {
             this.routes.map((route: Route) => {
                 if(req.method === route.method && req.url === route.endpoint) {
-                    route.callback(req, res);
+                    return route.callback(req, res);
                 }
             });
         }

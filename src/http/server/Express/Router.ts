@@ -15,7 +15,7 @@
    limitations under the License.
 */
 
-import { Router as ExpressRouterBase } from "express";
+import { Router as ExpressRouterBase, Request, Response } from "express";
 import { Router } from "../Router.js";
 import { Route } from "../Route.js";
 
@@ -34,9 +34,8 @@ class ExpressRouter implements Router  {
     }
 
     add(route: Route): void {
-        this.router[route.method](route.endpoint, async (req: any, res: any) => {
-            const output = await route.callback(req.params, req.body);
-            res.json(output);
+        this.router[route.method](route.endpoint, async (req: Request, res: Response) => {
+            return route.callback(req, res);
         });
     }
 

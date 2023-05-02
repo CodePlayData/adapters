@@ -16,16 +16,31 @@
  */
 
 import { after, before, describe, it } from "node:test";
-import { strictEqual } from "node:assert";
+import { deepEqual, strictEqual } from "node:assert";
 import { ExpressRouter } from "./Router.js";
 import { ExpressServer } from "./Server.js";
 import { Route } from "../Route.js";
-import { Express } from "express";
+import { Express, Request, Response } from "express";
+import { RequestBuilder } from "../../RequestBuilder.js";
 
 describe('Teste do ExpressApp com...', () => {
-    const route = new Route('get', '/data', async () => 'hello world' );
+    const dataRoute = new Route('get', '/data', async (req: Request, res: Response) => {
+        res.json('hello world')
+    } );
+    const loginRoute = new Route('post', '/login', (req: Request, res: Response) => {
+        let chunks: Uint8Array[] = [];
+
+        req.on('data', (chunk: Uint8Array) => {
+            chunks.push(chunk)
+        })
+        .on('end', () => {
+            res.send(chunks.toString())
+        });
+    })
+
     const router = new ExpressRouter();
-    router.add(route);
+    router.add(dataRoute);
+    router.add(loginRoute);
 
     let server: Express = new ExpressServer(router).app;
     let serverApp = server.listen(3000);
@@ -40,6 +55,16 @@ describe('Teste do ExpressApp com...', () => {
         const response = await fetch('http://127.0.0.1:3000/data')
         strictEqual(await response.json(), "hello world");
     });
+
+    it('a rota POST no /login.', async () => {
+        const request = new RequestBuilder('http://127.0.0.1:3000/login')
+                             .header('Content-Type', 'application/json')
+                             .post({ email: 'test@gmail.com' })
+                             .build()
+
+        const response = await fetch(request);
+        deepEqual(await response.json(), { email: 'test@gmail.com'});
+    })
 
     after(() => {
         serverApp.close();
