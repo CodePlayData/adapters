@@ -1,4 +1,4 @@
-// @filename: Queue.ts
+// @filename: MongoQueryOperationCouldNotCompleted.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,15 +13,17 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-import { Collection } from "./Collection.js";
-
-interface Queue extends Collection {
-    enqueue(...params: any[]): void;
-    dequeue(): unknown;
+class MongoQueryOperationCouldNotCompleted extends Error {
+    constructor(error?: unknown) {
+        super(error ? 
+            `The index operation could not be completed due: ${error}` :
+            `The index operation could not be completed.`
+        )
+    }
 }
 
 export {
-    Queue
+    MongoQueryOperationCouldNotCompleted
 }

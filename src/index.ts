@@ -15,14 +15,14 @@
    limitations under the License.
  */
 
-import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/browser/IndexedDB.js";
+import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/browser/IndexedDB/IndexedDB.js";
 import { LocalStorage } from "./databases/browser/LocalStorage.js";
 import { MongoDB } from "./databases/document/MongoDB.js";
 import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
-import { Collection } from "./collections/Collection.js";
-import { Queue } from "./collections/Queue.js";
-import { GenericQueue, DatabaseQuery } from "./collections/GenericQueue.js";
+import { Collection } from "./Collection.js";
+import { Queue } from "./queue/Queue.js";
+import { GenericQueue, DatabaseQuery } from "./queue/GenericQueue.js";
 import { ExpressServer } from "./http/server/Express/Server.js";
 import { ExpressRouter } from "./http/server/Express/Router.js";
 import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";

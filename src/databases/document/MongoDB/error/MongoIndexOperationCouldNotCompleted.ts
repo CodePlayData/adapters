@@ -1,4 +1,4 @@
-// @filename: Collection.ts
+// @filename: MongoIndexOperationCouldNotCompleted.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,15 +13,17 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-interface Collection {
-    storage: any[];
-
-    size: number;
-    isFull: boolean;
+class MongoIndexOperationCouldNotCompleted extends Error {
+    constructor(error?: unknown) {
+        super(error ? 
+            `The index operation could not be completed due: ${error}` :
+            `The index operation could not be completed.`
+        )
+    }
 }
 
 export {
-    Collection
+    MongoIndexOperationCouldNotCompleted
 }

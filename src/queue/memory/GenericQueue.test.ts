@@ -17,10 +17,10 @@
 
 import { describe, it } from "node:test";
 import { strictEqual, deepEqual, throws } from "node:assert";
-import { LocalStorage } from "../databases/browser/LocalStorage.js";
+import { LocalStorage } from "../../databases/browser/LocalStorage/LocalStorage.js";
 import { GenericQueue } from "./GenericQueue.js";
 import 'mock-local-storage';
-import { LocalStorageQuery } from "../enums.js";
+import { LocalStorageQuery } from "../../enums.js";
 
 describe('Testando a GenericQueue...', async () => {
     const localstorage = new LocalStorage();

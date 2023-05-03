@@ -1,4 +1,4 @@
-// @filename: Connection.ts
+// @filename: MongoDBUnavailable.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,26 +13,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-import { IndexOperations, IndexedDBQuery, LocalStorageQuery, MongoQuery } from "./enums.js";
-
-type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery
-
-interface Connection {
-    name: string;
-    hasThisFeature?: boolean;
-    database?: unknown;
-    store?: string;
-    collection?: string
-    indexNames?: unknown;
-
-    pipeline?(descriptions: unknown): any;
-    index?(op: IndexOperations, indexdescript?: unknown): any;
-    keysof?(prop: unknown, max?: number): any;
-    query(query: DatabaseQuery | string, object?: unknown, key?: any): any;
+class MongoDBUnavailable extends Error {
+    constructor() {
+        super('The MongoDB is not available.')
+    }
 }
 
 export {
-    Connection
+    MongoDBUnavailable
 }

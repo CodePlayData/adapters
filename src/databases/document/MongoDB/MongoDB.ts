@@ -26,11 +26,13 @@
  *  PS¹.: To test, it must have a mongod instance avaiable.
  */
 
-import { Document, IndexDescription, MongoClient } from "mongodb";
+import { Document, IndexDescription, MongoClient, ServerApiVersion } from "mongodb";
 import { MongoQuery, IndexOperations } from "../../enums.js";
 import { Connection } from "../../Connection.js";
 import { MongoAggregateCouldNotCompleted } from "../../error/MongoAggregateCouldNotCompleted.js";
-import { MongoOperationCouldNotCompleted } from "../../error/MongoOperationCouldNotCompleted.js";
+import { MongoIndexOperationCouldNotCompleted } from "../../error/MongoIndexOperationCouldNotCompleted.js";
+import { MongoDBUnavailable } from "../../error/MongoDBUnavailable.js";
+import { MongoQueryOperationCouldNotCompleted } from "../../error/MongoQueryOperationCouldNotCompleted.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */
@@ -40,7 +42,7 @@ class MongoDB implements Connection {
     /** @type { string } - The name of the desired database to connect. */
     _db: string
     /** @type { string } - The collection to be worked. */
-    _store: string
+    _collection: string
 
     /**
      *  To connect in some mongodb instance you only need the URI.
@@ -49,21 +51,21 @@ class MongoDB implements Connection {
     constructor(readonly uri: string) {
         this._client = new MongoClient(uri);
         this._db = 'local';
-        this._store = 'startup_log';
+        this._collection = 'startup_log';
     }
     
     /**
      *  Set the name of the collection.
      */
-    set store(store: string) {
-        this._store = store;
+    set collection(collection: string) {
+        this._collection = collection;
     }
 
     /**
      *  Get the name of the collection.
      */
-    get store() {
-        return this._store
+    get collection() {
+        return this._collection
     }
 
     /**
@@ -80,6 +82,26 @@ class MongoDB implements Connection {
         return this._db
     }
 
+
+
+    /**
+     *  A function to test connection with mongodb deployment.
+     */
+    async ping() {
+        try {
+            // Connect the client to the server	(optional starting in v4.7)
+            await this._client.connect();
+            // Send a ping to confirm a successful connection
+            await this._client.db("admin").command({ ping: 1 });
+            return true
+          } catch {
+            throw new MongoDBUnavailable()
+          } finally {
+            // Ensures that the client will close when you finish/error
+            await this._client.close();
+          }
+    }
+
     /**
      *  The function that performs the pipeline operations.
      *  @param descriptions @type { Document[] } - The Document type contains the mongo operators to be executed.
@@ -90,7 +112,7 @@ class MongoDB implements Connection {
         let result: Document[] = [];
         try {
             await this._client.connect();
-            const collection = this._client.db(this._db).collection(this._store);
+            const collection = this._client.db(this._db).collection(this._collection);
             const cursor = collection.aggregate(descriptions);
             await cursor.forEach(doc => {
                 result.push(doc)
@@ -113,12 +135,12 @@ class MongoDB implements Connection {
     async index(op: IndexOperations, indexdescript?: IndexDescription[]) {
         try {
             await this._client.connect();
-            const collection = this._client.db(this._db).collection(this._store);
+            const collection = this._client.db(this._db).collection(this._collection);
             const indexreturn = op === IndexOperations.create && indexdescript ? await collection.createIndexes(indexdescript) :
                                 op === IndexOperations.drop ? await collection.dropIndexes() : await collection.indexes();
             return indexreturn
         } catch (error) {
-            throw new MongoOperationCouldNotCompleted('trouble in the index operation.')
+            throw new MongoIndexOperationCouldNotCompleted(error)
         } finally {
             await this._client.close();
         }
@@ -135,13 +157,13 @@ class MongoDB implements Connection {
         const document = object as Document;
         try {
             await this._client.connect();
-            const collection = this._client.db(this._db).collection(this._store);
+            const collection = this._client.db(this._db).collection(this._collection);
             const request = object && !key ? await collection[query](document, key) : 
                             object && key ? await collection[query](key, document) : null;                        
 
             return request
         } catch (error) {
-            throw new MongoOperationCouldNotCompleted('a query error ocorred.');
+            throw new MongoQueryOperationCouldNotCompleted(error);
         } finally {
             await this._client.close();
         }

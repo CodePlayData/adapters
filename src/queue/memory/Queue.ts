@@ -1,4 +1,4 @@
-// @filename: Connection.ts
+// @filename: Queue.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,24 +15,13 @@
    limitations under the License.
  */
 
-import { IndexOperations, IndexedDBQuery, LocalStorageQuery, MongoQuery } from "./enums.js";
+import { Collection } from "../Collection.js";
 
-type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery
-
-interface Connection {
-    name: string;
-    hasThisFeature?: boolean;
-    database?: unknown;
-    store?: string;
-    collection?: string
-    indexNames?: unknown;
-
-    pipeline?(descriptions: unknown): any;
-    index?(op: IndexOperations, indexdescript?: unknown): any;
-    keysof?(prop: unknown, max?: number): any;
-    query(query: DatabaseQuery | string, object?: unknown, key?: any): any;
+interface Queue extends Collection {
+    enqueue(...params: any[]): void;
+    dequeue(): unknown;
 }
 
 export {
-    Connection
+    Queue
 }

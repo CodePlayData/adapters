@@ -1,4 +1,4 @@
-// @filename: Connection.ts
+// @filename: Collection.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,24 +15,13 @@
    limitations under the License.
  */
 
-import { IndexOperations, IndexedDBQuery, LocalStorageQuery, MongoQuery } from "./enums.js";
+interface Collection {
+    storage: any[];
 
-type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery
-
-interface Connection {
-    name: string;
-    hasThisFeature?: boolean;
-    database?: unknown;
-    store?: string;
-    collection?: string
-    indexNames?: unknown;
-
-    pipeline?(descriptions: unknown): any;
-    index?(op: IndexOperations, indexdescript?: unknown): any;
-    keysof?(prop: unknown, max?: number): any;
-    query(query: DatabaseQuery | string, object?: unknown, key?: any): any;
+    size: number;
+    isFull?: boolean;
 }
 
 export {
-    Connection
+    Collection
 }

@@ -16,32 +16,41 @@
  */
 
 import { describe, it, after } from "node:test";
-import { strictEqual, deepEqual, rejects } from "node:assert";
+import { strictEqual, deepEqual, rejects, ok } from "node:assert";
 import { MongoDB } from "./MongoDB.js"
-import { MongoQuery, IndexOperations } from "../../enums.js";
+import { MongoQuery, IndexOperations } from "../../../enums.js";
+import dotenv from "dotenv";
+
 
 describe('Testando a classe MongoDB com...', () => {
+    dotenv.config()
 
-    const mongo = new MongoDB('mongodb://127.0.0.1:27017');
+    const mongo = new MongoDB(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017');
+    mongo.database = 'npm_adapters';
+    mongo.collection = 'test';
 
-    it('a inicialização no local:startup_log.', () => {
-        strictEqual(mongo._db, 'local');
-        strictEqual(mongo._store, 'startup_log');    
+    it('a database e a collection pré-definidas.', () => {
+        strictEqual(mongo.database, 'npm_adapters');
+        strictEqual(mongo.collection, 'test');
     });
 
-    it('o setter/getter da database.', () => {
-        mongo.database = 'teste';
-        strictEqual(mongo.database, 'teste');
+    it('a database trocada.', () => {
+        mongo.database = 'npm_adapters2';
+        strictEqual(mongo.database, 'npm_adapters2');
     });
 
-    it('o setter/getter da store/collection.', () => {
-        mongo.store = 'collection1';
-        strictEqual(mongo.store, 'collection1');
+    it('a collection trocada.', () => {
+        mongo.collection = 'collection1';
+        strictEqual(mongo.collection, 'collection1');
+    });
+
+    it('um ping.', async () => {
+        ok(await mongo.ping());
     });
 
     it('o insertOne.', async () => {
-        mongo.database = 'test';
-        mongo.store = 'collection1';
+        mongo.database = 'npm_adapters';
+        mongo.collection = 'collection1';
 
         await mongo.query(MongoQuery.insertOne, { name: 'subject-1'});
         const length = await mongo.query(MongoQuery.countDocuments, {});
