@@ -16,13 +16,13 @@
  */
 
 import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/browser/IndexedDB/IndexedDB.js";
-import { LocalStorage } from "./databases/browser/LocalStorage.js";
-import { MongoDB } from "./databases/document/MongoDB.js";
+import { LocalStorage } from "./databases/browser/LocalStorage/LocalStorage.js"
+import { MongoDB } from "./databases/document/MongoDB/MongoDB.js";
 import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
 import { Collection } from "./Collection.js";
-import { Queue } from "./queue/Queue.js";
-import { GenericQueue, DatabaseQuery } from "./queue/GenericQueue.js";
+import { Queue } from "./queue/memory/Queue.js";
+import { GenericQueue, DatabaseQuery } from "./queue/memory/GenericQueue.js";
 import { ExpressServer } from "./http/server/Express/Server.js";
 import { ExpressRouter } from "./http/server/Express/Router.js";
 import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";

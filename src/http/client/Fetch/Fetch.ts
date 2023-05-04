@@ -16,15 +16,29 @@
  */
 
 import { HttpClient } from "../HttpClient.js";
+import { FetchInvalidArgument } from "./error/FetchInvalidArgument.js";
  
- class Fetch implements HttpClient {
+class Fetch implements HttpClient {
     /**
      * An implementation of a httpClient from the FetchAPI.
      * @param request An object derived from Request constructor to be fetched.
      * @returns @type { Promise<Response> } The eventLoopIdentifier of the request. Be aware, is not the Response directly.
      */
-    send(request: Request): Promise<Response> {
-        return fetch(request)
+    send(request: Request): Promise<Response>;
+    /**
+     * An implementation of a httpClient from the FetchAPI.
+     * @param url @type { string }
+     * @param options @type {{ [key: string]: any }}
+     */
+    send(url: string, options?: { [key: string]: any }): Promise<Response>;
+    send(requestOrUrl: Request | string, options?: { [key: string]: any }): Promise<Response> {
+        if (requestOrUrl instanceof Request) {
+            return fetch(requestOrUrl);
+        } else if (typeof requestOrUrl === 'string') {
+            return fetch(requestOrUrl, options);
+        } else {
+            throw new FetchInvalidArgument();
+        }
     }
 }
   

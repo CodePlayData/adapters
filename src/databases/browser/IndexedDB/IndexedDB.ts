@@ -30,7 +30,7 @@
 
 import { DatabasePermission, IndexedDBQuery } from "../../../enums.js";
 import type { Connection } from "../../../Connection.js";
-import { IndexedDBNoSupport } from "../../../error/IndexedDBNoSupport.js";
+import { IndexedDBNoSupport } from "./error/IndexedDBNoSupport.js";
 import { IndexedDBDeleteDatabaseFailure } from "./error/IndexedDBDeleteDatabaseFailure.js";
 
 type IDBIndex = {

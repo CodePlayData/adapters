@@ -18,12 +18,17 @@
 import { describe, it } from "node:test";
 import { strictEqual } from "node:assert";
 import { Fetch } from "./Fetch.js";
+import { RequestBuilder } from "../../RequestBuilder.js";
 
 describe('Testando a classe Fetch com...', () => {
     const httpclient = new Fetch();
 
-    it('uma requisição GET.', async () => {
+    it('uma Request.', async () => {
         const request =  new Request('https://httpstat.us/200');
         strictEqual((await httpclient.send(request)).status, 200);
+    });
+
+    it('uma url.', async () => {
+        strictEqual((await httpclient.send('https://httpstat.us/200')).status, 200)
     });
 });

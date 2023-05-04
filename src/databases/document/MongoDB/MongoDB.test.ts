@@ -122,7 +122,7 @@ describe('Testando a classe MongoDB com...', () => {
             },
             (error: Error) => {
                 strictEqual(error.name, 'Error');
-                strictEqual(error.message, 'The operation could not be completed due: a query error ocorred.');
+                strictEqual(error.message, 'The query operation could not be completed.');
                 return true;
             }
         )

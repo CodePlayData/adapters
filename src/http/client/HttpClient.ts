@@ -17,6 +17,7 @@
 
 interface HttpClient {
     send(request: Request): Promise<Response> | Response
+    send(url: string, options?: any): Promise<Response>;
 }
 
 export {

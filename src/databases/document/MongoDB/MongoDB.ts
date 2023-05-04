@@ -26,13 +26,13 @@
  *  PS¹.: To test, it must have a mongod instance avaiable.
  */
 
-import { Document, IndexDescription, MongoClient, ServerApiVersion } from "mongodb";
-import { MongoQuery, IndexOperations } from "../../enums.js";
-import { Connection } from "../../Connection.js";
-import { MongoAggregateCouldNotCompleted } from "../../error/MongoAggregateCouldNotCompleted.js";
-import { MongoIndexOperationCouldNotCompleted } from "../../error/MongoIndexOperationCouldNotCompleted.js";
-import { MongoDBUnavailable } from "../../error/MongoDBUnavailable.js";
-import { MongoQueryOperationCouldNotCompleted } from "../../error/MongoQueryOperationCouldNotCompleted.js";
+import { Document, IndexDescription, MongoClient } from "mongodb";
+import { MongoQuery, IndexOperations } from "../../../enums.js";
+import { Connection } from "../../../Connection.js";
+import { MongoAggregateCouldNotCompleted } from "./error/MongoAggregateCouldNotCompleted.js";
+import { MongoIndexOperationCouldNotCompleted } from "./error/MongoIndexOperationCouldNotCompleted.js";
+import { MongoDBUnavailable } from "./error/MongoDBUnavailable.js";
+import { MongoQueryOperationCouldNotCompleted } from "./error/MongoQueryOperationCouldNotCompleted.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */
@@ -163,7 +163,7 @@ class MongoDB implements Connection {
 
             return request
         } catch (error) {
-            throw new MongoQueryOperationCouldNotCompleted(error);
+            throw new MongoQueryOperationCouldNotCompleted();
         } finally {
             await this._client.close();
         }

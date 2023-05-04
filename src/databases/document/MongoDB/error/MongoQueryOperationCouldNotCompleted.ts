@@ -18,8 +18,8 @@
 class MongoQueryOperationCouldNotCompleted extends Error {
     constructor(error?: unknown) {
         super(error ? 
-            `The index operation could not be completed due: ${error}` :
-            `The index operation could not be completed.`
+            `The operation could not be completed due: ${error}` :
+            `The query operation could not be completed.`
         )
     }
 }
