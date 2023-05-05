@@ -43,7 +43,7 @@ const server = new ExpressServer();
 /.../
 ```
 
-Para seguir com o paradigma do _Ports and Adapters_ todas essas classes seguiram interfaces em comum, contudo, isso não quer dizer que não seja possível trabalhar com o _driver_ escolhido de forma customizada, basta procurar em qual propriedade da classe está o driver, veja abaixo um exemplo: 
+Para seguir com o paradigma do _Ports and Adapters_ todas essas classes seguiram interfaces em comum, contudo, isso não quer dizer que não seja possível trabalhar com o _driver_ escolhido de forma customizada, basta procurar em qual propriedade da classe está o driver (normalmente estará com nome de `app` de _aplication_), veja abaixo um exemplo: 
 
 ```typescript
 import { http: { server: { ExpressServer() }}} from '@codeplaydata/adapters';
