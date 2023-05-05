@@ -20,11 +20,61 @@ Seguindo os princípios do [Ports and Adapters - _Alistair Cockburn_](https://al
 
 ## Implementação
 
+Os diretórios estarão separados por categoria de _adapter_, por exemplo: para um _adapter_ de banco de dados em _browser_ procure os disponíveis em `src/databases/browser/IndexedDB/`. Os _adapters_ serão exportados seguindo o mesmo raciocínio a partir da pasta `src`, então para utilizá-los siga o exemplo abaixo:
+
+```typescript
+import { database, http } from '@codeplaydata/adapters';
+
+const db = new database.browser.IndexedDB();
+const server = new http.server.ExpressServer();
+
+/.../
+```
+
+Repare que apesar de a chamada parecer mais prolíxa ela possui um motivo. Todos as base de dados poderão ter interfaces em comuns, assim como todas que forem de browser. O mesmo se repete para o http, que no caso todos os _servers_ terão interfaces em comum. Obviamente é possível desestruturar essa chamada e trabalhar diretamente com a classe para ficar menos prolíxo:
+
+```typescript
+import { database: { browser: { IndexedDB }}} from '@codeplaydata/adapters';
+import { http: { server: { ExpressServer() }}} from '@codeplaydata/adapters';
+
+const db = new IndexedDB();
+const server = new ExpressServer();
+
+/.../
+```
+
+Para seguir com o paradigma do _Ports and Adapters_ todas essas classes seguiram interfaces em comum, contudo, isso não quer dizer que não seja possível trabalhar com o _driver_ escolhido de forma customizada, basta procurar em qual propriedade da classe está o driver, veja abaixo um exemplo: 
+
+```typescript
+import { http: { server: { ExpressServer() }}} from '@codeplaydata/adapters';
+
+const server = new ExpressServer();
+
+// método comum da interface
+server.listen
+// método comum da interface
+server.use
+// propriedade opcional da interface
+server?.router
+
+// método específico do Express.
+server.app.on(/.../)
+
+/.../
+```
+
+Repare que o no exemplo acima ainda que a interface server...
+
+
+
+
+
+
 Abaixo estão os _adapters_ já implementados até agora:
 
 | _File_   | Descrição  |
 |:---------|:-----------|
-|[GenericQueue](./src/collections/GenericQueue.ts) |  Essa classe normalmente é colocada antes de um banco de dados para controlar a _inflow_ e evitar o consumo de memória do servidor. Possui o comportamento de uma fila.|
+|[GenericQueue](./src/collections/GenericQueue.ts) |  Essa classe pode ser usada antes de um banco de dados para controlar o _inflow_ e evitar indisponibilidade. Possui o comportamento de uma fila.|
 | [IndexedDB*](./src/databases/IndexedDB.ts) | Utilizado para acessar a _database_ à documentos (NoSQL) orientada a eventos  de mesmo nome presente na maioria dos _browsers_ atuais.*|
 | [LocalStorage](./src/databases/LocalStorage.ts) | Esse adaptador acessa o localstorage dos _browsers_ atuais, que normalmente se comportam como um banco em memória.|
 | [MongoDB](./src/databases/MongoDB.ts) | Um adaptador para o clássico banco de dados orientado a documentos de mesmo nome. |

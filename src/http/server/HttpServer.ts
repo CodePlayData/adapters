@@ -18,6 +18,7 @@
 interface HttpServer {
     listen(port: number): void;
     use?(...params: any): void;
+    router?: any
 }
 
 export {
