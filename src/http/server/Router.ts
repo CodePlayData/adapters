@@ -18,7 +18,7 @@
 import { Route } from "./Route.js";
 
 interface Router {
-    add(route: Route): void;
+    add(route: Route<any, any>, ...params: any): void;
     routes: any;
 }
 

@@ -13,13 +13,13 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-abstract class Route<T, Z> {
-    constructor(readonly method: T, readonly endpoint: string, readonly callback: Z) {
-    }
-}
+import { Route } from "../Route.js";
+import { ExpressMethods } from "./Method.js";
+
+class ExpressRoute extends Route<ExpressMethods, (req: Request | any, res: Response | any) => any> {};
 
 export {
-    Route
+    ExpressRoute
 }

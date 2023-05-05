@@ -1,4 +1,4 @@
-// @filename: Route.ts
+// @filename: Schema.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,13 +13,15 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-abstract class Route<T, Z> {
-    constructor(readonly method: T, readonly endpoint: string, readonly callback: Z) {
-    }
+type FastifyValidationSchema = {
+    body?: any,
+    query?: any,
+    params?: any,
+    response?: any
 }
 
 export {
-    Route
+    FastifyValidationSchema
 }

@@ -18,7 +18,7 @@
 import { describe, it } from "node:test";
 import { strictEqual, deepEqual } from "node:assert";
 import { ExpressRouter } from "./Router.js";
-import { Route } from "../Route.js";
+import { ExpressRoute } from "./Route.js";
 
 describe('Testando a classe ExpressRouter com...', () => {
     const router = new ExpressRouter();
@@ -28,7 +28,7 @@ describe('Testando a classe ExpressRouter com...', () => {
     });
 
     it('uma rota GET no /data', async () => {
-        const route = new Route('get', '/data', async () => { return });
+        const route = new ExpressRoute('get', '/data', async () => { return });
         router.add(route);
         strictEqual(router.routes[0].path, '/data');
         strictEqual(router.routes[0].methods['get'], true);

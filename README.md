@@ -63,11 +63,13 @@ server.app.on(/.../)
 /.../
 ```
 
-Repare que o no exemplo acima ainda que a interface server...
+Repare que o no exemplo acima ainda que a interface server possua métodos e propriedades em comum, dentro da propriedade app temos a aplicação escolhida que possui seus próprios métodos de propriedades já conhecidades pelos desenvolvedores.
+A seguir falaremos mais sobre cada um dos adaptadores já implementados até então.
+
+## Como usar
 
 
-
-
+// TODO
 
 
 Abaixo estão os _adapters_ já implementados até agora:

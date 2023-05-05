@@ -1,4 +1,4 @@
-// @filename: Route.ts
+// @filename: FastifyRoute.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,13 +13,18 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
+import { Route } from "../Route.js";
+import { HTTPMethods } from "fastify";
+import { FastifyValidationSchema } from "./Schema.js";
+import { FastifyCallback } from "./Callback.js";
 
-abstract class Route<T, Z> {
-    constructor(readonly method: T, readonly endpoint: string, readonly callback: Z) {
+class FastifyRoute extends Route<HTTPMethods, FastifyCallback> {
+    constructor(readonly method: HTTPMethods, readonly endpoint: string, readonly callback: FastifyCallback, readonly schema: FastifyValidationSchema) {
+        super(method, endpoint, callback);
     }
 }
 
 export {
-    Route
+    FastifyRoute
 }

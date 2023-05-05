@@ -17,7 +17,7 @@
 
 import { Router as ExpressRouterBase, Request, Response } from "express";
 import { Router } from "../Router.js";
-import { Route } from "../Route.js";
+import { ExpressRoute } from "./Route.js";
 
 type RouterBase = ExpressRouterBase & {
     [key: string]: any
@@ -26,14 +26,15 @@ type RouterBase = ExpressRouterBase & {
 class ExpressRouter implements Router  {
     router!: RouterBase;
 
-    constructor(routes?: Route[], readonly routerPath: string = '/') {
+    constructor(routes?: ExpressRoute[], readonly routerPath: string = '/') {
         this.router = ExpressRouterBase();
-        routes?.map((route: Route) => {
+
+        routes?.map((route: ExpressRoute) => {
             this.add(route);
         });
     }
 
-    add(route: Route): void {
+    add(route: ExpressRoute): void {
         this.router[route.method](route.endpoint, async (req: Request, res: Response) => {
             return route.callback(req, res);
         });
