@@ -1,4 +1,4 @@
-// @filename: Router.test.ts
+// @filename: Method.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,22 +15,8 @@
    limitations under the License.
 */
 
-import { describe, it } from "node:test";
-import { strictEqual, deepEqual } from "node:assert";
-import { NodeRoute } from "./Route.js";
-import { NodeRouter } from "./Router.js";
+type NodeMethods = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | 'OPTIONS' | 'HEAD';
 
-describe('Testando a classe NodeRouter com...', () => {
-    const router = new NodeRouter();
-
-    it('nenhuma rota.', () => {
-        deepEqual(router.routes, []);
-    });
-
-    it('uma rota GET no /data', async () => {
-        const route = new NodeRoute('GET', '/data', async () => { return });
-        router.add(route);
-        strictEqual(router.routes[0].endpoint, '/data');
-    });
-});
-   
+export {
+    NodeMethods
+}

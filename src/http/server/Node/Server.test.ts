@@ -18,18 +18,18 @@
 import { after, before, describe, it } from "node:test";
 import { deepEqual, strictEqual } from "node:assert";
 import { IncomingMessage, ServerResponse } from "node:http";
-import { Route } from "../Route.js";
+import { NodeRoute } from "./Route.js";
 import { NodeRouter } from "./Router.js";
 import { NodeServer } from "./Server.js";
 import { RequestBuilder } from "../../RequestBuilder.js";
 
 describe('Teste do NodeApp com...', () => {
-    const dataRoute = new Route('GET', '/data', (req: any, res: any) => {
+    const dataRoute = new NodeRoute('GET', '/data', (req: any, res: any) => {
         res.write('hello world');
         res.end()
     });
 
-    const loginRoute = new Route('POST', '/login', async (req: IncomingMessage, res: ServerResponse) => {
+    const loginRoute = new NodeRoute('POST', '/login', async (req: IncomingMessage, res: ServerResponse) => {
 
         let chunks: Uint8Array[] = [];
 

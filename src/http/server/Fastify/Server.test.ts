@@ -1,4 +1,4 @@
-// @filename: ExpressApp.test.ts
+// @filename: Server.test.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,47 +13,61 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
 import { after, before, describe, it } from "node:test";
 import { deepEqual, strictEqual } from "node:assert";
-import { ExpressRouter } from "./Router.js";
-import { ExpressServer } from "./Server.js";
-import { ExpressRoute } from "./Route.js"
-import { Express, Request, Response } from "express";
+import { IncomingMessage, ServerResponse } from "node:http";
+import { FastifyRoute } from "./Route.js";
+import { FastifyRouter } from "./Router.js";
+import { FastifyServer } from "./Server.js";
 import { RequestBuilder } from "../../RequestBuilder.js";
 
-describe('Teste do ExpressApp com...', () => {
-    const dataRoute = new ExpressRoute('get', '/data', async (req: Request, res: Response) => {
-        res.json('hello world')
-    } );
-    const loginRoute = new ExpressRoute('post', '/login', (req: Request, res: Response) => {
-        let chunks: Uint8Array[] = [];
+describe('Teste do NodeApp com...', () => {
+    const callback1 = (req: any, rpl: any) => {
+        rpl.send('hello world');
+    }
+    const dataRoute = new FastifyRoute('GET', '/data', callback1, {});
 
-        req.on('data', (chunk: Uint8Array) => {
-            chunks.push(chunk)
-        })
-        .on('end', () => {
-            res.send(chunks.toString())
+    const callback2 = (req: any, rpl: any) => {
+        rpl.send(req.body)
+    }
+    const loginRoute = new FastifyRoute(
+        'POST', 
+        '/login', 
+        callback2,
+        {
+            body: {
+                type: 'object',
+                properties: {
+                    email: { type: 'string' }
+                }
+            }
         });
-    })
 
-    const router = new ExpressRouter();
+    const router = new FastifyRouter();
     router.add(dataRoute);
     router.add(loginRoute);
 
-    let server: Express = new ExpressServer(router).app;
-    let serverApp = server.listen(3000);
+    let server = new FastifyServer(router);
+    let serverApp: any;
+
+    server.listen(3000).then((context) => {
+        serverApp = context;
+    })
 
     before(async () => {
         await new Promise(resolve => {
-            serverApp.once('listening', resolve);
+            server.app.addHook('onReady', (done) => {
+                done()
+            });
+            resolve
         });
     });
 
     it('a rota helloWold na /data.', async () => {
-        const response = await fetch('http://127.0.0.1:3000/data')
-        strictEqual(await response.json(), "hello world");
+        const response = await fetch('http://127.0.0.1:3000/data');
+        strictEqual(await response.text(), "hello world");
     });
 
     it('a rota POST no /login.', async () => {
@@ -70,4 +84,3 @@ describe('Teste do ExpressApp com...', () => {
         serverApp.close();
     });
 });
-

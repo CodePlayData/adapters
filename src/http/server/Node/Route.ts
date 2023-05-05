@@ -1,4 +1,4 @@
-// @filename: Router.ts
+// @filename: Route.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,29 +15,12 @@
    limitations under the License.
 */
 
-import { Router } from "../Router.js";
-import { NodeRoute } from "./Route.js";
 import { IncomingMessage, ServerResponse } from "node:http";
+import { Route } from "../Route.js";
+import { NodeMethods } from "./Method.js";
 
-
-class NodeRouter implements Router {
-    routes: NodeRoute[] = [];
-
-    add(route: NodeRoute): void {
-        this.routes.push(route);
-    }
-
-    handler() {
-        return async (req: IncomingMessage, res: ServerResponse) => {
-            this.routes.map((route: NodeRoute) => {
-                if(req.method === route.method && req.url === route.endpoint) {
-                    return route.callback(req, res);
-                }
-            });
-        }
-    }
-}
+class NodeRoute extends Route<NodeMethods, (req: IncomingMessage, res: ServerResponse) => any> {};
 
 export {
-    NodeRouter
+    NodeRoute
 }

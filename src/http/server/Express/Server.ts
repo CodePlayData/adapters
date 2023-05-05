@@ -22,12 +22,21 @@ import express, { Express } from "express";
 class ExpressServer implements HttpServer {
     readonly app!: Express;
     
-    constructor(readonly router?: ExpressRouter) {
+    constructor(readonly routers?: ExpressRouter | ExpressRouter[]) {
         this.app = express();
-        if(router) {
+        
+        if(routers instanceof Array<ExpressRouter>) {
+            routers.map((i) => {
+                this.app
+                    .use(i.routerPath, i.router)
+            });
+
+            this.app.use(express.json());
+
+        } else {
             this.app
-                .use(router.routerPath, router.router)
-                .use(express.json())
+                .use(routers!.routerPath, routers!.router)
+                .use(express.json());
         }
     }
 
@@ -37,9 +46,9 @@ class ExpressServer implements HttpServer {
         })
     }
 
-    use(): void {
+    use(router: ExpressRouter): void {
         const expressApp = this.app as Express;
-        expressApp.use(this.router!.routerPath, this.router!.router)
+        expressApp.use(router!.routerPath, router!.router)
     }
 }
 

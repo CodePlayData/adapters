@@ -15,22 +15,31 @@
    limitations under the License.
 */
 
+
+
 import { describe, it } from "node:test";
 import { strictEqual, deepEqual } from "node:assert";
-import { NodeRoute } from "./Route.js";
-import { NodeRouter } from "./Router.js";
+import { FastifyRoute } from "./Route.js";
+import { FastifyRouter } from "./Router.js";
 
-describe('Testando a classe NodeRouter com...', () => {
-    const router = new NodeRouter();
+describe('Testando a classe FastifyRouter com...', () => {
+    const router = new FastifyRouter();
 
     it('nenhuma rota.', () => {
         deepEqual(router.routes, []);
     });
 
     it('uma rota GET no /data', async () => {
-        const route = new NodeRoute('GET', '/data', async () => { return });
+        const route = new FastifyRoute(
+            'GET',
+            '/data',
+            (req: any, rpl: any) => {
+                rpl.send({})
+            },
+            {}
+        );
         router.add(route);
-        strictEqual(router.routes[0].endpoint, '/data');
+        strictEqual(router.routes[0].url, '/data');
     });
 });
    

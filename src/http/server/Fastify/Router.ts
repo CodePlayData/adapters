@@ -14,13 +14,14 @@
    See the License for the specific language governing permissions and
    limitations under the License.
 */
+import { HTTPMethods } from "fastify";
 import { Router } from "../Router.js";
-import Fastify from "fastify";
 import { FastifyRoute } from "./Route.js";
-const fastify = Fastify({ logger: true });
+import { FastifyValidationSchema } from "./Schema.js";
+import { FastifyCallback } from "./Callback.js";
 
 class FastifyRouter implements Router {
-    routes: any[] = [];
+    routes: Array<{ method: HTTPMethods, url: string, schema: FastifyValidationSchema, handler: FastifyCallback}> = [];
 
     constructor(routes?: FastifyRoute[], readonly routerPath: string = '/') {
         routes?.map((route: FastifyRoute) => {
@@ -29,15 +30,12 @@ class FastifyRouter implements Router {
     }
 
     add(route: FastifyRoute): void {
-        
-        let fastifyRoute = fastify.route({
+        this.routes.push({
             method: route.method,
             url: route.endpoint,
             schema: route.schema,
             handler: route.callback
-        })
-
-        this.routes.push(fastifyRoute);
+        });
     }
 }
 
