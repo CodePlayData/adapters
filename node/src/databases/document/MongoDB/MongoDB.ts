@@ -26,13 +26,15 @@
  *  PS¹.: To test, it must have a mongod instance avaiable.
  */
 
-import { Document, IndexDescription, MongoClient } from "mongodb";
-import { MongoQuery, IndexOperations } from "../../../enums.js";
+import { Document } from "../Document.js";
+import { IndexDescription, MongoClient } from "mongodb";
 import { Connection } from "../../../Connection.js";
 import { MongoAggregateCouldNotCompleted } from "./error/MongoAggregateCouldNotCompleted.js";
 import { MongoIndexOperationCouldNotCompleted } from "./error/MongoIndexOperationCouldNotCompleted.js";
 import { MongoDBUnavailable } from "./error/MongoDBUnavailable.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/MongoQueryOperationCouldNotCompleted.js";
+import { IndexOperations } from "./IndexOperations.js";
+import { MongoQuery } from "./Query.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */
@@ -81,8 +83,6 @@ class MongoDB implements Connection {
     get database() {
         return this._db
     }
-
-
 
     /**
      *  A function to test connection with mongodb deployment.
@@ -136,8 +136,8 @@ class MongoDB implements Connection {
         try {
             await this._client.connect();
             const collection = this._client.db(this._db).collection(this._collection);
-            const indexreturn = op === IndexOperations.create && indexdescript ? await collection.createIndexes(indexdescript) :
-                                op === IndexOperations.drop ? await collection.dropIndexes() : await collection.indexes();
+            const indexreturn = op === 'create' && indexdescript ? await collection.createIndexes(indexdescript) :
+                                op === 'drop' ? await collection.dropIndexes() : await collection.indexes();
             return indexreturn
         } catch (error) {
             throw new MongoIndexOperationCouldNotCompleted(error)

@@ -15,9 +15,10 @@
    limitations under the License.
  */
 
-import { IndexOperations, IndexedDBQuery, LocalStorageQuery, MongoQuery } from "./enums.js";
+import { IndexOperations } from "./databases/document/MongoDB/IndexOperations.js";
+import { IndexedDBQuery, LocalStorageQuery } from "./enums.js";
 
-type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery
+type DatabaseQuery = IndexedDBQuery | LocalStorageQuery
 
 interface Connection {
     name: string;

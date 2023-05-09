@@ -15,15 +15,6 @@
    limitations under the License.
  */
 
-enum MongoQuery {
-    insertOne = 'insertOne',
-    deleteOne = 'deleteOne',
-    findOne = 'findOne',
-    countDocuments = 'countDocuments',
-    updateOne = 'updateOne',
-    deleteMany = 'deleteMany'
-}
-
 enum LocalStorageQuery {
     getItem = 'getItem',
     clear = 'clear',
@@ -47,16 +38,8 @@ enum DatabasePermission {
     readwrite = 'readwrite'
 }
 
-enum IndexOperations {
-    create = 'create',
-    drop = 'drop',
-    get = 'get'
-}
-
 export {
     LocalStorageQuery,
-    MongoQuery,
     IndexedDBQuery,
-    IndexOperations,
     DatabasePermission
 }

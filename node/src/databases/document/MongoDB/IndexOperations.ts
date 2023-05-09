@@ -1,4 +1,4 @@
-//@filename: Document.ts
+// @filename: IndexOperations.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,12 +15,8 @@
    limitations under the License.
 */
 
-import { Data } from "../Data";
-
-interface Document extends Data {
-    [key: string]: any;
-};
+type IndexOperations = 'create' | 'drop' | 'get';
 
 export {
-    Document
+    IndexOperations
 }

@@ -18,8 +18,8 @@
 import { describe, it, after } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
 import { MongoDB } from "./MongoDB.js"
-import { MongoQuery, IndexOperations } from "../../../enums.js";
 import dotenv from "dotenv";
+import { MongoQuery } from "./Query.js";
 
 
 describe('Testando a classe MongoDB com...', () => {
@@ -52,42 +52,42 @@ describe('Testando a classe MongoDB com...', () => {
         mongo.database = 'npm_adapters';
         mongo.collection = 'collection1';
 
-        await mongo.query(MongoQuery.insertOne, { name: 'subject-1'});
-        const length = await mongo.query(MongoQuery.countDocuments, {});
+        await mongo.query('insertOne', { name: 'subject-1'});
+        const length = await mongo.query('countDocuments', {});
         strictEqual(length, 1)
     });
 
     it('o create Index.', async () => {
-        await mongo.index(IndexOperations.create, [ { key: { name: 'text' }, default_language: 'english', name: 'index_name'} ]);
-        const indexes = await mongo.index(IndexOperations.get) as Array<any>;
+        await mongo.index('create', [ { key: { name: 'text' }, default_language: 'english', name: 'index_name'} ]);
+        const indexes = await mongo.index('get') as Array<any>;
         strictEqual(indexes[1].name, 'index_name');
     });
 
     it('o dropIndex.', async () => {
-        await mongo.index(IndexOperations.drop);
-        const indexes = await mongo.index(IndexOperations.get) as any[];
+        await mongo.index('drop');
+        const indexes = await mongo.index('get') as any[];
         strictEqual(indexes.length, 1);
     });
 
     it('o updateOne.', async () => {
-        await mongo.query(MongoQuery.updateOne, { $set: { name: 'subject-2' } }, { name: 'subject-1'});
-        const data = await mongo.query(MongoQuery.findOne, { name: 'subject-2'}) as { [key: string]: any };
+        await mongo.query('updateOne', { $set: { name: 'subject-2' } }, { name: 'subject-1'});
+        const data = await mongo.query('findOne', { name: 'subject-2'}) as { [key: string]: any };
         strictEqual(data.name, 'subject-2');
     });
 
     it('o delete.', async ()=> {
-        let count = await mongo.query(MongoQuery.countDocuments, { name: 'subject-2'});
+        let count = await mongo.query('countDocuments', { name: 'subject-2'});
         strictEqual(count, 1);
-        await mongo.query(MongoQuery.deleteOne, { name: 'subject-2' });
-        count = await mongo.query(MongoQuery.countDocuments, { name: 'subject-2' });
+        await mongo.query('deleteOne', { name: 'subject-2' });
+        count = await mongo.query('countDocuments', { name: 'subject-2' });
         strictEqual(count, 0);
     });
 
     it('o aggregate.', async () => {
-        await mongo.query(MongoQuery.insertOne, { scale: 2, receivers: ["admin", "public"], msg: "A warning for all." });
-        await mongo.query(MongoQuery.insertOne, { scale: 4, receivers: ["admin"], msg: "Bug Report."});
-        await mongo.query(MongoQuery.insertOne, { scale: 4, receivers: ["admin"], msg: "Upgrade needed."});
-        await mongo.query(MongoQuery.insertOne, { scale: 0, receivers: [ "public"], msg: "Be cool, nothing is wrong!"});
+        await mongo.query('insertOne', { scale: 2, receivers: ["admin", "public"], msg: "A warning for all." });
+        await mongo.query('insertOne', { scale: 4, receivers: ["admin"], msg: "Bug Report."});
+        await mongo.query('insertOne', { scale: 4, receivers: ["admin"], msg: "Upgrade needed."});
+        await mongo.query('insertOne', { scale: 0, receivers: [ "public"], msg: "Be cool, nothing is wrong!"});
 
         const aggregation = [
             { 
@@ -129,6 +129,6 @@ describe('Testando a classe MongoDB com...', () => {
     });
 
     after(async () => {
-        await mongo.query(MongoQuery.deleteMany, {});
+        await mongo.query('deleteMany', {});
     });
 });

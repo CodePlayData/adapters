@@ -1,4 +1,4 @@
-// @filename: Index.ts
+// @filename: Query.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-interface Index {};
+type MongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'countDocuments' | 'updateOne' | 'deleteMany';
 
 export {
-    Index
+    MongoQuery
 }

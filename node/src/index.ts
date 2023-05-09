@@ -28,7 +28,7 @@ import { ExpressRouter } from "./http/server/Express/Router.js";
 import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";
 import { GPUCommandRepository } from "./gpu/GPUCommandRepository.js";
 import { Connection } from "./Connection.js";
-import { LocalStorageQuery, MongoQuery, IndexedDBQuery, IndexOperations, DatabasePermission } from "./enums.js";
+import { LocalStorageQuery, IndexedDBQuery, DatabasePermission } from "./enums.js";
 import { WasmModuleSource } from "./webassembly/WasmModuleSource.js"
 
 export {
@@ -50,9 +50,7 @@ export {
     Connection,
     GPUDeviceAdapter,
     LocalStorageQuery, 
-    MongoQuery, 
     IndexedDBQuery, 
-    IndexOperations, 
     DatabasePermission,
     WasmModuleSource
 }
