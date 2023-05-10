@@ -22,11 +22,11 @@
 
 import { Queue } from "./Queue.js";
 import type { Connection } from "../../Connection.js";
-import { MongoQuery, IndexedDBQuery, LocalStorageQuery } from "../../enums.js";
+import { IndexedDBQuery, LocalStorageQuery } from "../../enums.js";
 import { QueueIsFull } from "./error/QueueIsFull.js";
 import { QueueIsEmpty } from "./error/QueueIsEmpty.js";
 
-type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery;
+type DatabaseQuery = IndexedDBQuery | LocalStorageQuery;
 
 class GenericQueue implements Queue, Connection {
     /** @type { string } - An identification. */

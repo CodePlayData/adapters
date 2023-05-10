@@ -29,10 +29,10 @@
 import { Document } from "../Document.js";
 import { IndexDescription, MongoClient } from "mongodb";
 import { Connection } from "../../../Connection.js";
-import { MongoAggregateCouldNotCompleted } from "./error/MongoAggregateCouldNotCompleted.js";
-import { MongoIndexOperationCouldNotCompleted } from "./error/MongoIndexOperationCouldNotCompleted.js";
-import { MongoDBUnavailable } from "./error/MongoDBUnavailable.js";
-import { MongoQueryOperationCouldNotCompleted } from "./error/MongoQueryOperationCouldNotCompleted.js";
+import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotCompleted.js";
+import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCouldNotCompleted.js";
+import { MongoDBUnavailable } from "./error/Unavailable.js";
+import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { IndexOperations } from "./IndexOperations.js";
 import { MongoQuery } from "./Query.js";
 
