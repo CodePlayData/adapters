@@ -15,7 +15,7 @@
    limitations under the License.
  */
 
-import { IndexOperations } from "./databases/document/MongoDB/IndexOperations.js";
+import { IndexOperations } from "./databases/document/IndexOperations.js";
 import { IndexedDBQuery, LocalStorageQuery } from "./enums.js";
 
 type DatabaseQuery = IndexedDBQuery | LocalStorageQuery

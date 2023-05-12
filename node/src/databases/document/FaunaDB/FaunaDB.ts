@@ -20,6 +20,9 @@ const { query: q } = faunadb;
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
 import { SingleDocumentFaunaQuery } from "./queries/SingleDocument.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
+import { IndexOperations } from '../IndexOperations.js';
+import { IndexDescription } from './IndexDescription.js';
+import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
 
 class FaunaDB {
     /**  @type { string } - An identifier. */
@@ -79,7 +82,47 @@ class FaunaDB {
             throw new FaunaQueryOperationCouldNotCompleted(error);
         }
     }
-    
+
+    /**
+     * Create indexes in some colletion.
+     * @param op @type { IndexOperations } - The allowed operations are: create, drop or get.
+     * @param indexdescript @type { IndexDescription[] } - The description of the indexes to be created.
+     * Check the test file to reference.
+     * @returns @type { Document } - A document with summary.
+     */
+    async index(op: IndexOperations, indexdescript?: IndexDescription) {
+        if(indexdescript) {
+            indexdescript.source = this._collection;
+        }
+
+        try {
+            const indexReturn = op === 'create' && indexdescript ? this._client.query(q.CreateIndex(indexdescript)) :
+                                op === 'get' ? this._client.query(q.Paginate(q.Indexes())) : this.dropIndexes();
+            return indexReturn
+        } catch (error) {
+            throw new FaunaIndexOperationCouldNotCompleted(error)
+        }
+        
+    }
+
+    private async dropIndexes() {
+        try {
+            const indexes = await this._client.query(q.Map(
+                q.Paginate(q.Indexes()),
+                q.Lambda('indexRef', q.Get(q.Var('indexRef')))
+            )) as { [key: string]: any }
+            
+            Promise.all(
+                indexes.data.map(async (index:any) => {
+                    await this._client.query(q.Delete(q.Index(index.ref.id)));
+                })
+            )
+            
+            return true
+        } catch (error) {
+            throw new FaunaIndexOperationCouldNotCompleted(error)
+        }
+    }
 }
 
 export {

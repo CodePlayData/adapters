@@ -33,7 +33,7 @@ import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotComple
 import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCouldNotCompleted.js";
 import { MongoDBUnavailable } from "./error/Unavailable.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
-import { IndexOperations } from "./IndexOperations.js";
+import { IndexOperations } from "../IndexOperations.js";
 import { SingleDocumentMongoQuery } from "./queries/SingleDocument.js";
 import { MultipleDocumentsMongoQuery } from "./queries/MultipleDocuments.js";
 

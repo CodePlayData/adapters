@@ -15,7 +15,7 @@
    limitations under the License.
  */
 
-import { describe, it, after } from "node:test";
+import { describe, it } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
 import { FaunaDB } from "./FaunaDB.js";
 import dotenv from "dotenv";
@@ -36,6 +36,22 @@ describe('Testando a classe FaunaDB com...', () => {
         strictEqual(response.data.name, 'subject-1');
     });
 
+    it('o create Index.', async () => {
+        ok(
+            await fauna.index('create', {
+                name: 'byName',
+                terms: [ 
+                    { field: ['data', 'name'] }
+                ]
+            })
+        )
+    });
+
+    it('o get Index.', async () => {
+        const indexes = await fauna.index('get') as { data: Array<{[key:string]: any}> };
+        strictEqual(indexes.data[0].id, 'byName');
+    });
+
     it('o Update.', async () => {
         const response = await fauna.query('Update', {name: 'subject-5'}, id) as {[key: string]: any};
         strictEqual(response.data.name, 'subject-5');
@@ -50,4 +66,11 @@ describe('Testando a classe FaunaDB com...', () => {
         const response = await fauna.query('Delete', undefined, id) as {[key: string]: any};
         strictEqual(response.data.name, 'subject-5');
     });
+
+    it('o drop Index.', async() => {
+        ok(
+            await fauna.index('drop')
+        )
+    });
+
 });
