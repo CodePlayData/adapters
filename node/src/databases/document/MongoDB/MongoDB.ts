@@ -34,7 +34,7 @@ import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCoul
 import { MongoDBUnavailable } from "./error/Unavailable.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { IndexOperations } from "./IndexOperations.js";
-import { MongoQuery } from "./Query.js";
+import { MongoQuery } from "./queries/Query.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */

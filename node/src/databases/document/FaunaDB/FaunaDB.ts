@@ -17,7 +17,7 @@
 
 import faunadb, { query as q, Client } from 'faunadb';
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
-import { FaunaQuery } from "./Query.js";
+import { FaunaQuery } from "./queries/Query.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
 
 class FaunaDB {
