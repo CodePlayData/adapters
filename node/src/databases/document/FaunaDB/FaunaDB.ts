@@ -15,31 +15,39 @@
    limitations under the License.
  */
 
-import faunadb from "faunadb";
+import faunadb, { query as q, Client } from 'faunadb';
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
-const { Paginate } = faunadb.query
+import { FaunaQuery } from "./Query.js";
+import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
 
 class FaunaDB {
+    /**  @type { string } - An identifier. */
     name: string = 'FaunaDB';
-    _client: faunadb.Client;
-    _collection: string;
+    /** @type { Client } - The FaunaDB client. */
+    _client: Client;
+    /** @type { string } - The name of the desired database to connect. */
+    _db!: string;
+    /** @type { faunadb.Expr } - The collection to be worked. */
+    _collection: faunadb.Expr;
 
+    /**
+     *  Set the name of the collection.
+     */
     set collection(collection: string) {
-        this._collection = collection;
+        this._collection = q.Collection(collection);;
     }
 
-    get collection() {
-        return this._collection
-    }
-    
     constructor(readonly uri: string, secret: string, collection: string) {
         this._client = new faunadb.Client({
             secret,
             endpoint: uri //https://db.fauna.com
         });
-        this._collection = collection;
+        this._collection = q.Collection(collection);
     }
 
+    /**
+     *  A function to test connection with FaunaDB deployment.
+     */
     async ping() {
         try {
             // Connect the client to the server	(optional starting in v4.7)
@@ -51,18 +59,24 @@ class FaunaDB {
         }
     }
 
-    async query() {
-        this._client.query(
-            faunadb.query.Create(
-                faunadb.query.Collection(this._collection),
-                { data: {
-                    name: 'subject-2'
-                }}
-            )
-        )
-        return true
+    /**
+     * The main method that performs CRUD operations.
+     * @param query @type { FaunaQuery } - The only queries allowed are: create, delete, readone, count, update and clear.
+     * @param object @type { unknown } - The data/object to be stored.
+     * @param key @type { any } - The key to be used to search some data.
+     * @returns @type { number | Document | Error | null }
+     */
+    async query(query: FaunaQuery, object?: unknown, key?: any) {
+        try {
+            const document = q.Ref(this._collection, key);
+            const request = object && !key ? q[query /** Create */](this._collection, { data: object }) : 
+                            object && key ? q[query /** Update */](document, { data: object }) : 
+                            !object && key ? q[query /** Get, Delete */](document, []) : null
+            return request;
+        } catch (error) {
+            throw new FaunaQueryOperationCouldNotCompleted(error);
+        }
     }
-
 }
 
 export {

@@ -25,7 +25,7 @@ interface Connection {
     hasThisFeature?: boolean;
     database?: unknown;
     store?: string;
-    collection?: string
+    collection?: any
     indexNames?: unknown;
 
     pipeline?(descriptions: unknown): any;
