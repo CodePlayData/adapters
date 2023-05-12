@@ -160,8 +160,7 @@ class MongoDB implements Connection {
             await this._client.connect();
             const collection = this._client.db(this._db).collection(this._collection);
             const request = object && !key ? await collection[query](document, key) : 
-                            object && key ? await collection[query](key, document) : null;                        
-
+                            object && key ? await collection[query](key, document) : null;               
             return request
         } catch (error) {
             throw new MongoQueryOperationCouldNotCompleted();

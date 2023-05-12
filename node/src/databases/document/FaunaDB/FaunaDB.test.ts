@@ -24,12 +24,30 @@ describe('Testando a classe FaunaDB com...', () => {
     dotenv.config();
 
     const fauna = new FaunaDB('https://db.fauna.com', process.env.FAUNA_SECRET as string, 'test');
+    let id: string;
 
     it('um ping.', async () => {
         ok(await fauna.ping());
     });
 
-    it('testando uma query qualquer.', async () => {
-        await fauna.query();
-    })
+    it('o Create.', async () => {
+        const response = await fauna.query('Create', { name: 'subject-1'}) as {[key: string]: any};
+        id = response.ref.value.id;
+        strictEqual(response.data.name, 'subject-1');
+    });
+
+    it('o Update.', async () => {
+        const response = await fauna.query('Update', {name: 'subject-5'}, id) as {[key: string]: any};
+        strictEqual(response.data.name, 'subject-5');
+    });
+
+    it('o Get.', async () => {
+        const response = await fauna.query('Get', undefined, id) as {[key: string]: any};
+        strictEqual(response.data.name, 'subject-5');
+    });
+
+    it('o Delete.', async() => {
+        const response = await fauna.query('Delete', undefined, id) as {[key: string]: any};
+        strictEqual(response.data.name, 'subject-5');
+    });
 });

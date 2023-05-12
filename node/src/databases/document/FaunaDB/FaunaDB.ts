@@ -15,7 +15,8 @@
    limitations under the License.
  */
 
-import faunadb, { query as q, Client } from 'faunadb';
+import faunadb, { Client } from 'faunadb';
+const { query: q } = faunadb;
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
 import { SingleDocumentFaunaQuery } from "./queries/SingleDocument.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
@@ -68,15 +69,17 @@ class FaunaDB {
      */
     async query(query: SingleDocumentFaunaQuery, object?: unknown, key?: any) {
         try {
-            const document = q.Ref(this._collection, key);
+            const documentRef = q.Ref(this._collection, key);
             const request = object && !key ? q[query /** Create */](this._collection, { data: object }) : 
-                            object && key ? q[query /** Update */](document, { data: object }) : 
-                            !object && key ? q[query /** Get, Delete */](document, []) : null
-            return request;
+                            object && key ? q[query /** Update */](documentRef, { data: object }) : 
+                            query === 'Get' ? q.Get(documentRef) : q.Delete(documentRef);
+            const response = this._client.query(request);
+            return response;
         } catch (error) {
             throw new FaunaQueryOperationCouldNotCompleted(error);
         }
     }
+    
 }
 
 export {
