@@ -1,4 +1,4 @@
-// @filename: Query.ts
+// @filename: SingleDocument.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type FaunaQuery = 'Get' | 'Update' | 'Delete' | 'Create';
+type SingleDocumentFaunaQuery = 'Get' | 'Update' | 'Delete' | 'Create';
 
 export {
-    FaunaQuery
+    SingleDocumentFaunaQuery
 }

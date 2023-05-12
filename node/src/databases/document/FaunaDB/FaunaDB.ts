@@ -17,7 +17,7 @@
 
 import faunadb, { query as q, Client } from 'faunadb';
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
-import { FaunaQuery } from "./queries/Query.js";
+import { SingleDocumentFaunaQuery } from "./queries/SingleDocument.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
 
 class FaunaDB {
@@ -61,12 +61,12 @@ class FaunaDB {
 
     /**
      * The main method that performs CRUD operations.
-     * @param query @type { FaunaQuery } - The only queries allowed are: create, delete, readone, count, update and clear.
+     * @param query @type { SingleDocumentFaunaQuery } - The only queries allowed are: create, delete, readone, count, update and clear.
      * @param object @type { unknown } - The data/object to be stored.
      * @param key @type { any } - The key to be used to search some data.
      * @returns @type { number | Document | Error | null }
      */
-    async query(query: FaunaQuery, object?: unknown, key?: any) {
+    async query(query: SingleDocumentFaunaQuery, object?: unknown, key?: any) {
         try {
             const document = q.Ref(this._collection, key);
             const request = object && !key ? q[query /** Create */](this._collection, { data: object }) : 

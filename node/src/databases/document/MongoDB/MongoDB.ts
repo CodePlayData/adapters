@@ -34,7 +34,8 @@ import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCoul
 import { MongoDBUnavailable } from "./error/Unavailable.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { IndexOperations } from "./IndexOperations.js";
-import { MongoQuery } from "./queries/Query.js";
+import { SingleDocumentMongoQuery } from "./queries/SingleDocument.js";
+import { MultipleDocumentsMongoQuery } from "./queries/MultipleDocuments.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */
@@ -153,7 +154,7 @@ class MongoDB implements Connection {
      * @param key @type { any } - The key to be used to search some data.
      * @returns @type { number | InsertOneResult<Document> | WithId<Document> | DeleteResult | UpdateResult | Error | null }
      */
-    async query(query: MongoQuery, object?: unknown, key?: any) {
+    async query(query: SingleDocumentMongoQuery | MultipleDocumentsMongoQuery, object?: unknown, key?: any) {
         const document = object as Document;
         try {
             await this._client.connect();

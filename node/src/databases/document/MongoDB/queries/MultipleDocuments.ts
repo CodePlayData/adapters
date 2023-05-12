@@ -1,4 +1,4 @@
-// @filename: Query.ts
+// @filename: MultipleDocuments.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type MongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'countDocuments' | 'updateOne' | 'deleteMany';
+type MultipleDocumentsMongoQuery = 'countDocuments' | 'deleteMany';
 
 export {
-    MongoQuery
+    MultipleDocumentsMongoQuery
 }

@@ -19,7 +19,7 @@ import { describe, it, after } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
 import { MongoDB } from "./MongoDB.js"
 import dotenv from "dotenv";
-import { MongoQuery } from "./queries/Query.js";
+import { MongoQuery } from "./queries/SingleDocument.js";
 
 
 describe('Testando a classe MongoDB com...', () => {
