@@ -15,7 +15,7 @@
    limitations under the License.
 */
 
-type MultipleDocumentsFaunaQuery = 'Count' | 'ReadAll';
+type MultipleDocumentsFaunaQuery = 'Count' | 'Mean' | 'Max' | 'Min' | 'Distinct';
 
 export {
     MultipleDocumentsFaunaQuery

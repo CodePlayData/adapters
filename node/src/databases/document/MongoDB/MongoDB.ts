@@ -48,13 +48,15 @@ class MongoDB implements Connection {
     _collection: string
 
     /**
-     *  To connect in some mongodb instance you only need the URI.
+     *  The adapter that connects to some mongodb instance.
      *  @param uri @type { string } - The connection URI to connect in mongod.
+     *  @param database @type { string | undefined } - The database to connect with.
+     *  @param collection @type { string | undefined } - The collection to work with.
      */
-    constructor(readonly uri: string) {
+    constructor(readonly uri: string, database?: string, collection?: string) {
         this._client = new MongoClient(uri);
-        this._db = 'local';
-        this._collection = 'startup_log';
+        this._db = database ?? 'local';
+        this._collection = collection ?? 'startup_log';
     }
     
     /**
@@ -168,6 +170,20 @@ class MongoDB implements Connection {
             await this._client.close();
         }
     }
+
+    /**
+     * The currying method to initialize one or more databases or collections in separeted references.
+     * @param uri @type { string } - The database server address.
+     * @returns @type { (string) => (string) => MongoDB }
+     */
+    static init(uri: string) {
+        return (database: string) => {
+            return (collection: string) => {
+                return new MongoDB(uri, database, collection)
+            }
+        }
+    }
+
 }
 
 export {

@@ -25,9 +25,16 @@ import { SingleDocumentMongoQuery } from "./queries/SingleDocument.js";
 describe('Testando a classe MongoDB com...', () => {
     dotenv.config()
 
+    /** Testando o acesso da classe sem o curryng. */
     const mongo = new MongoDB(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017');
     mongo.database = 'npm_adapters';
     mongo.collection = 'test';
+    
+    /** Testando o acesso com o curryng. */
+    const database = MongoDB.init(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
+    const collection1 = database('collection1');
+    const collection2 = database('collection2');
+
 
     it('a database e a collection pré-definidas.', () => {
         strictEqual(mongo.database, 'npm_adapters');
@@ -128,7 +135,18 @@ describe('Testando a classe MongoDB com...', () => {
         )
     });
 
-    after(async () => {
-        await mongo.query('deleteMany', {});
+    it('a função init definida para duas collections separadas.', async () => {
+        let length = await collection1.query('countDocuments', {});
+        strictEqual(length, 4)
+
+        await collection2.query('insertOne', { name: 'subject-1'});
+        length = await collection2.query('countDocuments', {});
+        strictEqual(length, 1)
     });
+
+    after(async () => {
+        await collection1.query('deleteMany', {});
+        await collection2.query('deleteMany', {});
+    });
+    
 });

@@ -23,8 +23,13 @@ import dotenv from "dotenv";
 describe('Testando a classe FaunaDB com...', () => {
     dotenv.config();
 
-    const fauna = new FaunaDB('https://db.fauna.com', process.env.FAUNA_SECRET as string, 'test');
+    /** Testando o acesso da classe sem o curryng. */
+    const fauna = new FaunaDB('https://db.fauna.com', process.env.FAUNA_SECRET as string, 'collection1');
     let id: string;
+
+    /** Testando o acesso da classe com o curryng. */
+    const database = FaunaDB.init('https://db.fauna.com')(process.env.FAUNA_SECRET as string);
+    const collection1 = database('collection1');
 
     it('um ping.', async () => {
         ok(await fauna.ping());
@@ -42,6 +47,9 @@ describe('Testando a classe FaunaDB com...', () => {
                 name: 'byName',
                 terms: [ 
                     { field: ['data', 'name'] }
+                ],
+                values: [
+                    { field: ['data', 'name'] }
                 ]
             })
         )
@@ -58,8 +66,16 @@ describe('Testando a classe FaunaDB com...', () => {
     });
 
     it('o Get.', async () => {
-        const response = await fauna.query('Get', undefined, id) as {[key: string]: any};
+        let response = await fauna.query('Get', undefined, id) as {[key: string]: any};
         strictEqual(response.data.name, 'subject-5');
+
+        response = await collection1.query('Get', undefined, id) as {[key: string]: any};
+        strictEqual(response.data.name, 'subject-5');
+    });
+
+    it('o Aggregate no Count.', async () => {
+        let response = await fauna.aggregate('Count', 'byName');
+        strictEqual(response, 1);
     });
 
     it('o Delete.', async() => {

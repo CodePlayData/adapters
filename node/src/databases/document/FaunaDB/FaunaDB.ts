@@ -23,6 +23,7 @@ import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCoul
 import { IndexOperations } from '../IndexOperations.js';
 import { IndexDescription } from './IndexDescription.js';
 import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
+import { MultipleDocumentsFaunaQuery } from './queries/MultipleDocuments.js';
 
 class FaunaDB {
     /**  @type { string } - An identifier. */
@@ -41,6 +42,13 @@ class FaunaDB {
         this._collection = q.Collection(collection);;
     }
 
+    /**
+     *  The adapter to connect to some FaunaDB instance.
+     *  @param uri @type { string } - The endpoint to connect with.
+     *  @param secret @type { string } - All FaunaDB instances provide the database access with some
+     *                                   secret that is used to authenticate and authorizes in that database.
+     *  @param collection  @type { string } - The collection to works with.
+     */
     constructor(readonly uri: string, secret: string, collection: string) {
         this._client = new faunadb.Client({
             secret,
@@ -102,9 +110,13 @@ class FaunaDB {
         } catch (error) {
             throw new FaunaIndexOperationCouldNotCompleted(error)
         }
-        
     }
 
+    /**
+     *  In FaunaDB the indexes are deleted one by one, however, in this implementation we need
+     *  the MongoDB behavior that drops all indexes at once. This is why this methods exists.
+     *  @returns @type { boolean }
+     */
     private async dropIndexes() {
         try {
             const indexes = await this._client.query(q.Map(
@@ -122,6 +134,54 @@ class FaunaDB {
         } catch (error) {
             throw new FaunaIndexOperationCouldNotCompleted(error)
         }
+    }
+
+    /**
+     * The currying method to initialize one or more databases or collections in separeted references.
+     * @param uri @type { string } - The database server address.
+     * @returns @type { (string) => (string) => FaunaDB }
+     */
+    static init(uri: string) {
+        return (secret: string) => {
+            return (collection: string) => {
+                return new FaunaDB(uri, secret, collection)
+            }
+        }
+    }
+
+    /**
+     *  Operations that manipulates many documents at once.
+     *  @param query @type { MultipleDocumentsFaunaQuery } - 'Count' | 'Mean' | 'Max' | 'Min' | 'Distinct';
+     *  @param indexName @type { string } - The index must be provided otherwise a error will occur.
+     *  @param fieldName @type { string } - In the cases that are not count you must identify the fieldName.
+     *  @returns 
+     */
+    async aggregate(query: MultipleDocumentsFaunaQuery, indexName?: string, fieldName?: string) {
+        const indexes = await this.index('get') as { data: Array<{[key:string]: any}> };
+        let createdIndexes = indexes.data.filter((index: any) => index.id === indexName);
+        let indexRef = q.Match(q.Index(indexName ?? ''));
+        let request;
+        
+        if(createdIndexes.length < 1) {
+            throw new Error('Index not exists.')
+        }
+
+        switch (query) {
+            case 'Count':
+                request = q.Count(q.Documents(this._collection));
+                break;
+            default:
+                request = q[query](q.Map(indexRef, q.Lambda(['x'], q.Select([fieldName],q.Get(q.Var('x'))))));
+                break;
+        }
+
+        try {
+            const result = await this._client.query(request);
+            return result    
+        } catch (error) {
+            throw new Error('The aggregate operation could conclude.')
+        }
+
     }
 }
 
