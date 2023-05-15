@@ -41,6 +41,7 @@ class Redis {
             this._client.disconnect();
         }
     }
+
 }
 
 export {

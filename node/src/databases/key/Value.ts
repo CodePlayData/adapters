@@ -1,4 +1,4 @@
-// @filename: Memcached.ts
+// @filename: Valeu.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,18 +13,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
-import client, { Location, options } from "memcached";
-
-class Memcached {
-    _client: client;
-
-    constructor(location: Location, options?: options) {
-        this._client = new client(location, options);
-    }
-}
+type Value = string | number | Record<string, any> | Array<any>;
 
 export {
-    Memcached
+    Value
 }

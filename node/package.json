@@ -26,7 +26,6 @@
     "homepage": "https://github.com/codeplaydata/adapters#readme",
     "devDependencies": {
         "@types/express": "^4.17.14",
-        "@types/memcached": "^2.2.7",
         "@types/node": "^18.11.9",
         "@webgpu/types": "^0.1.23",
         "axios": "^1.4.0",
@@ -34,7 +33,6 @@
         "express": "^4.18.2",
         "fastify": "^4.17.0",
         "faunadb": "^4.8.0",
-        "memcached": "^2.2.2",
         "mock-local-storage": "^1.1.23",
         "mongodb": "^4.12.1",
         "redis": "^4.6.6",
