@@ -1,0 +1,1 @@
+// https://cloud.scylladb.com/clusters/new/serverless
