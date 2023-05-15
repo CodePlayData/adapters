@@ -1,4 +1,4 @@
-// @filename: Memcached.ts
+// @filename: Redis.test.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,16 +15,22 @@
    limitations under the License.
 */
 
-import client, { Location, options } from "memcached";
+import { describe, it, after } from "node:test";
+import { strictEqual, deepEqual, rejects, ok } from "node:assert";
+import { Redis } from "./Redis.js";
+import dotenv from "dotenv";
 
-class Memcached {
-    _client: client;
+describe('Testando a classe Redis com...', () => { 
+    dotenv.config();
 
-    constructor(location: Location, options?: options) {
-        this._client = new client(location, options);
-    }
-}
+    const redis = new Redis(
+        process.env.REDIS_PASSWORD as string, 
+        process.env.REDIS_HOST as string,
+        Number(process.env.REDIS_PORT)
+    )
+    
+    it('um ping', async () => {
+        ok(await redis.ping())
+    });
 
-export {
-    Memcached
-}
+ });

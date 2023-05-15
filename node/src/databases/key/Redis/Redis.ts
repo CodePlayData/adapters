@@ -20,7 +20,7 @@ import { createClient, RedisClientType } from "redis";
 class Redis {
     _client!: RedisClientType;
 
-    constructor(password: string, host: string, port: number) {
+    constructor(password: string, host: string, port?: number) {
         this._client = createClient({
             password,
             socket: {
@@ -28,6 +28,18 @@ class Redis {
                 port
             }
         });
+    }
+
+    async ping() {
+        try {
+            await this._client.connect();
+            const pong = await this._client.ping();
+            return pong === 'PONG'
+        } catch (error) {
+            throw new Error('Redis server unavaiable.')
+        } finally {
+            this._client.disconnect();
+        }
     }
 }
 

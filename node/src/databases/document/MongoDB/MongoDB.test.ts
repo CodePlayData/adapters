@@ -19,7 +19,7 @@ import { describe, it, after } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
 import { MongoDB } from "./MongoDB.js"
 import dotenv from "dotenv";
-import { SingleDocumentMongoQuery } from "./queries/Document.js";
+import { DocumentMongoQuery as DocumentQuery } from "./queries/Document.js";
 
 
 describe('Testando a classe MongoDB com...', () => {
@@ -118,14 +118,14 @@ describe('Testando a classe MongoDB com...', () => {
     });
 
     it('o null como retorno de uma query vazia.', async () => {
-        const nullReturn = await mongo.query('error' as SingleDocumentMongoQuery);
+        const nullReturn = await mongo.query('error' as DocumentQuery);
         strictEqual(nullReturn, null);
     });
 
     it('o um erro de query.', async () => {
         await rejects(
             async() => {
-                await mongo.query('' as SingleDocumentMongoQuery, {}, {})
+                await mongo.query('' as DocumentQuery, {}, {})
             },
             (error: Error) => {
                 strictEqual(error.name, 'Error');

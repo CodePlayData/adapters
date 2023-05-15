@@ -18,12 +18,12 @@
 import faunadb, { Client } from 'faunadb';
 const { query: q } = faunadb;
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
-import { SingleDocumentFaunaQuery } from "./queries/Document.js";
+import { DocumentFaunaQuery as DocumentQuery } from "./queries/Document.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
 import { IndexOperations } from '../IndexOperations.js';
 import { IndexDescription } from './IndexDescription.js';
 import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
-import { MultipleDocumentsFaunaQuery } from './queries/Subset.js';
+import { SubsetFaunaQuery as SubsetQuery } from './queries/Subset.js';
 import { Document } from "../Document.js";
 
 class FaunaDB {
@@ -79,7 +79,7 @@ class FaunaDB {
      * @param key @type { any } - The key to be used to search some data.
      * @returns @type { number | Document | Error | null }
      */
-    async query(query: SingleDocumentFaunaQuery, object?: Document, key?: any) {
+    async query(query: DocumentQuery, object?: Document, key?: any) {
         try {
             const documentRef = q.Ref(this._collection, key);
             const request = object && !key ? q[query /** Create */](this._collection, { data: object }) : 
@@ -152,12 +152,12 @@ class FaunaDB {
 
     /**
      *  Operations that manipulates many documents at once.
-     *  @param query @type { MultipleDocumentsFaunaQuery } - 'Count' | 'Mean' | 'Max' | 'Min' | 'Distinct';
+     *  @param query @type { SubsetQuery } - 'Count' | 'Mean' | 'Max' | 'Min' | 'Distinct';
      *  @param indexName @type { string } - The index must be provided otherwise a error will occur.
      *  @param fieldName @type { string } - In the cases that are not count you must identify the fieldName.
      *  @returns 
      */
-    async aggregate(query: MultipleDocumentsFaunaQuery, indexName?: string, fieldName?: string) {
+    async aggregate(query: SubsetQuery, indexName?: string, fieldName?: string) {
         const indexes = await this.index('get') as { data: Array<{[key:string]: any}> };
         let createdIndexes = indexes.data.filter((index: any) => index.id === indexName);
         let indexRef = q.Match(q.Index(indexName ?? ''));
