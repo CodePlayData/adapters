@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type SingleDocumentMongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne';
+type DocumentMongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne';
 
 export {
-    SingleDocumentMongoQuery
+    DocumentMongoQuery
 }

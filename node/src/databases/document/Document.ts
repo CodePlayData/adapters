@@ -15,9 +15,7 @@
    limitations under the License.
 */
 
-import { Data } from "../Data";
-
-interface Document extends Data {
+type Document = {
     [key: string]: any;
 };
 

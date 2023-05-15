@@ -18,12 +18,13 @@
 import faunadb, { Client } from 'faunadb';
 const { query: q } = faunadb;
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
-import { SingleDocumentFaunaQuery } from "./queries/SingleDocument.js";
+import { SingleDocumentFaunaQuery } from "./queries/Document.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
 import { IndexOperations } from '../IndexOperations.js';
 import { IndexDescription } from './IndexDescription.js';
 import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
-import { MultipleDocumentsFaunaQuery } from './queries/MultipleDocuments.js';
+import { MultipleDocumentsFaunaQuery } from './queries/Subset.js';
+import { Document } from "../Document.js";
 
 class FaunaDB {
     /**  @type { string } - An identifier. */
@@ -62,7 +63,7 @@ class FaunaDB {
      */
     async ping() {
         try {
-            // Connect the client to the server	(optional starting in v4.7)
+            // Connect the client to the server.
             await this._client.ping()
             // Send a ping to confirm a successful connection
             return true
@@ -78,7 +79,7 @@ class FaunaDB {
      * @param key @type { any } - The key to be used to search some data.
      * @returns @type { number | Document | Error | null }
      */
-    async query(query: SingleDocumentFaunaQuery, object?: unknown, key?: any) {
+    async query(query: SingleDocumentFaunaQuery, object?: Document, key?: any) {
         try {
             const documentRef = q.Ref(this._collection, key);
             const request = object && !key ? q[query /** Create */](this._collection, { data: object }) : 

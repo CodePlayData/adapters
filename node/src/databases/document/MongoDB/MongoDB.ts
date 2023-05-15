@@ -34,8 +34,8 @@ import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCoul
 import { MongoDBUnavailable } from "./error/Unavailable.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { IndexOperations } from "../IndexOperations.js";
-import { SingleDocumentMongoQuery } from "./queries/SingleDocument.js";
-import { MultipleDocumentsMongoQuery } from "./queries/MultipleDocuments.js";
+import { DocumentMongoQuery as DocumentQuery } from "./queries/Document.js";
+import { SubsetMongoQuery as SubsetQuery } from "./queries/Subset.js";
 
 class MongoDB implements Connection {
     /**  @type { string } - An identifier. */
@@ -92,9 +92,9 @@ class MongoDB implements Connection {
      */
     async ping() {
         try {
-            // Connect the client to the server	(optional starting in v4.7)
+            // Connect the client to the server.
             await this._client.connect();
-            // Send a ping to confirm a successful connection
+            // Send a ping to confirm a connection
             await this._client.db("admin").command({ ping: 1 });
             return true
           } catch {
@@ -156,13 +156,12 @@ class MongoDB implements Connection {
      * @param key @type { any } - The key to be used to search some data.
      * @returns @type { number | InsertOneResult<Document> | WithId<Document> | DeleteResult | UpdateResult | Error | null }
      */
-    async query(query: SingleDocumentMongoQuery | MultipleDocumentsMongoQuery, object?: unknown, key?: any) {
-        const document = object as Document;
+    async query(query: DocumentQuery | SubsetQuery, object?: Document, key?: any) {
         try {
             await this._client.connect();
             const collection = this._client.db(this._db).collection(this._collection);
-            const request = object && !key ? await collection[query](document, key) : 
-                            object && key ? await collection[query](key, document) : null;               
+            const request = object && !key ? await collection[query](object!, key) : 
+                            object && key ? await collection[query](key, object!) : null;               
             return request
         } catch (error) {
             throw new MongoQueryOperationCouldNotCompleted();

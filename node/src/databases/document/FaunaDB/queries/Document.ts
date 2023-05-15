@@ -1,4 +1,4 @@
-// @filename: Value.ts
+// @filename: SingleDocument.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,10 +15,8 @@
    limitations under the License.
 */
 
-type Value = {
-    [key: string]: any
-} | string
+type DocumentFaunaQuery = 'Get' | 'Update' | 'Delete' | 'Create';
 
 export {
-    Value
+    DocumentFaunaQuery
 }

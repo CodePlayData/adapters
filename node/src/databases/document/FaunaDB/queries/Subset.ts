@@ -1,4 +1,4 @@
-// @filename: SingleDocument.ts
+// @filename: MultipleDocuments.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type SingleDocumentFaunaQuery = 'Get' | 'Update' | 'Delete' | 'Create';
+type SubsetFaunaQuery = 'Count' | 'Mean' | 'Max' | 'Min' | 'Distinct';
 
 export {
-    SingleDocumentFaunaQuery
+    SubsetFaunaQuery
 }
