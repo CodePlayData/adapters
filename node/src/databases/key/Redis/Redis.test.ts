@@ -24,9 +24,9 @@ describe('Testando a classe Redis com...', () => {
     dotenv.config();
 
     const redis = new Redis(
-        process.env.REDIS_PASSWORD as string, 
-        process.env.REDIS_HOST as string,
-        Number(process.env.REDIS_PORT)
+        process.env.REDIS_HOST as string || '127.0.0.1',
+        Number(process.env.REDIS_PORT) || 6379,
+        process.env.REDIS_PASSWORD as string || undefined
     )
     
     it('um ping', async () => {

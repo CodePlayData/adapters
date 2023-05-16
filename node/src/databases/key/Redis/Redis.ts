@@ -20,7 +20,7 @@ import { createClient, RedisClientType } from "redis";
 class Redis {
     _client!: RedisClientType;
 
-    constructor(password: string, host: string, port?: number) {
+    constructor(host: string, port?: number, password?: string,) {
         this._client = createClient({
             password,
             socket: {

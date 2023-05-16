@@ -24,11 +24,15 @@ describe('Testando a classe FaunaDB com...', () => {
     dotenv.config();
 
     /** Testando o acesso da classe sem o curryng. */
-    const fauna = new FaunaDB('https://db.fauna.com', process.env.FAUNA_SECRET as string, 'collection1');
+    const fauna = new FaunaDB(
+        'http://localhost:8443', 
+        process.env.FAUNA_SECRET as string, 
+        'collection1'
+    );
     let id: string;
 
     /** Testando o acesso da classe com o curryng. */
-    const database = FaunaDB.init('https://db.fauna.com')(process.env.FAUNA_SECRET as string);
+    const database = FaunaDB.init('http://localhost:8443')('fnAFEC5KPiACACnnoHkLMg7BkiuY4fMzhNKvl8TW');
     const collection1 = database('collection1');
 
     it('um ping.', async () => {
