@@ -26,7 +26,10 @@ describe('Testando a classe MongoDB com...', () => {
     dotenv.config()
 
     /** Testando o acesso da classe sem o curryng. */
-    const mongo = new MongoDB(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017');
+    const mongo = new MongoDB(
+        process.env.MONGO_URI as string
+    );
+    
     mongo.database = 'npm_adapters';
     mongo.collection = 'test';
     
