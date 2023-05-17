@@ -19,7 +19,7 @@ type SortRedisQuery = 'BZMPOP' | 'BZPOPMAX' | 'BZPOPMIN' | 'ZADD' | 'ZCARD' | 'Z
                       'ZDIFF' | 'ZDIFFSTORE' | 'ZINCRBY' | 'ZINTER' | 'ZINTERCARD'           |
                       'ZINTERSTORE' | 'ZLEXCOUNT' | 'ZMPOP' | 'ZMSCORE' | 'ZPOPMAX'          |
                       'ZPOPMIN' | 'ZRANDMEMBER' | 'ZRANGE' | 'ZRANGEBYLEX' | 'ZRANGEBYSCORE' |
-                      'ZRANGESTORE' | 'ZRANK' | 'ZREM' | 'ZRANGESTORE' | 
+                      'ZRANGESTORE' | 'ZRANK' | 'ZREM' | 'ZRANGESTORE' | 'ZRANK'
 
 export {
     SortRedisQuery
