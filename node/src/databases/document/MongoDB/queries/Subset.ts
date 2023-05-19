@@ -15,7 +15,7 @@
    limitations under the License.
 */
 
-type SubsetMongoQuery = 'countDocuments' | 'deleteMany';
+type SubsetMongoQuery = 'insertMany' | 'deleteMany' | 'updateMany';
 
 export {
     SubsetMongoQuery

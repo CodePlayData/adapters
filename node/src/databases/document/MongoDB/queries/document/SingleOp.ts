@@ -1,4 +1,4 @@
-// @filename: SingleDocument.ts
+// @filename: SingleOp.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type DocumentMongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne';
+type SingleOpDocumentMongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne' | 'replaceOne';
 
 export {
-    DocumentMongoQuery
+    SingleOpDocumentMongoQuery
 }

@@ -1,4 +1,4 @@
-// @filename: Geo.ts
+// @filename: DoubleOp.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,11 +13,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-type GeoRedisQuery = 'GEOADD' | 'GEODIST' | 'GEOHASH' | 'GEOPOS' | 'GEORADIUS' | 'GEORADIUS_RO'   |
-                     'GEORADIUSBYMEMBER' | 'GEORADIUSBYMEMBER_RO' | 'GEOSEARCH' | 'GEOSEARCHSTORE'
+type DoubleOpDocumentMongoQuery = 'findAndModify' | 'findOneAndDelete' | 'findOneAndReplace' | 'findOneAndUpdate';
 
 export {
-    GeoRedisQuery
+    DoubleOpDocumentMongoQuery
 }
