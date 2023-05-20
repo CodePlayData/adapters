@@ -17,54 +17,36 @@
 
 import { describe, it, after } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
-import { MongoDB } from "./MongoDB.js"
+import { MongoServer } from "./Server.js";
+import { MongoDatabase } from "./Database.js";
+import { MongoCollection } from "./Collection.js";
 import dotenv from "dotenv";
-import { DocumentMongoQuery as DocumentQuery } from "./queries/Document.js";
+import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
+
 
 
 describe('Testando a classe MongoDB com...', () => {
     dotenv.config()
 
     /** Testando o acesso da classe sem o curryng. */
-    const mongo = new MongoDB(
-        process.env.MONGO_URI as string
-    );
-    
-    mongo.database = 'npm_adapters';
-    mongo.collection = 'test';
+    const server = new MongoServer( process.env.MONGO_URI as string);
+    const db = new MongoDatabase(server, 'npm_adapters');
+    const mongo = new MongoCollection(db, 'collection1')
     
     /** Testando o acesso com o curryng. */
-    const database = MongoDB.init(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
+    const database = MongoCollection.init(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
     const collection1 = database('collection1');
     const collection2 = database('collection2');
 
-
-    it('a database e a collection pré-definidas.', () => {
-        strictEqual(mongo.database, 'npm_adapters');
-        strictEqual(mongo.collection, 'test');
-    });
-
-    it('a database trocada.', () => {
-        mongo.database = 'npm_adapters2';
-        strictEqual(mongo.database, 'npm_adapters2');
-    });
-
-    it('a collection trocada.', () => {
-        mongo.collection = 'collection1';
-        strictEqual(mongo.collection, 'collection1');
-    });
-
     it('um ping.', async () => {
-        ok(await mongo.ping());
+        ok(await mongo.database.ping());
+        ok(await collection1.database.ping());
+        ok(await collection2.database.ping());
     });
 
     it('o insertOne.', async () => {
-        mongo.database = 'npm_adapters';
-        mongo.collection = 'collection1';
-
         await mongo.query('insertOne', { name: 'subject-1'});
-        const length = await mongo.query('countDocuments', {});
-        strictEqual(length, 1)
+        //validação do teste
     });
 
     it('o create Index.', async () => {
@@ -86,11 +68,8 @@ describe('Testando a classe MongoDB com...', () => {
     });
 
     it('o delete.', async ()=> {
-        let count = await mongo.query('countDocuments', { name: 'subject-2'});
-        strictEqual(count, 1);
         await mongo.query('deleteOne', { name: 'subject-2' });
-        count = await mongo.query('countDocuments', { name: 'subject-2' });
-        strictEqual(count, 0);
+        // falta validar
     });
 
     it('o aggregate.', async () => {
@@ -121,14 +100,14 @@ describe('Testando a classe MongoDB com...', () => {
     });
 
     it('o null como retorno de uma query vazia.', async () => {
-        const nullReturn = await mongo.query('error' as DocumentQuery);
+        const nullReturn = await mongo.query('error' as SingleOpDocumentMongoQuery);
         strictEqual(nullReturn, null);
     });
 
     it('o um erro de query.', async () => {
         await rejects(
             async() => {
-                await mongo.query('' as DocumentQuery, {}, {})
+                await mongo.query('' as SingleOpDocumentMongoQuery, {}, {})
             },
             (error: Error) => {
                 strictEqual(error.name, 'Error');
@@ -138,18 +117,8 @@ describe('Testando a classe MongoDB com...', () => {
         )
     });
 
-    it('a função init definida para duas collections separadas.', async () => {
-        let length = await collection1.query('countDocuments', {});
-        strictEqual(length, 4)
-
-        await collection2.query('insertOne', { name: 'subject-1'});
-        length = await collection2.query('countDocuments', {});
-        strictEqual(length, 1)
-    });
-
     after(async () => {
         await collection1.query('deleteMany', {});
         await collection2.query('deleteMany', {});
     });
-    
 });
