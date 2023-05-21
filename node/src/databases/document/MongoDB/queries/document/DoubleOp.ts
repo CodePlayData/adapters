@@ -15,7 +15,7 @@
    limitations under the License.
 */
 
-type DoubleOpDocumentMongoQuery = 'findAndModify' | 'findOneAndDelete' | 'findOneAndReplace' | 'findOneAndUpdate';
+type DoubleOpDocumentMongoQuery = 'findOneAndDelete' | 'findOneAndReplace' | 'findOneAndUpdate';
 
 export {
     DoubleOpDocumentMongoQuery

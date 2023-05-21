@@ -15,7 +15,7 @@
    limitations under the License.
  */
 
-import { Collection, Filter, IndexDescription, OptionalUnlessRequiredId } from "mongodb";
+import { Collection, DeleteResult, Flatten, IndexDescription, InsertManyResult, InsertOneResult, ModifyResult, OptionalUnlessRequiredId, UpdateResult, WithId } from "mongodb";
 import { Document } from "../Document.js";
 import { IndexOperations } from "../IndexOperations.js";
 import { MongoDatabase } from "./Database.js";
@@ -24,12 +24,16 @@ import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotComple
 import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCouldNotCompleted.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
+import { DoubleOpDocumentMongoQuery } from "./queries/document/DoubleOp.js";
+import { MeasureMongoQuery } from "./queries/Mesuare.js";
+import { SubsetMongoQuery } from "./queries/Subset.js";
 
 /** A MongoColletion where the query, index and pipeline ops occurs. */
 class MongoCollection<T extends Document> {
     /** A collection of something... */
     collection: Collection<T>;
     
+
     /**
      *  This initiates a bound to a collection in some MongoDatabase.
      *  @param database @type { MongoDatabase } - The collection always refers to a MongoDatabase.
@@ -38,6 +42,7 @@ class MongoCollection<T extends Document> {
     constructor(readonly database: MongoDatabase, collection: string) {
         this.collection = this.database.db.collection<T>(collection);
     }
+
 
     /**
      *  The function that performs the pipeline operations.
@@ -61,12 +66,13 @@ class MongoCollection<T extends Document> {
         }
     }
 
+
     /**
-     * Create indexes in some colletion. **Be carrefull that too many indexes can slow down queries.**
-     * @param op @type { IndexOperations } - The allowed operations are: create, drop or get.
-     * @param indexdescript @type { IndexDescription[] } - The description of the indexes to be created.
-     * Check the test file to reference.
-     * @returns @type { Document } - A document with summary.
+     *  Create indexes in some colletion. **Be carrefull that too many indexes can slow down queries.**
+     *  @param op @type { IndexOperations } - The allowed operations are: create, drop or get.
+     *  @param indexdescript @type { IndexDescription[] } - The description of the indexes to be created.
+     *  Check the test file to reference.
+     *  @returns @type { Document } - A document with summary.
      */
     async index(op: IndexOperations, indexdescript?: IndexDescription[]) {
         try {
@@ -81,15 +87,43 @@ class MongoCollection<T extends Document> {
         }
     }
 
+
     /**
-     * The main method that performs CRUD operations.
-     * @param query @type { DatabaseQuery } - The only queries allowed are: create, delete, readone, count, update and clear.
-     * @param object @type { unknown } - The data/object to be stored.
-     * @param key @type { any } - The key to be used to search some data.
-     * @returns @type { number | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | Error | null }
+     *  A single operation based in a single document reference, _i.e._, insertOne, deleteOne etc.
+     *  @param query @type { SingleOpDocumentMongoQuery } - insertOne, deleteOne, findOne, updateOne and replaceOne.
+     *  @param data @type { OptionalUnlessRequiredId<T> } - The data to be stored. In that case is a single document.
+     *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
+     *  @returns @type { Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null> }
      */
-    async query(query: SingleOpDocumentMongoQuery, document?: OptionalUnlessRequiredId<T>, key?: Partial<T>) {
+    async query(query: SingleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>):  Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null>;
+    /**
+     *  Double operations based a single document reference, _i.e._, findOneAndDelete, findOneAndUpdate, etc.
+     *  @param query @type { DoubleOpDocumentMongoQuery } - findOneAndDelete, findOneAndReplace and findOneAndUpdate.
+     *  @param data @type { OptionalUnlessRequiredId<T> } - The data to be stored. In that case is a single document.
+     *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
+     *  @returns @type { Promise<ModifyResult<t>> }
+     */
+    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>[], key?: Partial<T>):  Promise<ModifyResult<T>>;
+    /**
+     *  Operations that involves multiple documents. The data is provided as an array, while the key is still a single Partial<T>.
+     *  @param query @type { SubsetMongoQuery } - insertMany, deleteMany and updateMany.
+     *  @param data @type { OptionalUnlessRequiredId<T>[] } - The Array of data to ve stored.
+     *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
+     *  @returns @type { Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> }
+     */
+    async query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>[], key?: Partial<T>): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
+    /**
+     *  The collections state summaries.
+     *  @param query @type { MeasureMongoQuery } - countDocuments and distinct.
+     *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
+     *  @returns @type { Promise<number | Flatten<WithId<T>>[]> }
+     */
+    async query(query: MeasureMongoQuery, key?: Partial<T>): Promise<number | Flatten<WithId<T>>[]>;
+    async query(query: any, document?: any, key?: Partial<T>) 
+    {
+        //TODO
         try {
+            this.collection.distinct
             await this.database.server._client.connect();
             const collectionMethod = this.collection[query] as (arg1: Partial<T> | OptionalUnlessRequiredId<T>, arg2?: OptionalUnlessRequiredId<T> | Partial<T>) => Promise<any>;
             const request = document && !key ? await collectionMethod.call(this.collection, document) : 

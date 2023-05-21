@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type MesuareMongoQuery = 'countDocuments' | 'estimatedDocumentCount' | 'distinct'
+type MeasureMongoQuery = 'countDocuments' | 'estimatedDocumentCount' | 'distinct';
 
 export {
-    MesuareMongoQuery
+    MeasureMongoQuery
 }
