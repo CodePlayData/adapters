@@ -119,15 +119,16 @@ class MongoCollection<T extends Document> {
      *  @returns @type { Promise<number | Flatten<WithId<T>>[]> }
      */
     async query(query: MeasureMongoQuery, key?: Partial<T>): Promise<number | Flatten<WithId<T>>[]>;
-    async query(query: any, document?: any, key?: Partial<T>) 
-    {
-        //TODO
+    async query(
+        query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, 
+        documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, 
+        key?: Partial<T>
+    ) {
         try {
-            this.collection.distinct
             await this.database.server._client.connect();
-            const collectionMethod = this.collection[query] as (arg1: Partial<T> | OptionalUnlessRequiredId<T>, arg2?: OptionalUnlessRequiredId<T> | Partial<T>) => Promise<any>;
-            const request = document && !key ? await collectionMethod.call(this.collection, document) : 
-                            document && key ? await collectionMethod.call(this.collection, key, document) : await collectionMethod.call(this.collection, key!);
+            const collectionMethod = this.collection[query] as (arg1: Partial<T> | OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[], arg2?: OptionalUnlessRequiredId<T> | Partial<T> | OptionalUnlessRequiredId<T>[]) => Promise<any>;
+            const request = documentOrKey && !key ? await collectionMethod.call(this.collection, documentOrKey) : 
+                            documentOrKey && key ? await collectionMethod.call(this.collection, key, documentOrKey) : await collectionMethod.call(this.collection, key!);
             return request
         } catch (error) {
             throw new MongoQueryOperationCouldNotCompleted();
