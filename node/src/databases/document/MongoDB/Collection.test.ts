@@ -42,16 +42,41 @@ describe('Testando a classe MongoCollection com...', () => {
         strictEqual(result?.acknowledged, true);
     });
 
-    it('o create Index.', async () => {
+    it('o createIndexes.', async () => {
         await mongo.index('createIndexes', [ { key: { name: 'text' }, default_language: 'english', name: 'index_name'} ]);
         const indexes = await mongo.index('indexes') as Array<any>;
         strictEqual(indexes[1].name, 'index_name');
     });
 
-    it('o dropIndex.', async () => {
+    it('o createIndex.', async () => {
+        await mongo.index('createIndex', { age: 1 });
+        const indexes = await mongo.index('indexes') as Array<any>;
+        strictEqual(indexes[2].name, 'age_1');
+    });
+
+    it('o indexExists.', async() => {
+        ok(await mongo.index('indexExists', 'age_1'));
+    });
+
+    it('o indexInformation.', async() => {
+        const info = await mongo.index('indexInformation', 'age_1');
+        deepEqual(info, { _id_: [ ['_id', 1] ], age_1: [ ['age', 1] ], index_name: [ ['_fts', 'text'], ['_ftsx', 1] ]});
+    });
+
+    it('o dropIndex.', async() => {
+        await mongo.index('dropIndex', 'age_1');
+        strictEqual(await mongo.index('indexExists', 'age_1'), false);
+    });
+
+    it('o dropIndexes.', async () => {
         await mongo.index('dropIndexes');
         const indexes = await mongo.index('indexes') as any[];
         strictEqual(indexes.length, 1);
+    });
+
+    it('o indexes.', async() => {
+        const indexes = await mongo.index('indexes');
+        deepEqual(indexes, [ { key: { _id: 1}, name: '_id_', v: 2 } ]);
     });
 
     it('o updateOne.', async () => {
