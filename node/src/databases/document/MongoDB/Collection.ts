@@ -29,8 +29,8 @@ import {
     WithId 
 } from "mongodb";
 import { Document } from "../Document.js";
-import { MongoDatabase } from "./Database.js";
-import { MongoServer } from "./Server.js";
+import { MongoDB } from "./Database.js";
+import { MongoDBServer } from "./Server.js";
 import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotCompleted.js";
 import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCouldNotCompleted.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
@@ -42,17 +42,17 @@ import { SingleIndexMongoOp } from "./queries/index/Single.js";
 import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
 
 /** A MongoColletion where the query, index and pipeline ops occurs. */
-class MongoCollection<T extends Document> {
+class MongoDBCollection<T extends Document> {
     /** A collection of something... */
     collection: Collection<T>;
     
 
     /**
-     *  This initiates a bound to a collection in some MongoDatabase.
-     *  @param database @type { MongoDatabase } - The collection always refers to a MongoDatabase.
+     *  This initiates a bound to a collection in some MongoDB.
+     *  @param database @type { MongoDB } - The collection always refers to a MongoDB.
      *  @param collection @type { string } - The collection name.
      */
-    constructor(readonly database: MongoDatabase, collection: string) {
+    constructor(readonly database: MongoDB, collection: string) {
         this.collection = this.database.db.collection<T>(collection);
     }
 
@@ -164,14 +164,14 @@ class MongoCollection<T extends Document> {
     /**
      *  The curryng method to instatiate in parts this class.
      *  @param uri @type { string } - The connection endpoint.
-     *  @returns @type { (database: string) => (collection: string) => MongoCollection }
+     *  @returns @type { (database: string) => (collection: string) => MongoDBCollection }
      */
     static init(uri: string) {
         return (database: string) => {
             return (collection: string) => {
-                return new MongoCollection(
-                    new MongoDatabase(
-                        new MongoServer(uri),
+                return new MongoDBCollection(
+                    new MongoDB(
+                        new MongoDBServer(uri),
                         database
                     ),
                     collection
@@ -182,5 +182,5 @@ class MongoCollection<T extends Document> {
 }
 
 export {
-    MongoCollection
+    MongoDBCollection
 }

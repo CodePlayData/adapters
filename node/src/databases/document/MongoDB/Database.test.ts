@@ -18,20 +18,20 @@
 import { describe, it } from "node:test";
 import { ok } from "node:assert";
 import dotenv from "dotenv";
-import { MongoDatabase } from "./Database.js";
-import { MongoServer } from "./Server.js";
+import { MongoDB } from "./Database.js";
+import { MongoDBServer } from "./Server.js";
 
-describe('Testando a classe MongoDatabase com...', () => {
+describe('Testando a classe MongoDB com...', () => {
     dotenv.config()
 
     it('um ping.', async () => {
-        const server = new MongoServer(process.env.MONGO_URI as string);
-        const db = new MongoDatabase(server, 'npm_adapters');
+        const server = new MongoDBServer(process.env.MONGO_URI as string);
+        const db = new MongoDB(server, 'npm_adapters');
         ok(await db.ping());
     });
 
     it('a criação pelo método init.', async () => {
-        const db = MongoDatabase.init(process.env.MONGO_URI as string)('npm_adapters')
+        const db = MongoDB.init(process.env.MONGO_URI as string)('npm_adapters')
         ok(await db.ping());
     });
 });

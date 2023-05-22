@@ -17,29 +17,29 @@
 
 import { describe, it, after } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
-import { MongoServer } from "./Server.js";
-import { MongoDatabase } from "./Database.js";
-import { MongoCollection } from "./Collection.js";
+import { MongoDBServer } from "./Server.js";
+import { MongoDB } from "./Database.js";
+import { MongoDBCollection } from "./Collection.js";
 import dotenv from "dotenv";
 import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
 
 
-describe('Testando a classe MongoCollection com...', () => {
+describe('Testando a classe MongoDBCollection com...', () => {
     dotenv.config()
 
     /** Testando o acesso da classe sem o curryng. */
-    const server = new MongoServer( process.env.MONGO_URI as string);
-    const db = new MongoDatabase(server, 'npm_adapters');
-    const mongo = new MongoCollection(db, 'collection1')
+    const server = new MongoDBServer( process.env.MONGO_URI as string);
+    const db = new MongoDB(server, 'npm_adapters');
+    const mongo = new MongoDBCollection(db, 'collection1')
     
     /** Testando o acesso com o curryng. */
-    const database = MongoCollection.init(process.env.MONGO_URI as string ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
+    const database = MongoDBCollection.init(process.env.MONGO_URI as string ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
     const collection1 = database('collection1');
     const collection2 = database('collection2');
 
     it('o insertOne.', async () => {
         const result = await mongo.query('insertOne', { name: 'subject-1'});
-        strictEqual(result?.acknowledged, true);
+        ok(result?.acknowledged);
     });
 
     it('o createIndexes.', async () => {
@@ -81,7 +81,7 @@ describe('Testando a classe MongoCollection com...', () => {
 
     it('o updateOne.', async () => {
         const result = await mongo.query('updateOne', { $set: { name: 'subject-2' } }, { name: 'subject-1'});
-        strictEqual(result?.acknowledged, true);
+        ok(result?.acknowledged);
     });
 
     it('o findOne.', async() => {
@@ -91,7 +91,7 @@ describe('Testando a classe MongoCollection com...', () => {
 
     it('o replaceOne.', async() => {
         const result = await mongo.query('replaceOne', { name: 'subject-2' }, { name: 'subject-1' });
-        strictEqual(result?.acknowledged, true);
+        ok(result?.acknowledged);
     });
 
     it('o findOneAndReplace.', async() => {
@@ -111,15 +111,26 @@ describe('Testando a classe MongoCollection com...', () => {
 
     it('o deleteOne.', async ()=> {
         const result = await mongo.query('deleteOne', { name: 'subject-2' });
-        strictEqual(result?.acknowledged, true);
+        ok(result?.acknowledged);
+    });
+
+    it('o insertMany', async() => {
+        const docs = [
+            { scale: 2, receivers: ["admin", "public"], msg: "A warning for all." },
+            { scale: 4, receivers: ["admin"], msg: "Bug Report."},
+            { scale: 4, receivers: ["admin"], msg: "Upgrade needed."},
+            { scale: 0, receivers: [ "public"], msg: "Be cool, nothing is wrong!"}
+        ]
+        const result = await mongo.query('insertMany', docs);
+        ok(result?.acknowledged);
+    });
+
+    it('o updateMany', async() => {
+        const result = await mongo.query('updateMany', { $set: { msg: 'Updated!'}}, { scale: 4 });
+        ok(result?.acknowledged);
     });
 
     it('o aggregate.', async () => {
-        await mongo.query('insertOne', { scale: 2, receivers: ["admin", "public"], msg: "A warning for all." });
-        await mongo.query('insertOne', { scale: 4, receivers: ["admin"], msg: "Bug Report."});
-        await mongo.query('insertOne', { scale: 4, receivers: ["admin"], msg: "Upgrade needed."});
-        await mongo.query('insertOne', { scale: 0, receivers: [ "public"], msg: "Be cool, nothing is wrong!"});
-
         const aggregation = [
             { 
                 $match: { 
@@ -137,7 +148,6 @@ describe('Testando a classe MongoCollection com...', () => {
         ]
 
         const data = await mongo.pipeline(aggregation) as Document[];
-
         deepEqual(Object.keys(data[0]), ['_id', 'count']);
     });
 
@@ -154,7 +164,7 @@ describe('Testando a classe MongoCollection com...', () => {
         )
     });
 
-    after(async () => {
+    it('o deleteMany.', async () => {
         await collection1.query('deleteMany', undefined, {});
         await collection2.query('deleteMany', undefined, {});
     });

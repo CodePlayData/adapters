@@ -15,22 +15,6 @@
    limitations under the License.
 */
 
-import { MongoClient } from "mongodb";
-
-/** A MongoDB service. */
-class MongoDBServer {
-    /** The client to connects with an Mongo instance. */
-    _client!: MongoClient;
-
-    /**
-     *  This initiates a client for a MongoDB deployment server.
-     *  @param uri @type { string } - The MongoDB endopoint.
-     */
-    constructor(readonly uri: string) {
-        this._client = new MongoClient(this.uri);
-    }
-}
-
-export {
-    MongoDBServer
+class FaunaDB {
+    
 }

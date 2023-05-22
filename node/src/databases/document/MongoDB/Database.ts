@@ -1,4 +1,4 @@
-// @filename: MongoDatabase.ts
+// @filename: MongoDB.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -16,20 +16,20 @@
  */
 
 import { Db } from "mongodb";
-import { MongoServer } from "./Server.js";
+import { MongoDBServer } from "./Server.js";
 import { MongoDBUnavailable } from "./error/Unavailable.js";
 
 /** A MongoDB database. */
-class MongoDatabase {
+class MongoDB {
     /** The database itself. */
     db: Db;
 
     /**
      *  This class is the classe thar represents some database in a MongoDB service deployment.
-     *  @param server @type { MongoServer } - The server that this intance of database refers to.
+     *  @param server @type { MongoDBServer } - The server that this intance of database refers to.
      *  @param database @type { string } - The name of the database.
      */
-    constructor(readonly server: MongoServer, database: string) {
+    constructor(readonly server: MongoDBServer, database: string) {
         this.db = this.server._client.db(database)
     }
 
@@ -55,15 +55,15 @@ class MongoDatabase {
      *  This is the curryng method to initiate this class, defining the URI 
      *  and later the database name.
      *  @param uri @type { string } - The MongoDB endpoint.
-     *  @returns @type { MongoDatabase }
+     *  @returns @type { MongoDB }
      */
     static init(uri: string) {
         return (database: string) => {
-            return new MongoDatabase(new MongoServer(uri), database)
+            return new MongoDB(new MongoDBServer(uri), database)
         }
     }
 }
 
 export {
-    MongoDatabase
+    MongoDB
 }
