@@ -1,4 +1,4 @@
-// @filename: IndexOperations.ts
+// @filename: Multiple.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type IndexOperations = 'create' | 'drop' | 'get';
+type MultipleIndexMongoOp = 'createIndexes' | 'dropIndexes' | 'indexes';
 
 export {
-    IndexOperations
+    MultipleIndexMongoOp
 }

@@ -15,9 +15,20 @@
    limitations under the License.
  */
 
-import { Collection, DeleteResult, Flatten, IndexDescription, InsertManyResult, InsertOneResult, ModifyResult, OptionalUnlessRequiredId, UpdateResult, WithId } from "mongodb";
+import { 
+    Collection, 
+    DeleteResult, 
+    Flatten, 
+    IndexDescription, 
+    IndexSpecification, 
+    InsertManyResult, 
+    InsertOneResult, 
+    ModifyResult, 
+    OptionalUnlessRequiredId, 
+    UpdateResult, 
+    WithId 
+} from "mongodb";
 import { Document } from "../Document.js";
-import { IndexOperations } from "../IndexOperations.js";
 import { MongoDatabase } from "./Database.js";
 import { MongoServer } from "./Server.js";
 import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotCompleted.js";
@@ -27,6 +38,8 @@ import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
 import { DoubleOpDocumentMongoQuery } from "./queries/document/DoubleOp.js";
 import { MeasureMongoQuery } from "./queries/Mesuare.js";
 import { SubsetMongoQuery } from "./queries/Subset.js";
+import { SingleIndexMongoOp } from "./queries/index/Single.js";
+import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
 
 /** A MongoColletion where the query, index and pipeline ops occurs. */
 class MongoCollection<T extends Document> {
@@ -68,18 +81,28 @@ class MongoCollection<T extends Document> {
 
 
     /**
-     *  Create indexes in some colletion. **Be carrefull that too many indexes can slow down queries.**
-     *  @param op @type { IndexOperations } - The allowed operations are: create, drop or get.
-     *  @param indexdescript @type { IndexDescription[] } - The description of the indexes to be created.
-     *  Check the test file to reference.
-     *  @returns @type { Document } - A document with summary.
+     *  Operations for a single index in a collection.
+     *  @param op @type { SingleIndexMongoOp } - createIndex, dropIndex, indexExists and IndexInformation.
+     *  @param indexspec @type { IndexSpecification } - The info about the index itself.
+     *  @returns @type { Promise<string | Document | boolean> }
      */
-    async index(op: IndexOperations, indexdescript?: IndexDescription[]) {
+    async index(op: SingleIndexMongoOp, indexspec?: IndexSpecification | string | string[]): Promise<string | Document | boolean>;
+    /**
+     *  Operations for multiple indexes in a collection.
+     *  @param op @type { MultipleIndexMongoOp } - createIndexes, dropIndexes and indexes.
+     *  @param indexdescript @type { IndexDescription[] } - The info about all indexes.
+     *  @returns @type { Promise<string[] | Document | Document[]> }
+     */
+    async index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]): Promise<string[] | Document | Document[]>;
+    async index(
+        op: SingleIndexMongoOp | MultipleIndexMongoOp, 
+        indexdescriptOrSpecification?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]
+    ): Promise<string | string[] | Document | Document[] | boolean> {
         try {
             await this.database.server._client.connect();
-            const indexreturn = op === 'create' && indexdescript ? await this.collection.createIndexes(indexdescript) :
-                                op === 'drop' ? await this.collection.dropIndexes() : await this.collection.indexes();
-            return indexreturn
+            const indexMethod = this.collection[op] as (arg1?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]) => Promise<any>;
+            const request = !indexdescriptOrSpecification ? await indexMethod.call(this.collection) : await indexMethod.call(this.collection, indexdescriptOrSpecification);
+            return request
         } catch (error) {
             throw new MongoIndexOperationCouldNotCompleted(error)
         } finally {
@@ -126,9 +149,9 @@ class MongoCollection<T extends Document> {
     ) {
         try {
             await this.database.server._client.connect();
-            const collectionMethod = this.collection[query] as (arg1: Partial<T> | OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[], arg2?: OptionalUnlessRequiredId<T> | Partial<T> | OptionalUnlessRequiredId<T>[]) => Promise<any>;
-            const request = documentOrKey && !key ? await collectionMethod.call(this.collection, documentOrKey) : 
-                            documentOrKey && key ? await collectionMethod.call(this.collection, key, documentOrKey) : await collectionMethod.call(this.collection, key!);
+            const queryMethod = this.collection[query] as (arg1: Partial<T> | OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[], arg2?: OptionalUnlessRequiredId<T> | Partial<T> | OptionalUnlessRequiredId<T>[]) => Promise<any>;
+            const request = documentOrKey && !key ? await queryMethod.call(this.collection, documentOrKey) : 
+                            documentOrKey && key ? await queryMethod.call(this.collection, key, documentOrKey) : await queryMethod.call(this.collection, key!);
             return request
         } catch (error) {
             throw new MongoQueryOperationCouldNotCompleted();
@@ -141,7 +164,7 @@ class MongoCollection<T extends Document> {
     /**
      *  The curryng method to instatiate in parts this class.
      *  @param uri @type { string } - The connection endpoint.
-     *  @returns @type { (database: string) => (collection: string) => MongoCollection}
+     *  @returns @type { (database: string) => (collection: string) => MongoCollection }
      */
     static init(uri: string) {
         return (database: string) => {

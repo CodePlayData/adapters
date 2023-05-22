@@ -33,7 +33,7 @@ describe('Testando a classe MongoCollection com...', () => {
     const mongo = new MongoCollection(db, 'collection1')
     
     /** Testando o acesso com o curryng. */
-    const database = MongoCollection.init(process.env.MONGO_URI ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
+    const database = MongoCollection.init(process.env.MONGO_URI as string ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
     const collection1 = database('collection1');
     const collection2 = database('collection2');
 
@@ -43,14 +43,14 @@ describe('Testando a classe MongoCollection com...', () => {
     });
 
     it('o create Index.', async () => {
-        await mongo.index('create', [ { key: { name: 'text' }, default_language: 'english', name: 'index_name'} ]);
-        const indexes = await mongo.index('get') as Array<any>;
+        await mongo.index('createIndexes', [ { key: { name: 'text' }, default_language: 'english', name: 'index_name'} ]);
+        const indexes = await mongo.index('indexes') as Array<any>;
         strictEqual(indexes[1].name, 'index_name');
     });
 
     it('o dropIndex.', async () => {
-        await mongo.index('drop');
-        const indexes = await mongo.index('get') as any[];
+        await mongo.index('dropIndexes');
+        const indexes = await mongo.index('indexes') as any[];
         strictEqual(indexes.length, 1);
     });
 

@@ -20,7 +20,6 @@ const { query: q } = faunadb;
 import { FaunaDBUnavailable } from "./error/Unavailable.js";
 import { DocumentFaunaQuery as DocumentQuery } from "./queries/Document.js";
 import { FaunaQueryOperationCouldNotCompleted } from './error/QueryOperationCouldNotComplete.js';
-import { IndexOperations } from '../IndexOperations.js';
 import { IndexDescription } from './IndexDescription.js';
 import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
 import { SubsetFaunaQuery as SubsetQuery } from './queries/Subset.js';
@@ -99,7 +98,7 @@ class FaunaDB {
      * Check the test file to reference.
      * @returns @type { Document } - A document with summary.
      */
-    async index(op: IndexOperations, indexdescript?: IndexDescription) {
+    async index(op: any, indexdescript?: IndexDescription) {
         if(indexdescript) {
             indexdescript.source = this._collection;
         }

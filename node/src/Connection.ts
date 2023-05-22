@@ -15,7 +15,6 @@
    limitations under the License.
  */
 
-import { IndexOperations } from "./databases/document/IndexOperations.js";
 import { IndexedDBQuery, LocalStorageQuery } from "./enums.js";
 
 type DatabaseQuery = IndexedDBQuery | LocalStorageQuery
@@ -29,7 +28,7 @@ interface Connection {
     indexNames?: unknown;
 
     pipeline?(descriptions: unknown): any;
-    index?(op: IndexOperations, indexdescript?: unknown): any;
+    index?(op: any, indexdescript?: unknown): any;
     keysof?(prop: unknown, max?: number): any;
     query(query: DatabaseQuery | string, object?: unknown, key?: any): any;
 }

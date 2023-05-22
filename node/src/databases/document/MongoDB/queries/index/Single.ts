@@ -1,4 +1,4 @@
-// @filename: Shard.ts
+// @filename: Single.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-type ShardMongoQuery = 'getShardDistribution' | 'getShardVersion';
+type SingleIndexMongoOp = 'createIndex' | 'dropIndex' | 'indexExists' | 'indexInformation'
 
 export {
-    ShardMongoQuery
+    SingleIndexMongoOp
 }
