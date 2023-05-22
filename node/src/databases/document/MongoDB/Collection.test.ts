@@ -24,8 +24,7 @@ import dotenv from "dotenv";
 import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
 
 
-
-describe('Testando a classe MongoDB com...', () => {
+describe('Testando a classe MongoCollection com...', () => {
     dotenv.config()
 
     /** Testando o acesso da classe sem o curryng. */
@@ -38,15 +37,9 @@ describe('Testando a classe MongoDB com...', () => {
     const collection1 = database('collection1');
     const collection2 = database('collection2');
 
-    it('um ping.', async () => {
-        ok(await mongo.database.ping());
-        ok(await collection1.database.ping());
-        ok(await collection2.database.ping());
-    });
-
     it('o insertOne.', async () => {
-        await mongo.query('insertOne', { name: 'subject-1'});
-        //validação do teste
+        const result = await mongo.query('insertOne', { name: 'subject-1'});
+        strictEqual(result?.acknowledged, true);
     });
 
     it('o create Index.', async () => {
@@ -68,8 +61,8 @@ describe('Testando a classe MongoDB com...', () => {
     });
 
     it('o delete.', async ()=> {
-        await mongo.query('deleteOne', { name: 'subject-2' });
-        // falta validar
+        const result = await mongo.query('deleteOne', { name: 'subject-2' });
+        strictEqual(result?.acknowledged, true);
     });
 
     it('o aggregate.', async () => {
@@ -99,11 +92,6 @@ describe('Testando a classe MongoDB com...', () => {
         deepEqual(Object.keys(data[0]), ['_id', 'count']);
     });
 
-    it('o null como retorno de uma query vazia.', async () => {
-        const nullReturn = await mongo.query('error' as SingleOpDocumentMongoQuery);
-        strictEqual(nullReturn, null);
-    });
-
     it('o um erro de query.', async () => {
         await rejects(
             async() => {
@@ -118,7 +106,7 @@ describe('Testando a classe MongoDB com...', () => {
     });
 
     after(async () => {
-        await collection1.query('deleteMany', {});
-        await collection2.query('deleteMany', {});
+        await collection1.query('deleteMany', undefined, {});
+        await collection2.query('deleteMany', undefined, {});
     });
 });

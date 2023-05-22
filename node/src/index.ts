@@ -17,7 +17,9 @@
 
 import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/browser/IndexedDB/IndexedDB.js";
 import { LocalStorage } from "./databases/browser/LocalStorage/LocalStorage.js"
-import { MongoDB } from "./databases/document/MongoDB/MongoDB.js";
+import { MongoCollection } from "./databases/document/MongoDB/Collection.js";
+import { MongoDatabase } from "./databases/document/MongoDB/Database.js";
+import { MongoServer } from "./databases/document/MongoDB/Server.js";
 import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
 import { Collection } from "./Collection.js";
@@ -32,6 +34,9 @@ import { LocalStorageQuery, IndexedDBQuery, DatabasePermission } from "./enums.j
 import { WasmModuleSource } from "./webassembly/WasmModuleSource.js"
 
 export {
+    MongoCollection,
+    MongoDatabase,
+    MongoServer,
     IndexedDB,
     IDBIndex,
     IDBRepo,
@@ -41,7 +46,6 @@ export {
     Queue,
     Collection,
     LocalStorage,
-    MongoDB,
     GenericQueue,
     GPUCommandRepository,
     Fetch,
