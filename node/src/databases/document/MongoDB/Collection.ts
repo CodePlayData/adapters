@@ -126,7 +126,7 @@ class MongoCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<ModifyResult<t>> }
      */
-    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>[], key?: Partial<T>):  Promise<ModifyResult<T>>;
+    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>):  Promise<ModifyResult<T>>;
     /**
      *  Operations that involves multiple documents. The data is provided as an array, while the key is still a single Partial<T>.
      *  @param query @type { SubsetMongoQuery } - insertMany, deleteMany and updateMany.

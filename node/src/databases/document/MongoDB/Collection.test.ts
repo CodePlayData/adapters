@@ -80,12 +80,36 @@ describe('Testando a classe MongoCollection com...', () => {
     });
 
     it('o updateOne.', async () => {
-        await mongo.query('updateOne', { $set: { name: 'subject-2' } }, { name: 'subject-1'});
+        const result = await mongo.query('updateOne', { $set: { name: 'subject-2' } }, { name: 'subject-1'});
+        strictEqual(result?.acknowledged, true);
+    });
+
+    it('o findOne.', async() => {
         const data = await mongo.query('findOne', { name: 'subject-2'}) as { [key: string]: any };
         strictEqual(data.name, 'subject-2');
     });
 
-    it('o delete.', async ()=> {
+    it('o replaceOne.', async() => {
+        const result = await mongo.query('replaceOne', { name: 'subject-2' }, { name: 'subject-1' });
+        strictEqual(result?.acknowledged, true);
+    });
+
+    it('o findOneAndReplace.', async() => {
+        const data = await mongo.query('findOneAndReplace', { name: 'subject-1' }, { name: 'subject-2' }) as { [key: string]: any };
+        strictEqual(data.value.name, 'subject-2');
+    });
+
+    it('o findOneAndUpdate.', async() => {
+        const data = await mongo.query('findOneAndUpdate', { $set: { name: 'subject-2' } }, { name: 'subject-1' }) as { [key: string]: any };
+        strictEqual(data.value.name, 'subject-1');
+    });
+
+    it('o findOneAndDelete', async() => {
+        const result = await mongo.query('findOneAndDelete', { name: 'subject-2' });
+        ok(result.ok);
+    });
+
+    it('o deleteOne.', async ()=> {
         const result = await mongo.query('deleteOne', { name: 'subject-2' });
         strictEqual(result?.acknowledged, true);
     });
