@@ -36,7 +36,7 @@ import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCoul
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { SingleOpDocumentMongoQuery, SingleOpDocumentMongoQueryOptions } from "./queries/document/SingleOp.js";
 import { DoubleOpDocumentMongoQuery } from "./queries/document/DoubleOp.js";
-import { MeasureMongoQuery } from "./queries/Mesuare.js";
+import { MeasureMongoQuery, MeasureMongoQueryOptions } from "./queries/Mesuare.js";
 import { SubsetMongoQuery, SubsetMongoQueryOptions } from "./queries/Subset.js";
 import { SingleIndexMongoOp } from "./queries/index/Single.js";
 import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
@@ -67,13 +67,17 @@ class MongoDBCollection<T extends Document> {
         let result: Document[] = [];
         try {
             await this.database.server._client.connect();
-            const cursor = this.collection.aggregate(descriptions);
-            await cursor.forEach(doc => {
-                result.push(doc)
-            })
-            return result
+            callback: {
+                const cursor = this.collection.aggregate(descriptions);
+                await cursor.forEach(doc => {
+                    result.push(doc)
+                })
+                return result
+            }
         } catch (error) {
-            throw new MongoAggregateCouldNotCompleted(error);
+            error: {
+                throw new MongoAggregateCouldNotCompleted(error);
+            }
         } finally {
             await this.database.server._client.close();
         }
@@ -100,11 +104,15 @@ class MongoDBCollection<T extends Document> {
     ): Promise<string | string[] | Document | Document[] | boolean> {
         try {
             await this.database.server._client.connect();
-            const indexMethod = this.collection[op] as (arg1?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]) => Promise<any>;
-            const request = !indexdescriptOrSpecification ? await indexMethod.call(this.collection) : await indexMethod.call(this.collection, indexdescriptOrSpecification);
-            return request
+            callback: {
+                const indexMethod = this.collection[op] as (arg1?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]) => Promise<any>;
+                const request = !indexdescriptOrSpecification ? await indexMethod.call(this.collection) : await indexMethod.call(this.collection, indexdescriptOrSpecification);
+                return request
+            }
         } catch (error) {
-            throw new MongoIndexOperationCouldNotCompleted(error)
+            error: {
+                throw new MongoIndexOperationCouldNotCompleted(error)
+            }
         } finally {
             await this.database.server._client.close();
         }
@@ -156,25 +164,45 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<number | Flatten<WithId<T>>[]> }
      */
-    async query(query: MeasureMongoQuery, key?: Partial<T>): Promise<number | Flatten<WithId<T>>[]>;
+    async query(
+        query: MeasureMongoQuery,
+        key?: Partial<T>,
+        options?: MeasureMongoQueryOptions
+    ): Promise<number | Flatten<WithId<T>>[]>;
+    /** Overloaded */
     async query(
         query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, 
         documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, 
-        key?: Partial<T>
+        keyoOrOptions?: Partial<T>| MeasureMongoQueryOptions,
+        options?: SingleOpDocumentMongoQueryOptions | DoubleOpDocumentMongoQuery | SubsetMongoQueryOptions
     ) {
         try {
             await this.database.server._client.connect();
-            const queryMethod = this.collection[query] as (arg1: Partial<T> | OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[], arg2?: OptionalUnlessRequiredId<T> | Partial<T> | OptionalUnlessRequiredId<T>[]) => Promise<any>;
-            const request = documentOrKey && !key ? await queryMethod.call(this.collection, documentOrKey) : 
-                            documentOrKey && key ? await queryMethod.call(this.collection, key, documentOrKey) : await queryMethod.call(this.collection, key!);
-            return request
+            callback: {
+                const queryMethod = this.collection[query] as (arg1: Partial<T> | MeasureMongoQueryOptions | OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[], arg2?: OptionalUnlessRequiredId<T> | Partial<T> | OptionalUnlessRequiredId<T>[]) => Promise<any>;
+                const request = documentOrKey && !keyoOrOptions ? await queryMethod.call(this.collection, documentOrKey) : 
+                                documentOrKey && keyoOrOptions ? await queryMethod.call(this.collection, keyoOrOptions, documentOrKey) : await queryMethod.call(this.collection, keyoOrOptions!);
+                return request
+            }
         } catch (error) {
-            throw new MongoQueryOperationCouldNotCompleted();
+            error: {
+                throw new MongoQueryOperationCouldNotCompleted();
+            }
         } finally {
             await this.database.server._client.close();
         }
     }
     
+    private async atomicOp() {
+        try {
+            await this.database.server._client.connect();
+            // a callback.
+        } catch (error) {
+            // a error.
+        } finally {
+            await this.database.server._client.close();
+        }
+    }
 
     /**
      *  The curryng method to instatiate in parts this class.

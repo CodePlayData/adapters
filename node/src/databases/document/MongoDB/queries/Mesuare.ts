@@ -15,8 +15,12 @@
    limitations under the License.
 */
 
+import { CountDocumentsOptions, DistinctOptions, EstimatedDocumentCountOptions } from "mongodb";
+
 type MeasureMongoQuery = 'countDocuments' | 'estimatedDocumentCount' | 'distinct';
+type MeasureMongoQueryOptions = CountDocumentsOptions | EstimatedDocumentCountOptions | DistinctOptions;
 
 export {
-    MeasureMongoQuery
+    MeasureMongoQuery,
+    MeasureMongoQueryOptions
 }
