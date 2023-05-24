@@ -134,7 +134,7 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> }
      */
-    async query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>[], key?: Partial<T>): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
+    async query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>, key?: Partial<T>): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
     /**
      *  The collections state summaries.
      *  @param query @type { MeasureMongoQuery } - countDocuments and distinct.
