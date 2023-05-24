@@ -34,10 +34,10 @@ import { MongoDBServer } from "./Server.js";
 import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotCompleted.js";
 import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCouldNotCompleted.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
-import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
+import { SingleOpDocumentMongoQuery, SingleOpDocumentMongoQueryOptions } from "./queries/document/SingleOp.js";
 import { DoubleOpDocumentMongoQuery } from "./queries/document/DoubleOp.js";
 import { MeasureMongoQuery } from "./queries/Mesuare.js";
-import { SubsetMongoQuery } from "./queries/Subset.js";
+import { SubsetMongoQuery, SubsetMongoQueryOptions } from "./queries/Subset.js";
 import { SingleIndexMongoOp } from "./queries/index/Single.js";
 import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
 
@@ -118,7 +118,12 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null> }
      */
-    async query(query: SingleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>):  Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null>;
+    async query(
+        query: SingleOpDocumentMongoQuery, 
+        data?: OptionalUnlessRequiredId<T>, 
+        key?: Partial<T>, 
+        options?: SingleOpDocumentMongoQueryOptions
+    ):  Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null>;
     /**
      *  Double operations based a single document reference, _i.e._, findOneAndDelete, findOneAndUpdate, etc.
      *  @param query @type { DoubleOpDocumentMongoQuery } - findOneAndDelete, findOneAndReplace and findOneAndUpdate.
@@ -126,7 +131,12 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<ModifyResult<t>> }
      */
-    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>):  Promise<ModifyResult<T>>;
+    async query(
+        query: DoubleOpDocumentMongoQuery, 
+        data?: OptionalUnlessRequiredId<T>, 
+        key?: Partial<T>,
+        options?: DoubleOpDocumentMongoQuery
+    ):  Promise<ModifyResult<T>>;
     /**
      *  Operations that involves multiple documents. The data is provided as an array, while the key is still a single Partial<T>.
      *  @param query @type { SubsetMongoQuery } - insertMany, deleteMany and updateMany.
@@ -134,7 +144,12 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> }
      */
-    async query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>, key?: Partial<T>): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
+    async query(
+        query: SubsetMongoQuery, 
+        data?:OptionalUnlessRequiredId<T>, 
+        key?: Partial<T>,
+        options?: SubsetMongoQueryOptions
+    ): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
     /**
      *  The collections state summaries.
      *  @param query @type { MeasureMongoQuery } - countDocuments and distinct.

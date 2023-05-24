@@ -30,7 +30,7 @@ class MongoDB {
      *  @param database @type { string } - The name of the database.
      */
     constructor(readonly server: MongoDBServer, database: string) {
-        this.db = this.server._client.db(database)
+        this.db = this.server._client.db(database);
     }
 
     /**

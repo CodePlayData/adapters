@@ -15,8 +15,12 @@
    limitations under the License.
 */
 
+import { DeleteOptions, FindOptions, InsertOneOptions, ReplaceOptions, UpdateOptions } from "mongodb";
+
 type SingleOpDocumentMongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne' | 'replaceOne';
+type SingleOpDocumentMongoQueryOptions = InsertOneOptions | DeleteOptions | FindOptions<Document> | UpdateOptions | ReplaceOptions;
 
 export {
-    SingleOpDocumentMongoQuery
+    SingleOpDocumentMongoQuery,
+    SingleOpDocumentMongoQueryOptions
 }

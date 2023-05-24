@@ -15,8 +15,12 @@
    limitations under the License.
 */
 
+import { BulkWriteOptions, DeleteOptions, UpdateOptions } from "mongodb";
+
 type SubsetMongoQuery = 'insertMany' | 'deleteMany' | 'updateMany';
+type SubsetMongoQueryOptions = BulkWriteOptions | DeleteOptions | UpdateOptions;
 
 export {
-    SubsetMongoQuery
+    SubsetMongoQuery,
+    SubsetMongoQueryOptions
 }

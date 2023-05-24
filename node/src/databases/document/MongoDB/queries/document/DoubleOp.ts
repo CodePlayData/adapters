@@ -15,8 +15,12 @@
    limitations under the License.
 */
 
+import { FindOneAndDeleteOptions, FindOneAndReplaceOptions, FindOneAndUpdateOptions } from "mongodb";
+
 type DoubleOpDocumentMongoQuery = 'findOneAndDelete' | 'findOneAndReplace' | 'findOneAndUpdate';
+type DoubleOpDocumentMongoQueryOptions = FindOneAndDeleteOptions | FindOneAndReplaceOptions | FindOneAndUpdateOptions;
 
 export {
-    DoubleOpDocumentMongoQuery
+    DoubleOpDocumentMongoQuery,
+    DoubleOpDocumentMongoQueryOptions
 }

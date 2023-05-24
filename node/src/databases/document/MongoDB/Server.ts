@@ -15,12 +15,13 @@
    limitations under the License.
 */
 
-import { MongoClient } from "mongodb";
+import { ClientSession, MongoClient } from "mongodb";
 
 /** A MongoDB service. */
 class MongoDBServer {
     /** The client to connects with an Mongo instance. */
     _client!: MongoClient;
+    _session!: ClientSession;
 
     /**
      *  This initiates a client for a MongoDB deployment server.
@@ -28,6 +29,15 @@ class MongoDBServer {
      */
     constructor(readonly uri: string) {
         this._client = new MongoClient(this.uri);
+        this._session = this._client.startSession()
+    }
+
+    static session(uri: string) {
+        const client = new MongoClient(uri)
+        return [
+            client,
+            client.startSession()
+        ]
     }
 }
 
