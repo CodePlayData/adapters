@@ -33,7 +33,7 @@ class MongoDBServer {
     }
 
     static session(uri: string) {
-        const client = new MongoClient(uri)
+        const client = new MongoDBServer(uri)
         return [
             client,
             client.startSession()
