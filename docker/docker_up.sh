@@ -17,7 +17,7 @@ else
 fi
 
 docker run -d --name redis -p 6379:6379 -p 8001:8001 my-redis
-
+docker run -d --name mongodb -p 27017:27017 my-mongodb
 docker run -d --name fauna -p 8443:8443 -p 8084:8084 my-faunadb
 sleep 10
 
