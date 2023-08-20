@@ -36,7 +36,7 @@ class MongoDBServer {
         const client = new MongoDBServer(uri)
         return [
             client,
-            client.startSession()
+            client._client.startSession()
         ]
     }
 }

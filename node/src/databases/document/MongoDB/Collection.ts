@@ -43,19 +43,17 @@ import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
 
 interface MongoDBCollection <T extends Document> {
     collection: Collection<T>;
-
+    
     pipeline(descriptions: Document[]): Promise<Document[]>;
-
+    
     index(op: SingleIndexMongoOp, indexspec?: IndexSpecification | string | string[]): Promise<string | Document | boolean>;
     index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]): Promise<string[] | Document | Document[]>;
-    /** Overload */
     index(op: SingleIndexMongoOp | MultipleIndexMongoOp, indexdescriptOrSpecification?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]): Promise<string | Document | boolean> | Promise<string[] | Document | Document[]>;
-
+    
     query(query: SingleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SingleOpDocumentMongoQueryOptions): Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null>;
     query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: DoubleOpDocumentMongoQuery):  Promise<ModifyResult<T>>;
     query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SubsetMongoQueryOptions): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
     query(query: MeasureMongoQuery, key?: Partial<T>, options?: MeasureMongoQueryOptions): Promise<number | Flatten<WithId<T>>[]>;
-    /** Overload */
     query(query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, keyoOrOptions?: Partial<T>| MeasureMongoQueryOptions, options?: SingleOpDocumentMongoQueryOptions | DoubleOpDocumentMongoQuery | SubsetMongoQueryOptions): Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null> | Promise<ModifyResult<T>> | Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> | Promise<number | Flatten<WithId<T>>[]>;
 }
 
@@ -108,14 +106,14 @@ class MongoDBCollection<T extends Document> {
      *  @param indexspec @type { IndexSpecification } - The info about the index itself.
      *  @returns @type { Promise<string | Document | boolean> }
      */
-    async index(op: SingleIndexMongoOp, indexspec?: IndexSpecification | string | string[]);
+    async index(op: SingleIndexMongoOp, indexspec?: IndexSpecification | string | string[]): Promise<string | Document | boolean>;
     /**
      *  Operations for multiple indexes in a collection.
      *  @param op @type { MultipleIndexMongoOp } - createIndexes, dropIndexes and indexes.
      *  @param indexdescript @type { IndexDescription[] } - The info about all indexes.
      *  @returns @type { Promise<string[] | Document | Document[]> }
      */
-    async index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]);
+    async index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]): Promise<string[] | Document | Document[]>;
     /** Overloaded */
     async index(
         op: SingleIndexMongoOp | MultipleIndexMongoOp, 
@@ -145,7 +143,7 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null> }
      */
-    async query(query: SingleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SingleOpDocumentMongoQueryOptions);
+    async query(query: SingleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SingleOpDocumentMongoQueryOptions): Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null>;
     /**
      *  Double operations based a single document reference, _i.e._, findOneAndDelete, findOneAndUpdate, etc.
      *  @param query @type { DoubleOpDocumentMongoQuery } - findOneAndDelete, findOneAndReplace and findOneAndUpdate.
@@ -153,7 +151,7 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<ModifyResult<t>> }
      */
-    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: DoubleOpDocumentMongoQuery);
+    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: DoubleOpDocumentMongoQuery): Promise<ModifyResult<T>>;
     /**
      *  Operations that involves multiple documents. The data is provided as an array, while the key is still a single Partial<T>.
      *  @param query @type { SubsetMongoQuery } - insertMany, deleteMany and updateMany.
@@ -161,14 +159,14 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> }
      */
-    async query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SubsetMongoQueryOptions);
+    async query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SubsetMongoQueryOptions): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
     /**
      *  The collections state summaries.
      *  @param query @type { MeasureMongoQuery } - countDocuments and distinct.
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<number | Flatten<WithId<T>>[]> }
      */
-    async query(query: MeasureMongoQuery, key?: Partial<T>, options?: MeasureMongoQueryOptions);
+    async query(query: MeasureMongoQuery, key?: Partial<T>, options?: MeasureMongoQueryOptions): Promise<number | Flatten<WithId<T>>[]>;
     /** Overloaded */
     async query(
         query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, 

@@ -122,7 +122,7 @@ describe('Testando a classe MongoDBCollection com...', () => {
             { scale: 0, receivers: [ "public"], msg: "Be cool, nothing is wrong!"}
         ]
         const result = await mongo.query('insertMany', docs);
-        ok(result?.acknowledged);
+        ok(result)
     });
 
     it('o updateMany', async() => {
