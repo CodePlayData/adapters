@@ -1,6 +1,6 @@
 {
     "name": "@codeplaydata/adapters",
-    "version": "0.7.2",
+    "version": "0.7.7",
     "type": "module",
     "main": "index.js",
     "scripts": {
@@ -28,10 +28,12 @@
         "@types/express": "^4.17.14",
         "@types/mongodb": "^4.0.7",
         "@types/node": "^18.11.9",
-        "@webgpu/types": "^0.1.23",
+        "@webgpu/types": "^0.1.23"
+    },
+    "dependencies": {
+        "express": "^4.18.2",
         "axios": "^1.4.0",
         "dotenv": "^16.0.3",
-        "express": "^4.18.2",
         "fastify": "^4.17.0",
         "faunadb": "^4.8.0",
         "mock-local-storage": "^1.1.23",

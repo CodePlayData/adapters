@@ -52,5 +52,7 @@ class ExpressRouter implements Router  {
 };
 
 export {
-    ExpressRouter
+    ExpressRouter,
+    Request,
+    Response
 }

@@ -25,7 +25,7 @@ class ExpressServer implements HttpServer {
     constructor(readonly routers?: ExpressRouter | ExpressRouter[]) {
         this.app = express();
         
-        if(routers instanceof Array<ExpressRouter>) {
+        if(Array.isArray(routers)) {
             routers.map((i) => {
                 this.app
                     .use(i.routerPath, i.router)

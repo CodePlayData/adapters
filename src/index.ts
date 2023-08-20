@@ -25,7 +25,7 @@ import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
 
 import { ExpressServer } from "./http/server/Express/Server.js";
-import { ExpressRouter } from "./http/server/Express/Router.js";
+import { ExpressRouter, Request, Response } from "./http/server/Express/Router.js";
 import { ExpressRoute } from "./http/server/Express/Route.js";
 
 import { FastifyRoute } from "./http/server/Fastify/Route.js";
@@ -39,9 +39,13 @@ import { NodeServer } from "./http/server/Node/Server.js";
 const http = {
     server: {
         express: {
-            server: ExpressServer,
-            router: ExpressRouter,
-            route: ExpressRoute
+            server: (router?: ExpressRouter) => new ExpressServer(router),
+            router: (routes?: ExpressRoute[]) => new ExpressRouter(routes),
+            route: (
+                method: ExpressMethods, 
+                endpoint: string, 
+                callback: (req: any, res: any) => any
+            ) => new ExpressRoute(method, endpoint, callback)
         },
         fastify: {
             server: FastifyRoute,
@@ -66,8 +70,11 @@ import { WasmModuleSource } from "./webassembly/WasmModuleSource.js"
 import { Collection } from "./Collection.js";
 import { Connection } from "./Connection.js";
 import { LocalStorageQuery, IndexedDBQuery, DatabasePermission } from "./enums.js";
+import { ExpressMethods } from "./http/server/Express/Method.js";
 
 export {
+    Request,
+    Response,
     FastifyRoute,
     FastifyRouter,
     FastifyServer,
