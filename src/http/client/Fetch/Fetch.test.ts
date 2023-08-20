@@ -18,7 +18,6 @@
 import { describe, it } from "node:test";
 import { strictEqual } from "node:assert";
 import { Fetch } from "./Fetch.js";
-import { RequestBuilder } from "../../RequestBuilder.js";
 import dotenv from "dotenv";
 
 describe('Testando a classe Fetch com...', () => {
@@ -26,11 +25,11 @@ describe('Testando a classe Fetch com...', () => {
     const httpclient = new Fetch();
 
     it('uma Request.', async () => {
-        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string);
+        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com");
         strictEqual((await httpclient.send(request)).status, 200);
     });
 
     it('uma url.', async () => {
-        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string)).status, 200)
+        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com")).status, 200)
     });
 });

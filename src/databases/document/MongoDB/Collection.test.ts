@@ -28,12 +28,12 @@ describe('Testando a classe MongoDBCollection com...', () => {
     dotenv.config()
 
     /** Testando o acesso da classe sem o curryng. */
-    const server = new MongoDBServer( process.env.MONGO_URI as string);
+    const server = new MongoDBServer( process.env.MONGO_URI as string || "mongodb://localhost:27017");
     const db = new MongoDB(server, 'npm_adapters');
     const mongo = new MongoDBCollection(db, 'collection1')
     
     /** Testando o acesso com o curryng. */
-    const database = MongoDBCollection.init(process.env.MONGO_URI as string ?? 'mongodb://127.0.0.1:27017')('npm_adapters');
+    const database = MongoDBCollection.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")('npm_adapters');
     const collection1 = database('collection1');
     const collection2 = database('collection2');
 

@@ -25,13 +25,13 @@ describe('Testando a classe MongoDB com...', () => {
     dotenv.config()
 
     it('um ping.', async () => {
-        const server = new MongoDBServer(process.env.MONGO_URI as string);
+        const server = new MongoDBServer(process.env.MONGO_URI as string || "mongodb://localhost:27017");
         const db = new MongoDB(server, 'npm_adapters');
         ok(await db.ping());
     });
 
     it('a criação pelo método init.', async () => {
-        const db = MongoDB.init(process.env.MONGO_URI as string)('npm_adapters')
+        const db = MongoDB.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")('npm_adapters')
         ok(await db.ping());
     });
 });

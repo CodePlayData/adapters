@@ -18,7 +18,6 @@
 import { describe, it } from "node:test";
 import { strictEqual } from "node:assert";
 import { Axios } from "./Axios.js";
-import { RequestBuilder } from "../../RequestBuilder.js";
 import dotenv from "dotenv";
 
 describe('Testando a classe Axios com...', () => {
@@ -27,12 +26,12 @@ describe('Testando a classe Axios com...', () => {
     const httpclient = new Axios();
    
     it('uma Request.', async () => {
-        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string);
+        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com");
         strictEqual((await httpclient.send(request)).status, 200);
     });
 
     it('uma url.', async () => {
-        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string)).status, 200)
+        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com")).status, 200)
     });
 });
    

@@ -25,15 +25,15 @@ describe('Testando a classe FaunaDB com...', () => {
 
     /** Testando o acesso da classe sem o curryng. */
     const fauna = new FaunaDB(
-        process.env.FAUNA_HOST as string, 
+        process.env.FAUNA_HOST as string || "http://localhost:8443", 
         process.env.FAUNA_SECRET as string,
-        process.env.FAUNA_COLLECTION as string 
+        process.env.FAUNA_COLLECTION as string  || "teste"
     );
     let id: string;
 
     /** Testando o acesso da classe com o curryng. */
-    const database = FaunaDB.init(process.env.FAUNA_HOST as string)(process.env.FAUNA_SECRET as string);
-    const collection1 = database(process.env.FAUNA_COLLECTION as string);
+    const database = FaunaDB.init(process.env.FAUNA_HOST as string || "http://localhost:8443")(process.env.FAUNA_SECRET as string);
+    const collection1 = database(process.env.FAUNA_COLLECTION as string || "teste");
 
     it('um ping.', async () => {
         ok(await fauna.ping());
