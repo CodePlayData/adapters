@@ -23,8 +23,38 @@ import { MongoDBServer } from "./databases/document/MongoDB/Server.js";
 
 import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
+
 import { ExpressServer } from "./http/server/Express/Server.js";
 import { ExpressRouter } from "./http/server/Express/Router.js";
+import { ExpressRoute } from "./http/server/Express/Route.js";
+
+import { FastifyRoute } from "./http/server/Fastify/Route.js";
+import { FastifyRouter } from "./http/server/Fastify/Router.js";
+import { FastifyServer } from "./http/server/Fastify/Server.js";
+
+import { NodeRoute } from "./http/server/Node/Route.js";
+import { NodeRouter } from "./http/server/Node/Router.js";
+import { NodeServer } from "./http/server/Node/Server.js";
+
+const http = {
+    server: {
+        express: {
+            server: ExpressServer,
+            router: ExpressRouter,
+            route: ExpressRoute
+        },
+        fastify: {
+            server: FastifyRoute,
+            router: FastifyRouter,
+            route: FastifyRoute
+        },
+        node: {
+            server: NodeServer,
+            router: NodeRouter,
+            route: NodeRoute
+        }
+    }
+}
 
 import { Queue } from "./queue/memory/Queue.js";
 import { GenericQueue, DatabaseQuery } from "./queue/memory/GenericQueue.js";
@@ -38,6 +68,15 @@ import { Connection } from "./Connection.js";
 import { LocalStorageQuery, IndexedDBQuery, DatabasePermission } from "./enums.js";
 
 export {
+    FastifyRoute,
+    FastifyRouter,
+    FastifyServer,
+    NodeRoute,
+    NodeRouter,
+    NodeServer,
+    ExpressServer,
+    ExpressRouter,
+    ExpressRoute,
     MongoDBCollection,
     MongoDB,
     MongoDBServer,
@@ -53,12 +92,11 @@ export {
     GenericQueue,
     GPUCommandRepository,
     Fetch,
-    ExpressServer,
-    ExpressRouter,
     Connection,
     GPUDeviceAdapter,
     LocalStorageQuery, 
     IndexedDBQuery, 
     DatabasePermission,
-    WasmModuleSource
+    WasmModuleSource,
+    http
 }
