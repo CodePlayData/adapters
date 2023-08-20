@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: Single.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,33 +13,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
-
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type SingleIndexMongoOp = 'createIndex' | 'dropIndex' | 'indexExists' | 'indexInformation'
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    SingleIndexMongoOp
 }

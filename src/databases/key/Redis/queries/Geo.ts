@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: Geo.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,31 +15,9 @@
    limitations under the License.
  */
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
-
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type GeoRedisQuery = 'GEOADD' | 'GEODIST' | 'GEOHASH' | 'GEOPOS' | 'GEORADIUS' | 'GEORADIUS_RO'   |
+                     'GEORADIUSBYMEMBER' | 'GEORADIUSBYMEMBER_RO' | 'GEOSEARCH' | 'GEOSEARCHSTORE'
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    GeoRedisQuery
 }

@@ -18,7 +18,10 @@ Seguindo os princípios do [Ports and Adapters - _Alistair Cockburn_](https://al
 
 <br>
 
-## Implementação
+
+![](./assets/print.png)
+
+## Organização
 
 Os diretórios estarão separados por categoria de _adapter_, por exemplo: para um _adapter_ de banco de dados em _browser_ procure os disponíveis em `src/databases/browser/IndexedDB/`. Os _adapters_ serão exportados seguindo o mesmo raciocínio a partir da pasta `src`, então para utilizá-los siga o exemplo abaixo:
 

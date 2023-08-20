@@ -1,4 +1,4 @@
-// @filename: Axios.test.ts
+// @filename: Redis.test.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,25 +13,24 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-import { describe, it } from "node:test";
-import { strictEqual } from "node:assert";
-import { Axios } from "./Axios.js";
+import { describe, it, after } from "node:test";
+import { strictEqual, deepEqual, rejects, ok } from "node:assert";
+import { Redis } from "./Redis.js";
 import dotenv from "dotenv";
 
-describe('Testando a classe Axios com...', () => {
+describe('Testando a classe Redis com...', () => { 
     dotenv.config();
 
-    const httpclient = new Axios();
-   
-    it('uma Request.', async () => {
-        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com");
-        strictEqual((await httpclient.send(request)).status, 200);
+    const redis = new Redis(
+        process.env.REDIS_HOST as string || '127.0.0.1',
+        Number(process.env.REDIS_PORT) || 6379,
+        process.env.REDIS_PASSWORD as string || undefined
+    )
+    
+    it('um ping', async () => {
+        ok(await redis.ping())
     });
 
-    it('uma url.', async () => {
-        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com")).status, 200)
-    });
-});
-   
+ });

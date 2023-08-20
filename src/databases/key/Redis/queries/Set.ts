@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: Set.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,31 +15,10 @@
    limitations under the License.
  */
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
-
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type SetRedisQuery = 'SADD' | 'SCARD' | 'SDIFF' | 'SDIFFSTORE' | 'SINTER' | 'SINTERCARD' |
+                     'SINTERSTORE' | 'SISMEMBER' | 'SMEMBERS' | 'SMISMEMBER' | 'SMOVE'   |
+                     'SPOP' | 'SRANDMEMBER' | 'SREM' | 'SSCAN' | 'SUNION' | 'SUNIONSTORE'
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    SetRedisQuery
 }

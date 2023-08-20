@@ -48,21 +48,10 @@ describe('Teste do NodeApp com...', () => {
     const router = new FastifyRouter();
     router.add(dataRoute);
     router.add(loginRoute);
-
     let server = new FastifyServer(router);
-    let serverApp: any;
-
-    server.listen(3000).then((context) => {
-        serverApp = context;
-    })
-
+    
     before(async () => {
-        await new Promise(resolve => {
-            server.app.addHook('onReady', (done) => {
-                done()
-            });
-            resolve
-        });
+        await server.app.listen(3000);
     });
 
     it('a rota helloWold na /data.', async () => {
@@ -81,6 +70,6 @@ describe('Teste do NodeApp com...', () => {
     })
 
     after(() => {
-        serverApp.close();
+        server.app.close();
     });
 });

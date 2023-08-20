@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: SingleOp.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,33 +13,14 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
+import { DeleteOptions, FindOptions, InsertOneOptions, ReplaceOptions, UpdateOptions } from "mongodb";
 
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type SingleOpDocumentMongoQuery = 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne' | 'replaceOne';
+type SingleOpDocumentMongoQueryOptions = InsertOneOptions | DeleteOptions | FindOptions<Document> | UpdateOptions | ReplaceOptions;
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    SingleOpDocumentMongoQuery,
+    SingleOpDocumentMongoQueryOptions
 }

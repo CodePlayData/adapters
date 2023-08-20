@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: List.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,31 +15,11 @@
    limitations under the License.
  */
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
-
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type ListRedisQuery = 'BLMOVE' | 'BLMPOP' | 'BLPOP' | 'BRPOP' | 'BRPOPLPUSH' | 'LINDEX'      |
+                      'LINSERT' | 'LLEN' | 'LMOVE' | 'LMPOP' | 'LPOP' | 'LPOS' | 'LPUSH'     |
+                      'LPUSHX' | 'LRANGE' | 'LREM' | 'LSET' | 'LTRIM' | 'RPOP' | 'RPOPLPUSH' |
+                      'RPUSH' | 'RPUSHX'
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    ListRedisQuery
 }

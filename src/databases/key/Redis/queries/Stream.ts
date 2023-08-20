@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: Stream.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,31 +15,12 @@
    limitations under the License.
  */
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
-
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type StreamRedisQuery = 'XACK' | 'XADD' | 'XAUTOCLAIM' | 'XCLAIM' | 'XDEL' | 'XGROUP CREATE' |
+                        'XGROUP CREATECONSUMER' | 'XGROUP DELCONSUMER' | 'XGROUP DESTROY'    |
+                        'XGROUP SETID' | 'XINFO CONSUMERS' | 'XINFO GROUPS' | 'XINFO STREAM' |
+                        'XLEN' | 'XPENDING' | 'XRANGE' | 'XREAD' | 'XREADGROUP' | 'XREVRANGE'|
+                        'XSETID' | 'XTRIM'
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    StreamRedisQuery
 }

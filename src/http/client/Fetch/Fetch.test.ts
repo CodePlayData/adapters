@@ -18,17 +18,18 @@
 import { describe, it } from "node:test";
 import { strictEqual } from "node:assert";
 import { Fetch } from "./Fetch.js";
-import { RequestBuilder } from "../../RequestBuilder.js";
+import dotenv from "dotenv";
 
 describe('Testando a classe Fetch com...', () => {
+    dotenv.config();
     const httpclient = new Fetch();
 
     it('uma Request.', async () => {
-        const request =  new Request('https://httpstat.us/200');
+        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com");
         strictEqual((await httpclient.send(request)).status, 200);
     });
 
     it('uma url.', async () => {
-        strictEqual((await httpclient.send('https://httpstat.us/200')).status, 200)
+        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com")).status, 200)
     });
 });

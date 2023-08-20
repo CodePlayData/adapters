@@ -15,20 +15,20 @@
    limitations under the License.
  */
 
-import { IndexOperations, IndexedDBQuery, LocalStorageQuery, MongoQuery } from "./enums.js";
+import { IndexedDBQuery, LocalStorageQuery } from "./enums.js";
 
-type DatabaseQuery = MongoQuery | IndexedDBQuery | LocalStorageQuery
+type DatabaseQuery = IndexedDBQuery | LocalStorageQuery
 
 interface Connection {
     name: string;
     hasThisFeature?: boolean;
     database?: unknown;
     store?: string;
-    collection?: string
+    collection?: any
     indexNames?: unknown;
 
     pipeline?(descriptions: unknown): any;
-    index?(op: IndexOperations, indexdescript?: unknown): any;
+    index?(op: any, indexdescript?: unknown): any;
     keysof?(prop: unknown, max?: number): any;
     query(query: DatabaseQuery | string, object?: unknown, key?: any): any;
 }

@@ -1,0 +1,1 @@
+// Da pra usar em um container...https://hub.docker.com/r/amazon/dynamodb-local/

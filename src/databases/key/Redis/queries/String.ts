@@ -1,4 +1,4 @@
-// @filename: enums.ts
+// @filename: QueryString.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,31 +15,11 @@
    limitations under the License.
  */
 
-enum LocalStorageQuery {
-    getItem = 'getItem',
-    clear = 'clear',
-    setItem = 'setItem',
-    delete = -1,
-    readall = 0
-}
-
-enum IndexedDBQuery {
-    add = 'add',
-    delete = 'delete',
-    readone = 'readone',
-    count = 'count',
-    put = 'put',
-    clear = 'clear',
-    getAll = 'getAll'
-}
-
-enum DatabasePermission { 
-    read = 'readonly',
-    readwrite = 'readwrite'
-}
+type StringRedisQuery = 'APPEND' | 'DECR' | 'DECRBY' | 'GET' | 'GETDEL' | 'GETEX' | 
+                        'GETRANGE' | 'GETSET' | 'INCR' | 'INCRBY' | 'INCRBYFLOAT' |
+                        'LCS' | 'MGET' | 'MSET' | 'MSETNX' | 'PSETEX' | 'SET'     |
+                        'SETEX' | 'SETNX' | 'SETRANGE' | 'STRLEN' | 'SUBSTR'
 
 export {
-    LocalStorageQuery,
-    IndexedDBQuery,
-    DatabasePermission
+    StringRedisQuery
 }

@@ -1,4 +1,4 @@
-// @filename: Axios.test.ts
+// @filename: Database.test.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -16,22 +16,22 @@
  */
 
 import { describe, it } from "node:test";
-import { strictEqual } from "node:assert";
-import { Axios } from "./Axios.js";
+import { ok } from "node:assert";
 import dotenv from "dotenv";
+import { MongoDB } from "./Database.js";
+import { MongoDBServer } from "./Server.js";
 
-describe('Testando a classe Axios com...', () => {
-    dotenv.config();
+describe('Testando a classe MongoDB com...', () => {
+    dotenv.config()
 
-    const httpclient = new Axios();
-   
-    it('uma Request.', async () => {
-        const request =  new Request(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com");
-        strictEqual((await httpclient.send(request)).status, 200);
+    it('um ping.', async () => {
+        const server = new MongoDBServer(process.env.MONGO_URI as string || "mongodb://localhost:27017");
+        const db = new MongoDB(server, 'npm_adapters');
+        ok(await db.ping());
     });
 
-    it('uma url.', async () => {
-        strictEqual((await httpclient.send(process.env.HTTP_CLIENT_TEST_URL as string || "https://google.com")).status, 200)
+    it('a criação pelo método init.', async () => {
+        const db = MongoDB.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")('npm_adapters')
+        ok(await db.ping());
     });
 });
-   
