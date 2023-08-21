@@ -15,9 +15,11 @@
    limitations under the License.
 */
 
-import { Router as ExpressRouterBase, Request, Response } from "express";
+import { Router as ExpressRouterBase } from "express";
 import { Router } from "../Router.js";
 import { ExpressRoute } from "./Route.js";
+import { ExpressRequest } from "./Request.js";
+import { ExpressResponse } from "./Response.js";
 
 type RouterBase = ExpressRouterBase & {
     [key: string]: any
@@ -35,7 +37,7 @@ class ExpressRouter implements Router  {
     }
 
     add(route: ExpressRoute): void {
-        this.router[route.method](route.endpoint, async (req: Request, res: Response) => {
+        this.router[route.method](route.endpoint, async (req: ExpressRequest, res: ExpressResponse) => {
             return route.callback(req, res);
         });
     }
@@ -52,7 +54,5 @@ class ExpressRouter implements Router  {
 };
 
 export {
-    ExpressRouter,
-    Request,
-    Response
+    ExpressRouter
 }

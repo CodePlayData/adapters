@@ -21,12 +21,18 @@ import { MongoDBCollection } from "./databases/document/MongoDB/Collection.js";
 import { MongoDB } from "./databases/document/MongoDB/Database.js";
 import { MongoDBServer } from "./databases/document/MongoDB/Server.js";
 
-import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { HttpClient } from "./http/client/HttpClient.js";
 
+import { Fetch } from "./http/client/Fetch/Fetch.js";
+import { Axios } from "./http/client/Axios/Axios.js";
+
+import { HttpServer } from "./http/server/HttpServer.js";
+
 import { ExpressServer } from "./http/server/Express/Server.js";
-import { ExpressRouter, Request, Response } from "./http/server/Express/Router.js";
+import { ExpressRouter } from "./http/server/Express/Router.js";
 import { ExpressRoute } from "./http/server/Express/Route.js";
+import { ExpressRequest } from "./http/server/Express/Request.js";
+import { ExpressResponse } from "./http/server/Express/Response.js";
 
 import { FastifyRoute } from "./http/server/Fastify/Route.js";
 import { FastifyRouter } from "./http/server/Fastify/Router.js";
@@ -37,6 +43,10 @@ import { NodeRouter } from "./http/server/Node/Router.js";
 import { NodeServer } from "./http/server/Node/Server.js";
 
 const http = {
+    client: {
+        axios: () => new Axios(),
+        fetch: () => new Fetch()
+    },
     server: {
         express: {
             server: (router?: ExpressRouter) => new ExpressServer(router),
@@ -44,7 +54,7 @@ const http = {
             route: (
                 method: ExpressMethods, 
                 endpoint: string, 
-                callback: (req: any, res: any) => any
+                callback: (req: ExpressRequest, res: ExpressResponse) => any
             ) => new ExpressRoute(method, endpoint, callback)
         },
         fastify: {
@@ -73,8 +83,9 @@ import { LocalStorageQuery, IndexedDBQuery, DatabasePermission } from "./enums.j
 import { ExpressMethods } from "./http/server/Express/Method.js";
 
 export {
-    Request,
-    Response,
+    http,
+    HttpServer,
+    HttpClient,
     FastifyRoute,
     FastifyRouter,
     FastifyServer,
@@ -84,6 +95,11 @@ export {
     ExpressServer,
     ExpressRouter,
     ExpressRoute,
+    ExpressRequest,
+    ExpressResponse,
+    Fetch,
+    Axios,
+
     MongoDBCollection,
     MongoDB,
     MongoDBServer,
@@ -91,19 +107,16 @@ export {
     IDBIndex,
     IDBRepo,
     IDBConfig,
-    HttpClient,
     DatabaseQuery,
     Queue,
     Collection,
     LocalStorage,
     GenericQueue,
     GPUCommandRepository,
-    Fetch,
     Connection,
     GPUDeviceAdapter,
     LocalStorageQuery, 
     IndexedDBQuery, 
     DatabasePermission,
-    WasmModuleSource,
-    http
+    WasmModuleSource
 }

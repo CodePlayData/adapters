@@ -1,4 +1,4 @@
-// @filename: Route.ts
+// @filename: Request.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,15 +13,8 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
-import { Route } from "../Route.js";
-import { ExpressMethods } from "./Method.js";
-import { ExpressRequest } from "./Request.js";
-import { ExpressResponse } from "./Response.js";
+import { Request } from "express";
 
-class ExpressRoute extends Route<ExpressMethods, (req: ExpressRequest | any, res: ExpressResponse | any) => any> {};
-
-export {
-    ExpressRoute
-}
+export type ExpressRequest = Request;
