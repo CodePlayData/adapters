@@ -1,4 +1,4 @@
-// @filename: IndexedDBDeleteDatabaseFailure.ts
+// @filename: AggregationQuery.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,12 +15,8 @@
    limitations under the License.
  */
 
-class IndexedDBDeleteDatabaseFailure extends Error {
-    constructor() {
-        super('The database could not be deleted.')
-    }
-}
-
-export {
-    IndexedDBDeleteDatabaseFailure
-}
+export type AggregationQuery<T=any> = {
+    query: string, 
+    index: string,
+    field?: string
+} | Array<T>

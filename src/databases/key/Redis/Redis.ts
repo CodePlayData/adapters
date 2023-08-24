@@ -16,14 +16,21 @@
 */
 
 import { createClient, RedisClientType } from "redis";
+import { RedisOptions } from "./RedisOptions.js";
+import { RedisServerUnavaiable } from "./error/RedisServerUnavaiable.js";
 
 class Redis {
     _client!: RedisClientType;
 
-    constructor(host: string, port?: number, password?: string,) {
+    constructor(host: string, port: number, options?: RedisOptions) {
         this._client = createClient({
-            password,
+            username: options?.username,
+            password: options?.password,
             socket: {
+                tls: options?.tls ? true : false,
+                key: options?.tls?.key,
+                ca: options?.tls?.ca,
+                cert: options?.tls?.cert,
                 host,
                 port
             }
@@ -36,7 +43,7 @@ class Redis {
             const pong = await this._client.ping();
             return pong === 'PONG'
         } catch (error) {
-            throw new Error('Redis server unavaiable.')
+            throw new RedisServerUnavaiable(error)
         } finally {
             this._client.disconnect();
         }

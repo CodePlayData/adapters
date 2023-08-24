@@ -15,8 +15,8 @@
    limitations under the License.
 */
 
-import { describe, it, after } from "node:test";
-import { strictEqual, deepEqual, rejects, ok } from "node:assert";
+import { describe, it } from "node:test";
+import { ok } from "node:assert";
 import { Redis } from "./Redis.js";
 import dotenv from "dotenv";
 
@@ -25,8 +25,7 @@ describe('Testando a classe Redis com...', () => {
 
     const redis = new Redis(
         process.env.REDIS_HOST as string || '127.0.0.1',
-        Number(process.env.REDIS_PORT) || 6379,
-        process.env.REDIS_PASSWORD as string || undefined
+        Number(process.env.REDIS_PORT) || 6379
     )
     
     it('um ping', async () => {

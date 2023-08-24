@@ -35,16 +35,20 @@ import { MongoAggregateCouldNotCompleted } from "./error/AggregateCouldNotComple
 import { MongoIndexOperationCouldNotCompleted } from "./error/IndexOperationCouldNotCompleted.js";
 import { MongoQueryOperationCouldNotCompleted } from "./error/QueryOperationCouldNotCompleted.js";
 import { SingleOpDocumentMongoQuery, SingleOpDocumentMongoQueryOptions } from "./queries/document/SingleOp.js";
-import { DoubleOpDocumentMongoQuery } from "./queries/document/DoubleOp.js";
+import { DoubleOpDocumentMongoQuery, DoubleOpDocumentMongoQueryOptions } from "./queries/document/DoubleOp.js";
 import { MeasureMongoQuery, MeasureMongoQueryOptions } from "./queries/Mesuare.js";
 import { SubsetMongoQuery, SubsetMongoQueryOptions } from "./queries/Subset.js";
 import { SingleIndexMongoOp } from "./queries/index/Single.js";
 import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
+import { AggregationQuery } from "../AggregationQuery.js";
+import { Connection } from "../../../Connection.js";
 
-interface MongoDBCollection <T extends Document> {
+interface MongoDBCollection <T extends Document> extends Connection<
+    Document[]
+> {
     collection: Collection<T>;
     
-    pipeline(descriptions: Document[]): Promise<Document[]>;
+    aggregate(descriptions: Document[]): Promise<Document[]>;
     
     index(op: SingleIndexMongoOp, indexspec?: IndexSpecification | string | string[]): Promise<string | Document | boolean>;
     index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]): Promise<string[] | Document | Document[]>;
@@ -57,8 +61,8 @@ interface MongoDBCollection <T extends Document> {
     query(query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, keyoOrOptions?: Partial<T>| MeasureMongoQueryOptions, options?: SingleOpDocumentMongoQueryOptions | DoubleOpDocumentMongoQuery | SubsetMongoQueryOptions): Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null> | Promise<ModifyResult<T>> | Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> | Promise<number | Flatten<WithId<T>>[]>;
 }
 
-/** A MongoColletion where the query, index and pipeline ops occurs. */
-class MongoDBCollection<T extends Document> {
+/** A MongoColletion where the query, index and aggregate ops occurs. */
+class MongoDBCollection<T extends Document> implements Connection<Document[]> {
     /** A collection of something... */
     collection: Collection<T>;
     
@@ -74,13 +78,15 @@ class MongoDBCollection<T extends Document> {
 
 
     /**
-     *  The function that performs the pipeline operations.
+     *  The function that performs the aggregate operations.
      *  @param descriptions @type { Document[] } - The Document type contains the mongo operators to be executed.
      *  for reference: https://www.mongodb.com/docs/manual/aggregation/.
      *  @returns @type { Document[] }
      */
-    async pipeline(descriptions: Document[]) {
+    async aggregate(descriptions: AggregationQuery<Document>) {
+        descriptions = descriptions as Document[];
         let result: Document[] = [];
+        
         try {
             await this.database.server._client.connect();
             callback: {
@@ -114,9 +120,8 @@ class MongoDBCollection<T extends Document> {
      *  @returns @type { Promise<string[] | Document | Document[]> }
      */
     async index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]): Promise<string[] | Document | Document[]>;
-    /** Overloaded */
     async index(
-        op: SingleIndexMongoOp | MultipleIndexMongoOp, 
+        op: SingleIndexMongoOp | MultipleIndexMongoOp,
         indexdescriptOrSpecification?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]
     ) {
         try {
@@ -151,7 +156,7 @@ class MongoDBCollection<T extends Document> {
      *  @param key @type { Partial<T> } - The key to be used to search some data. Must be a key thar exists in the document defined in generics type.
      *  @returns @type { Promise<ModifyResult<t>> }
      */
-    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: DoubleOpDocumentMongoQuery): Promise<ModifyResult<T>>;
+    async query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: DoubleOpDocumentMongoQueryOptions): Promise<ModifyResult<T>>;
     /**
      *  Operations that involves multiple documents. The data is provided as an array, while the key is still a single Partial<T>.
      *  @param query @type { SubsetMongoQuery } - insertMany, deleteMany and updateMany.
@@ -171,15 +176,15 @@ class MongoDBCollection<T extends Document> {
     async query(
         query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, 
         documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, 
-        keyoOrOptions?: Partial<T>| MeasureMongoQueryOptions,
-        options?: SingleOpDocumentMongoQueryOptions | DoubleOpDocumentMongoQuery | SubsetMongoQueryOptions
+        keyoOrOptions?: Partial<T>| MeasureMongoQueryOptions | SingleOpDocumentMongoQueryOptions | DoubleOpDocumentMongoQueryOptions | SubsetMongoQueryOptions
     ) {
         try {
             await this.database.server._client.connect();
             callback: {
                 const queryMethod = this.collection[query] as (arg1: Partial<T> | MeasureMongoQueryOptions | OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[], arg2?: OptionalUnlessRequiredId<T> | Partial<T> | OptionalUnlessRequiredId<T>[]) => Promise<any>;
                 const request = documentOrKey && !keyoOrOptions ? await queryMethod.call(this.collection, documentOrKey) : 
-                                documentOrKey && keyoOrOptions ? await queryMethod.call(this.collection, keyoOrOptions, documentOrKey) : await queryMethod.call(this.collection, keyoOrOptions!);
+                                documentOrKey && keyoOrOptions ? await queryMethod.call(this.collection, keyoOrOptions, documentOrKey) : 
+                                await queryMethod.call(this.collection, keyoOrOptions!);
                 return request
             }
         } catch (error) {
@@ -191,17 +196,6 @@ class MongoDBCollection<T extends Document> {
         }
     }
     
-    private async atomicOp() {
-        try {
-            await this.database.server._client.connect();
-            // a callback.
-        } catch (error) {
-            // a error.
-        } finally {
-            await this.database.server._client.close();
-        }
-    }
-
     /**
      *  The curryng method to instatiate in parts this class.
      *  @param uri @type { string } - The connection endpoint.

@@ -1,4 +1,4 @@
-// @filename: Collection.ts
+// @filename: RedisServerUnavaiable.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,8 +13,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
- */
+*/
 
-class FaunaDBCollection {
-    
+export class RedisServerUnavaiable extends Error {
+    constructor(error?: unknown) {
+        super(`Redis server unavaiable: ${error}`)
+    }
 }

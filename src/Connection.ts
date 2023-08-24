@@ -15,22 +15,16 @@
    limitations under the License.
  */
 
-import { IndexedDBQuery, LocalStorageQuery } from "./enums.js";
+import { AggregationQuery } from "./databases/document/AggregationQuery.js";
 
-type DatabaseQuery = IndexedDBQuery | LocalStorageQuery
-
-interface Connection {
-    name: string;
-    hasThisFeature?: boolean;
-    database?: unknown;
-    store?: string;
-    collection?: any
-    indexNames?: unknown;
-
-    pipeline?(descriptions: unknown): any;
-    index?(op: any, indexdescript?: unknown): any;
-    keysof?(prop: unknown, max?: number): any;
-    query(query: DatabaseQuery | string, object?: unknown, key?: any): any;
+interface Connection<
+    AggregateReturn = unknown,
+    IndexReturn = unknown,
+    QueryReturn = unknown
+> {
+    aggregate?(query: AggregationQuery): Promise<AggregateReturn>; //ok
+    index?(op: string, indexdescript?: unknown): Promise<IndexReturn>; //ok
+    query(query: any, object?: any, key?: any, options?: any): Promise<QueryReturn>; //ok
 }
 
 export {

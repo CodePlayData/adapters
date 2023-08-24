@@ -24,8 +24,14 @@ import { IndexDescription } from './IndexDescription.js';
 import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
 import { SubsetFaunaQuery as SubsetQuery } from './queries/Subset.js';
 import { Document } from "../Document.js";
+import { AggregationQuery } from '../AggregationQuery.js';
+import { Connection } from '../../../Connection.js';
 
-class FaunaDB {
+class FaunaDB implements Connection<
+    object,
+    object | boolean,
+    object
+> {
     /**  @type { string } - An identifier. */
     name: string = 'FaunaDB';
     /** @type { Client } - The FaunaDB client. */
@@ -81,8 +87,8 @@ class FaunaDB {
     async query(query: DocumentQuery, object?: Document, key?: any) {
         try {
             const documentRef = q.Ref(this._collection, key);
-            const request = object && !key ? q[query /** Create */](this._collection, { data: object }) : 
-                            object && key ? q[query /** Update */](documentRef, { data: object }) : 
+            const request = object && !key ? q[query](this._collection, { data: object }) : 
+                            object && key ? q[query](documentRef, { data: object }) : 
                             query === 'Get' ? q.Get(documentRef) : q.Delete(documentRef);
             const response = this._client.query(request);
             return response;
@@ -156,7 +162,8 @@ class FaunaDB {
      *  @param fieldName @type { string } - In the cases that are not count you must identify the fieldName.
      *  @returns 
      */
-    async aggregate(query: SubsetQuery, indexName?: string, fieldName?: string) {
+    async aggregate(Query: AggregationQuery): Promise<object> {
+        const { query, index: indexName, field: fieldName} = Query as { query: SubsetQuery, index: string, field?: string};
         const indexes = await this.index('get') as { data: Array<{[key:string]: any}> };
         let createdIndexes = indexes.data.filter((index: any) => index.id === indexName);
         let indexRef = q.Match(q.Index(indexName ?? ''));

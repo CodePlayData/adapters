@@ -16,7 +16,7 @@
  */
 
 import { describe, it } from "node:test";
-import { strictEqual, deepEqual, rejects, ok } from "node:assert";
+import { strictEqual, ok } from "node:assert";
 import { FaunaDB } from "./FaunaDB.js";
 import dotenv from "dotenv";
 
@@ -29,6 +29,7 @@ describe('Testando a classe FaunaDB com...', () => {
         process.env.FAUNA_SECRET as string,
         process.env.FAUNA_COLLECTION as string  || "teste"
     );
+    
     let id: string;
 
     /** Testando o acesso da classe com o curryng. */
@@ -78,7 +79,7 @@ describe('Testando a classe FaunaDB com...', () => {
     });
 
     it('o Aggregate no Count.', async () => {
-        let response = await fauna.aggregate('Count', 'byName');
+        let response = await fauna.aggregate({ query: 'Count', index: 'byName'});
         strictEqual(response, 1);
     });
 

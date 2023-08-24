@@ -147,7 +147,7 @@ describe('Testando a classe MongoDBCollection com...', () => {
             }
         ]
 
-        const data = await mongo.pipeline(aggregation) as Document[];
+        const data = await mongo.aggregate(aggregation) as Document[];
         deepEqual(Object.keys(data[0]), ['_id', 'count']);
     });
 

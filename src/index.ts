@@ -15,29 +15,18 @@
    limitations under the License.
  */
 
-import { IndexedDB, IDBIndex, IDBRepo, IDBConfig } from "./databases/browser/IndexedDB/IndexedDB.js";
-import { LocalStorage } from "./databases/browser/LocalStorage/LocalStorage.js"
-import { MongoDBCollection } from "./databases/document/MongoDB/Collection.js";
-import { MongoDB } from "./databases/document/MongoDB/Database.js";
-import { MongoDBServer } from "./databases/document/MongoDB/Server.js";
-
 import { HttpClient } from "./http/client/HttpClient.js";
-
 import { Fetch } from "./http/client/Fetch/Fetch.js";
 import { Axios } from "./http/client/Axios/Axios.js";
-
 import { HttpServer } from "./http/server/HttpServer.js";
-
 import { ExpressServer } from "./http/server/Express/Server.js";
 import { ExpressRouter } from "./http/server/Express/Router.js";
 import { ExpressRoute } from "./http/server/Express/Route.js";
 import { ExpressRequest } from "./http/server/Express/Request.js";
 import { ExpressResponse } from "./http/server/Express/Response.js";
-
 import { FastifyRoute } from "./http/server/Fastify/Route.js";
 import { FastifyRouter } from "./http/server/Fastify/Router.js";
 import { FastifyServer } from "./http/server/Fastify/Server.js";
-
 import { NodeRoute } from "./http/server/Node/Route.js";
 import { NodeRouter } from "./http/server/Node/Router.js";
 import { NodeServer } from "./http/server/Node/Server.js";
@@ -70,16 +59,24 @@ const http = {
     }
 }
 
-import { Queue } from "./queue/memory/Queue.js";
-import { GenericQueue, DatabaseQuery } from "./queue/memory/GenericQueue.js";
+import { MongoDBCollection } from "./databases/document/MongoDB/Collection.js";
+import { MongoDB } from "./databases/document/MongoDB/Database.js";
+import { MongoDBServer } from "./databases/document/MongoDB/Server.js";
+import { FaunaDB } from "./databases/document/FaunaDB/FaunaDB.js";
+
+const database = {
+    document: {
+        mongo: (uri: string, database: string, collection: string) => MongoDBCollection.init(uri)(database)(collection),
+        fauna: (uri: string, secret: string, collection: string) => FaunaDB.init(uri)(secret)(collection)
+    }
+}
+
 import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";
 import { GPUCommandRepository } from "./gpu/GPUCommandRepository.js";
 
 import { WasmModuleSource } from "./webassembly/WasmModuleSource.js"
 
-import { Collection } from "./Collection.js";
 import { Connection } from "./Connection.js";
-import { LocalStorageQuery, IndexedDBQuery, DatabasePermission } from "./enums.js";
 import { ExpressMethods } from "./http/server/Express/Method.js";
 
 export {
@@ -100,23 +97,15 @@ export {
     Fetch,
     Axios,
 
+    database,
+    FaunaDB,
     MongoDBCollection,
     MongoDB,
     MongoDBServer,
-    IndexedDB,
-    IDBIndex,
-    IDBRepo,
-    IDBConfig,
-    DatabaseQuery,
-    Queue,
-    Collection,
-    LocalStorage,
-    GenericQueue,
+
+
     GPUCommandRepository,
     Connection,
     GPUDeviceAdapter,
-    LocalStorageQuery, 
-    IndexedDBQuery, 
-    DatabasePermission,
     WasmModuleSource
 }
