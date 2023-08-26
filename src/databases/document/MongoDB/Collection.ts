@@ -172,7 +172,6 @@ class MongoDBCollection<T extends Document> implements Connection<Document[]> {
      *  @returns @type { Promise<number | Flatten<WithId<T>>[]> }
      */
     async query(query: MeasureMongoQuery, key?: Partial<T>, options?: MeasureMongoQueryOptions): Promise<number | Flatten<WithId<T>>[]>;
-    /** Overloaded */
     async query(
         query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, 
         documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, 

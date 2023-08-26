@@ -30,6 +30,7 @@ import { FastifyServer } from "./http/server/Fastify/Server.js";
 import { NodeRoute } from "./http/server/Node/Route.js";
 import { NodeRouter } from "./http/server/Node/Router.js";
 import { NodeServer } from "./http/server/Node/Server.js";
+import { ExpressMethods } from "./http/server/Express/Method.js";
 
 const http = {
     client: {
@@ -71,13 +72,11 @@ const database = {
     }
 }
 
-import { GPUDeviceAdapter } from "./gpu/GPUDeviceAdapter.js";
-import { GPUCommandRepository } from "./gpu/GPUCommandRepository.js";
-
 import { WasmModuleSource } from "./webassembly/WasmModuleSource.js"
 
-import { Connection } from "./Connection.js";
-import { ExpressMethods } from "./http/server/Express/Method.js";
+const api = {
+    wasi: async(pathToWasmModule: string) => await WasmModuleSource.load(pathToWasmModule)
+}
 
 export {
     http,
@@ -103,9 +102,6 @@ export {
     MongoDB,
     MongoDBServer,
 
-
-    GPUCommandRepository,
-    Connection,
-    GPUDeviceAdapter,
+    api,
     WasmModuleSource
 }
