@@ -1,4 +1,4 @@
-// @filename: SingleOp.ts
+// @filename: DocumentDatabaseAdapter.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -13,15 +13,15 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-*/
+ */
 
-import { DeleteOptions, FindOptions, InsertOneOptions, ReplaceOptions, UpdateOptions } from "mongodb";
-import { DocumentQueries } from "../../../DocumentQueries";
+import { AggregationData } from "./AggregationData.js"
 
-type SingleOpDocumentMongoQuery = DocumentQueries & 'insertOne' | 'deleteOne' | 'findOne' | 'updateOne' | 'replaceOne';
-type SingleOpDocumentMongoQueryOptions = InsertOneOptions | DeleteOptions | FindOptions<Document> | UpdateOptions | ReplaceOptions;
-
-export {
-    SingleOpDocumentMongoQuery,
-    SingleOpDocumentMongoQueryOptions
+export interface DocumentDatabaseAdapter<
+    IndexQueries extends string = string,
+    DocumentQueries extends string = string
+> {
+    aggregate(query: AggregationData): any
+    index(op: IndexQueries, ...params: any) : any
+    query(query: DocumentQueries, ...params: any) : any
 }

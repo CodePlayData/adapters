@@ -1,4 +1,4 @@
-// @filename: AggregationQuery.ts
+// @filename: DocumentDatabaseRepository.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,8 +15,9 @@
    limitations under the License.
  */
 
-export type AggregationQuery<T=any> = {
-    query: string, 
-    index: string,
-    field?: string
-} | Array<T>
+import { DocumentDatabaseAdapter } from "./DocumentDatabaseAdapter.js";
+
+export abstract class DocumentDatabaseRepository {
+    constructor(readonly documentDB: DocumentDatabaseAdapter) {
+    }
+}

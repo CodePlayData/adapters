@@ -40,29 +40,16 @@ import { MeasureMongoQuery, MeasureMongoQueryOptions } from "./queries/Mesuare.j
 import { SubsetMongoQuery, SubsetMongoQueryOptions } from "./queries/Subset.js";
 import { SingleIndexMongoOp } from "./queries/index/Single.js";
 import { MultipleIndexMongoOp } from "./queries/index/Multiple.js";
-import { AggregationQuery } from "../AggregationQuery.js";
-import { Connection } from "../../../Connection.js";
-
-interface MongoDBCollection <T extends Document> extends Connection<
-    Document[]
-> {
-    collection: Collection<T>;
-    
-    aggregate(descriptions: Document[]): Promise<Document[]>;
-    
-    index(op: SingleIndexMongoOp, indexspec?: IndexSpecification | string | string[]): Promise<string | Document | boolean>;
-    index(op: MultipleIndexMongoOp, indexdescript?: IndexDescription[]): Promise<string[] | Document | Document[]>;
-    index(op: SingleIndexMongoOp | MultipleIndexMongoOp, indexdescriptOrSpecification?: IndexSpecification | string | string[] | IndexDescription | IndexDescription[]): Promise<string | Document | boolean> | Promise<string[] | Document | Document[]>;
-    
-    query(query: SingleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SingleOpDocumentMongoQueryOptions): Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null>;
-    query(query: DoubleOpDocumentMongoQuery, data?: OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: DoubleOpDocumentMongoQuery):  Promise<ModifyResult<T>>;
-    query(query: SubsetMongoQuery, data?:OptionalUnlessRequiredId<T>, key?: Partial<T>, options?: SubsetMongoQueryOptions): Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult>;
-    query(query: MeasureMongoQuery, key?: Partial<T>, options?: MeasureMongoQueryOptions): Promise<number | Flatten<WithId<T>>[]>;
-    query(query: SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery, documentOrKey?: OptionalUnlessRequiredId<T> | OptionalUnlessRequiredId<T>[] | Partial<T>, keyoOrOptions?: Partial<T>| MeasureMongoQueryOptions, options?: SingleOpDocumentMongoQueryOptions | DoubleOpDocumentMongoQuery | SubsetMongoQueryOptions): Promise<Document | InsertOneResult<T> | WithId<T> | DeleteResult | UpdateResult | null> | Promise<ModifyResult<T>> | Promise<InsertManyResult<T> | DeleteResult | Document | UpdateResult> | Promise<number | Flatten<WithId<T>>[]>;
-}
+import { AggregationData } from "../AggregationData.js";
+import { DocumentDatabaseAdapter } from "../DocumentDatabaseAdapter.js";
 
 /** A MongoColletion where the query, index and aggregate ops occurs. */
-class MongoDBCollection<T extends Document> implements Connection<Document[]> {
+class MongoDBCollection<
+    T extends Document = Document
+> implements DocumentDatabaseAdapter<
+    SingleIndexMongoOp | MultipleIndexMongoOp, 
+    SingleOpDocumentMongoQuery | DoubleOpDocumentMongoQuery | SubsetMongoQuery | MeasureMongoQuery
+> {
     /** A collection of something... */
     collection: Collection<T>;
     
@@ -72,7 +59,7 @@ class MongoDBCollection<T extends Document> implements Connection<Document[]> {
      *  @param database @type { MongoDB } - The collection always refers to a MongoDB.
      *  @param collection @type { string } - The collection name.
      */
-    constructor(readonly database: MongoDB, collection: string) {
+    private constructor(readonly database: MongoDB, collection: string) {
         this.collection = this.database.db.collection<T>(collection);
     }
 
@@ -83,7 +70,7 @@ class MongoDBCollection<T extends Document> implements Connection<Document[]> {
      *  for reference: https://www.mongodb.com/docs/manual/aggregation/.
      *  @returns @type { Document[] }
      */
-    async aggregate(descriptions: AggregationQuery<Document>) {
+    async aggregate(descriptions: AggregationData<Document>) {
         descriptions = descriptions as Document[];
         let result: Document[] = [];
         

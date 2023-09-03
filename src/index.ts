@@ -31,6 +31,7 @@ import { NodeRoute } from "./http/server/Node/Route.js";
 import { NodeRouter } from "./http/server/Node/Router.js";
 import { NodeServer } from "./http/server/Node/Server.js";
 import { ExpressMethods } from "./http/server/Express/Method.js";
+import { RequestBuilder } from "./http/RequestBuilder.js";
 
 const http = {
     client: {
@@ -64,6 +65,10 @@ import { MongoDBCollection } from "./databases/document/MongoDB/Collection.js";
 import { MongoDB } from "./databases/document/MongoDB/Database.js";
 import { MongoDBServer } from "./databases/document/MongoDB/Server.js";
 import { FaunaDB } from "./databases/document/FaunaDB/FaunaDB.js";
+import { DocumentDatabaseAdapter } from "./databases/document/DocumentDatabaseAdapter.js";
+import { AggregationData } from "./databases/document/AggregationData.js";
+import { Document } from "./databases/document/Document.js";
+import { DocumentDatabaseRepository } from "./databases/document/DocumentDatabaseRepository.js";
 
 const database = {
     document: {
@@ -95,12 +100,17 @@ export {
     ExpressResponse,
     Fetch,
     Axios,
+    RequestBuilder,
 
     database,
     FaunaDB,
     MongoDBCollection,
     MongoDB,
     MongoDBServer,
+    DocumentDatabaseAdapter,
+    Document,
+    AggregationData,
+    DocumentDatabaseRepository,
 
     api,
     WasmModuleSource

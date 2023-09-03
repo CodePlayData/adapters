@@ -16,8 +16,9 @@
 */
 
 import { CountDocumentsOptions, DistinctOptions, EstimatedDocumentCountOptions } from "mongodb";
+import { DocumentQueries } from "../../DocumentQueries.js";
 
-type MeasureMongoQuery = 'countDocuments' | 'estimatedDocumentCount' | 'distinct';
+type MeasureMongoQuery = DocumentQueries & 'countDocuments' | 'estimatedDocumentCount' | 'distinct';
 type MeasureMongoQueryOptions = CountDocumentsOptions | EstimatedDocumentCountOptions | DistinctOptions;
 
 export {

@@ -24,11 +24,10 @@ describe('Testando a classe FaunaDB com...', () => {
     dotenv.config();
 
     /** Testando o acesso da classe sem o curryng. */
-    const fauna = new FaunaDB(
-        process.env.FAUNA_HOST as string || "http://localhost:8443", 
-        process.env.FAUNA_SECRET as string,
-        process.env.FAUNA_COLLECTION as string  || "teste"
-    );
+    const fauna = FaunaDB.init
+        (process.env.FAUNA_HOST as string || "http://localhost:8443")
+        (process.env.FAUNA_SECRET as string)
+        (process.env.FAUNA_COLLECTION as string  || "teste")
     
     let id: string;
 

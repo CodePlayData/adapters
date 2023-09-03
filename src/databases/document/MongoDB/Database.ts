@@ -25,7 +25,7 @@ class MongoDB {
     db: Db;
 
     /**
-     *  This class is the classe thar represents some database in a MongoDB service deployment.
+     *  This is the classe that represents some database in a MongoDB service deployment.
      *  @param server @type { MongoDBServer } - The server that this intance of database refers to.
      *  @param database @type { string } - The name of the database.
      */

@@ -1,4 +1,4 @@
-// @filename: Collection.ts
+// @filename: AggregationQuery.ts
 
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
@@ -15,13 +15,8 @@
    limitations under the License.
  */
 
-interface Collection {
-    storage: any[];
-
-    size: number;
-    isFull?: boolean;
-}
-
-export {
-    Collection
-}
+export type AggregationData<T=any> = {
+    query: string, 
+    index: string,
+    field?: string
+} | Array<T>

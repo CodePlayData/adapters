@@ -26,7 +26,7 @@ interface WasmModuleSource {
 }
 
 class WasmModuleSource {
-    constructor(readonly buffer: Buffer) {
+    private constructor(readonly buffer: Buffer) {
     }
 
     static async load(path: string, imports?: {[key: string]: any}) {

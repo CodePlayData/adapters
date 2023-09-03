@@ -24,14 +24,10 @@ import { IndexDescription } from './IndexDescription.js';
 import { FaunaIndexOperationCouldNotCompleted } from './error/IndexOperationCouldNotCompleted.js';
 import { SubsetFaunaQuery as SubsetQuery } from './queries/Subset.js';
 import { Document } from "../Document.js";
-import { AggregationQuery } from '../AggregationQuery.js';
-import { Connection } from '../../../Connection.js';
+import { AggregationData } from '../AggregationData.js';
+import { DocumentDatabaseAdapter } from '../DocumentDatabaseAdapter.js';
 
-class FaunaDB implements Connection<
-    object,
-    object | boolean,
-    object
-> {
+class FaunaDB implements DocumentDatabaseAdapter<"", DocumentQuery> {
     /**  @type { string } - An identifier. */
     name: string = 'FaunaDB';
     /** @type { Client } - The FaunaDB client. */
@@ -55,7 +51,7 @@ class FaunaDB implements Connection<
      *                                   secret that is used to authenticate and authorizes in that database.
      *  @param collection  @type { string } - The collection to works with.
      */
-    constructor(readonly uri: string, secret: string, collection: string) {
+    private constructor(readonly uri: string, secret: string, collection: string) {
         this._client = new faunadb.Client({
             secret,
             endpoint: uri //https://db.fauna.com
@@ -162,7 +158,7 @@ class FaunaDB implements Connection<
      *  @param fieldName @type { string } - In the cases that are not count you must identify the fieldName.
      *  @returns 
      */
-    async aggregate(Query: AggregationQuery): Promise<object> {
+    async aggregate(Query: AggregationData): Promise<object> {
         const { query, index: indexName, field: fieldName} = Query as { query: SubsetQuery, index: string, field?: string};
         const indexes = await this.index('get') as { data: Array<{[key:string]: any}> };
         let createdIndexes = indexes.data.filter((index: any) => index.id === indexName);

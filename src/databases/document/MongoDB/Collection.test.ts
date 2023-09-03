@@ -15,10 +15,8 @@
    limitations under the License.
  */
 
-import { describe, it, after } from "node:test";
+import { describe, it } from "node:test";
 import { strictEqual, deepEqual, rejects, ok } from "node:assert";
-import { MongoDBServer } from "./Server.js";
-import { MongoDB } from "./Database.js";
 import { MongoDBCollection } from "./Collection.js";
 import dotenv from "dotenv";
 import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
@@ -27,15 +25,9 @@ import { SingleOpDocumentMongoQuery } from "./queries/document/SingleOp.js";
 describe('Testando a classe MongoDBCollection com...', () => {
     dotenv.config()
 
-    /** Testando o acesso da classe sem o curryng. */
-    const server = new MongoDBServer( process.env.MONGO_URI as string || "mongodb://localhost:27017");
-    const db = new MongoDB(server, 'npm_adapters');
-    const mongo = new MongoDBCollection(db, 'collection1')
-    
-    /** Testando o acesso com o curryng. */
-    const database = MongoDBCollection.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")('npm_adapters');
-    const collection1 = database('collection1');
-    const collection2 = database('collection2');
+    const mongo = MongoDBCollection.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")("npm_adapters")("collection1");
+    const collection1 = MongoDBCollection.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")("npm_adapters")("collection1");
+    const collection2 = MongoDBCollection.init(process.env.MONGO_URI as string || "mongodb://localhost:27017")("npm_adapters")("collection2");
 
     it('o insertOne.', async () => {
         const result = await mongo.query('insertOne', { name: 'subject-1'});

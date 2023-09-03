@@ -16,8 +16,9 @@
 */
 
 import { BulkWriteOptions, DeleteOptions, UpdateOptions } from "mongodb";
+import { DocumentQueries } from "../../DocumentQueries.js";
 
-type SubsetMongoQuery = 'insertMany' | 'deleteMany' | 'updateMany';
+type SubsetMongoQuery = DocumentQueries & 'insertMany' | 'deleteMany' | 'updateMany';
 type SubsetMongoQueryOptions = BulkWriteOptions | DeleteOptions | UpdateOptions;
 
 export {

@@ -15,18 +15,4 @@
    limitations under the License.
  */
 
-import { AggregationQuery } from "./databases/document/AggregationQuery.js";
-
-interface Connection<
-    AggregateReturn = unknown,
-    IndexReturn = unknown,
-    QueryReturn = unknown
-> {
-    aggregate?(query: AggregationQuery): Promise<AggregateReturn>; //ok
-    index?(op: string, indexdescript?: unknown): Promise<IndexReturn>; //ok
-    query(query: any, object?: any, key?: any, options?: any): Promise<QueryReturn>; //ok
-}
-
-export {
-    Connection
-}
+export interface Connection {};

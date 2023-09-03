@@ -16,8 +16,9 @@
 */
 
 import { FindOneAndDeleteOptions, FindOneAndReplaceOptions, FindOneAndUpdateOptions } from "mongodb";
+import { DocumentQueries } from "../../../DocumentQueries";
 
-type DoubleOpDocumentMongoQuery = 'findOneAndDelete' | 'findOneAndReplace' | 'findOneAndUpdate';
+type DoubleOpDocumentMongoQuery = DocumentQueries & 'findOneAndDelete' | 'findOneAndReplace' | 'findOneAndUpdate';
 type DoubleOpDocumentMongoQueryOptions = FindOneAndDeleteOptions | FindOneAndReplaceOptions | FindOneAndUpdateOptions;
 
 export {

@@ -1,5 +1,7 @@
 // @filename: Multiple.ts
 
+import { DocumentQueries } from "../../../DocumentQueries";
+
 /* Copyright 2023 Pedro Paulo Teixeira dos Santos
 
    Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,7 +17,7 @@
    limitations under the License.
 */
 
-type MultipleIndexMongoOp = 'createIndexes' | 'dropIndexes' | 'indexes';
+type MultipleIndexMongoOp = DocumentQueries & 'createIndexes' | 'dropIndexes' | 'indexes';
 
 export {
     MultipleIndexMongoOp
