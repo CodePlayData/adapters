@@ -7,13 +7,13 @@ fi
 if [ -n "$FAUNA_COLLECTION" ]; then
   COLLECTION_NAME="$FAUNA_COLLECTION"
 else
-  COLLECTION_NAME="teste"
+  COLLECTION_NAME='teste'
 fi
 
 if [ -n "$FAUNA_DATABASE" ]; then
   DATABASE_NAME="$FAUNA_DATABASE"
 else
-  DATABASE_NAME="db"
+  DATABASE_NAME='db'
 fi
 
 docker run -d --name redis -p 6379:6379 -p 8001:8001 my-redis
