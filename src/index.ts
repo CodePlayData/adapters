@@ -61,14 +61,14 @@ const http = {
     }
 }
 
-import { MongoDBCollection } from "./databases/document/MongoDB/Collection.js";
-import { MongoDB } from "./databases/document/MongoDB/Database.js";
-import { MongoDBServer } from "./databases/document/MongoDB/Server.js";
-import { FaunaDB } from "./databases/document/FaunaDB/FaunaDB.js";
-import { DocumentDatabaseAdapter } from "./databases/document/DocumentDatabaseAdapter.js";
-import { AggregationData } from "./databases/document/AggregationData.js";
-import { Document } from "./databases/document/Document.js";
-import { DocumentDatabaseRepository } from "./databases/document/DocumentDatabaseRepository.js";
+import { MongoDBCollection } from "./database/document/MongoDB/Collection.js";
+import { MongoDB } from "./database/document/MongoDB/Database.js";
+import { MongoDBServer } from "./database/document/MongoDB/Server.js";
+import { FaunaDB } from "./database/document/FaunaDB/FaunaDB.js";
+import { DocumentDatabaseAdapter } from "./database/document/DocumentDatabaseAdapter.js";
+import { AggregationData } from "./database/document/AggregationData.js";
+import { Document } from "./database/document/Document.js";
+import { DocumentDatabaseRepository } from "./database/document/DocumentDatabaseRepository.js";
 
 const database = {
     document: {

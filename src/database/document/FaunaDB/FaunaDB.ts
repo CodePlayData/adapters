@@ -139,7 +139,7 @@ class FaunaDB implements DocumentDatabaseAdapter<"", DocumentQuery> {
     }
 
     /**
-     * The currying method to initialize one or more databases or collections in separeted references.
+     * The currying method to initialize one or more database or collections in separeted references.
      * @param uri @type { string } - The database server address.
      * @returns @type { (string) => (string) => FaunaDB }
      */

@@ -20,7 +20,7 @@ import { KeyPairGenerator } from "./KeyPairGenerator.js";
 import { generateKeyPairSync } from "node:crypto";
 
 export class RSAKeyPairGenerator extends KeyPairGenerator {
-    private constructor(readonly modulusLength: number = 4096) {
+    private constructor(readonly modulusLength: 2048 | 3072 | 4096 = 4096) {
         super('rsa');
     }
 
@@ -92,7 +92,7 @@ export class RSAKeyPairGenerator extends KeyPairGenerator {
         }
     }
 
-    static getInstance(modulusLength: number = 4096 ) {
+    static getInstance(modulusLength: 2048 | 3072 | 4096 = 4096 ) {
         return new RSAKeyPairGenerator(modulusLength)
     }
 }
